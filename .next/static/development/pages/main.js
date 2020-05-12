@@ -8444,48 +8444,6 @@ module.exports = content.locals || {};
 
 /***/ }),
 
-/***/ "./src/pages/main/cloudpayments.js":
-/*!*****************************************!*\
-  !*** ./src/pages/main/cloudpayments.js ***!
-  \*****************************************/
-/*! exports provided: pay */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pay", function() { return pay; });
-var pay = function pay(amount, successAction) {
-  var widget = new cp.CloudPayments();
-  widget.charge({
-    // options
-    publicId: 'pk_d6ade581f1060d5e657f0d18ebd81',
-    //id из личного кабинета
-    description: 'Пример оплаты (деньги сниматься не будут)',
-    //назначение
-    amount: amount,
-    //сумма
-    currency: 'RUB',
-    //валюта
-    accountId: 'user@example.com',
-    //идентификатор плательщика (необязательно)
-    skin: "modern" //дизайн виджета
-    // data: {
-    //     myProp: 'myProp value' //произвольный набор параметров
-    // }
-
-  }, function (options) {
-    // success
-    //действие при успешной оплате
-    successAction();
-  }, function (reason, options) {
-    // fail
-    //действие при неуспешной оплате
-    console.log('Произошла ошибка');
-  });
-};
-
-/***/ }),
-
 /***/ "./src/pages/main/index.tsx":
 /*!**********************************!*\
   !*** ./src/pages/main/index.tsx ***!
@@ -8510,7 +8468,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! next/head */ "./node_modules/next/dist/next-server/lib/head.js");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _cloudpayments__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./cloudpayments */ "./src/pages/main/cloudpayments.js");
+/* harmony import */ var _static_cloudpayments__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../static/cloudpayments */ "./static/cloudpayments.js");
 /* harmony import */ var _api_order__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../api/order */ "./src/api/order.ts");
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\pages\\main\\index.tsx";
@@ -8599,7 +8557,7 @@ var Main = function Main(_ref) {
   var buyCourse = function buyCourse() {
     var _materialsState$;
 
-    Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__["default"])() ? Object(_cloudpayments__WEBPACK_IMPORTED_MODULE_11__["pay"])((_materialsState$ = materialsState[0]) === null || _materialsState$ === void 0 ? void 0 : _materialsState$.price, createOrder) : function () {
+    Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__["default"])() ? Object(_static_cloudpayments__WEBPACK_IMPORTED_MODULE_11__["pay"])((_materialsState$ = materialsState[0]) === null || _materialsState$ === void 0 ? void 0 : _materialsState$.price, createOrder) : function () {
       setResponseModal({
         error: true,
         response: 'Войдите для совершения покупки'
@@ -8643,14 +8601,14 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 95,
+      lineNumber: 94,
       columnNumber: 13
     }
   }, __jsx("title", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96,
+      lineNumber: 95,
       columnNumber: 17
     }
   }, "Main Page"), __jsx("script", {
@@ -8658,7 +8616,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 97,
+      lineNumber: 96,
       columnNumber: 17
     }
   })), responseModal.response ? __jsx("div", {
@@ -8669,7 +8627,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 100,
+      lineNumber: 99,
       columnNumber: 17
     }
   }, __jsx("img", {
@@ -8678,14 +8636,14 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 105,
+      lineNumber: 104,
       columnNumber: 21
     }
   }), __jsx("span", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 106,
+      lineNumber: 105,
       columnNumber: 21
     }
   }, responseModal.response)) : null, __jsx("header", {
@@ -8693,7 +8651,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 110,
+      lineNumber: 109,
       columnNumber: 13
     }
   }, pageWidth > 768 ? __jsx("div", {
@@ -8701,7 +8659,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 112,
+      lineNumber: 111,
       columnNumber: 21
     }
   }, __jsx("img", {
@@ -8710,7 +8668,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 113,
+      lineNumber: 112,
       columnNumber: 25
     }
   }), __jsx("img", {
@@ -8723,7 +8681,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 114,
+      lineNumber: 113,
       columnNumber: 25
     }
   }), __jsx("img", {
@@ -8732,7 +8690,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 118,
+      lineNumber: 117,
       columnNumber: 25
     }
   })) : null, __jsx("div", {
@@ -8740,21 +8698,21 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 121,
+      lineNumber: 120,
       columnNumber: 17
     }
   }, __jsx("h3", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 122,
+      lineNumber: 121,
       columnNumber: 21
     }
   }, "Teaches FIFA 20"), __jsx("h1", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 123,
+      lineNumber: 122,
       columnNumber: 21
     }
   }, "cyberclass: FIFA 20"), __jsx("span", {
@@ -8762,7 +8720,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 124,
+      lineNumber: 123,
       columnNumber: 21
     }
   }, "Top seller"), __jsx("img", {
@@ -8771,7 +8729,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 125,
+      lineNumber: 124,
       columnNumber: 21
     }
   }))), __jsx("div", {
@@ -8779,7 +8737,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 128,
+      lineNumber: 127,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -8787,7 +8745,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 129,
+      lineNumber: 128,
       columnNumber: 17
     }
   }, __jsx("h2", {
@@ -8795,7 +8753,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 130,
+      lineNumber: 129,
       columnNumber: 21
     }
   }, "\u0427\u0415\u041C\u0423 \u0412\u042B \u041D\u0410\u0423\u0427\u0418\u0422\u0415\u0421\u042C?"), __jsx("h3", {
@@ -8803,7 +8761,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 131,
+      lineNumber: 130,
       columnNumber: 21
     }
   }, "\u0418\u043C\u0435\u0439\u0442\u0435 \u0432 \u0432\u0438\u0434\u0443, \u0447\u0442\u043E \u044D\u0442\u043E \u043B\u0438\u0448\u044C \u043F\u0435\u0440\u0432\u0430\u044F \u0447\u0430\u0441\u0442\u044C \u0438\u0437 5, \u0438 \u043D\u0430\u0447\u043D\u0435\u043C \u043C\u044B \u0441 \u043E\u0441\u043D\u043E\u0432"), __jsx("div", {
@@ -8811,7 +8769,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 132,
+      lineNumber: 131,
       columnNumber: 21
     }
   }, __jsx("div", {
@@ -8819,7 +8777,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 133,
+      lineNumber: 132,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8827,7 +8785,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 134,
+      lineNumber: 133,
       columnNumber: 29
     }
   }, "\u0423\u041F\u0420\u0410\u0412\u041B\u0415\u041D\u0418\u0415"), __jsx("p", {
@@ -8835,7 +8793,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 135,
+      lineNumber: 134,
       columnNumber: 29
     }
   }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435 \u0438\u0433\u0440\u0443 \u043F\u043E \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0430\u043C \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u043A\u0438\u0431\u0435\u0440\u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u043E\u0432")), __jsx("div", {
@@ -8843,7 +8801,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 137,
+      lineNumber: 136,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8851,7 +8809,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 138,
+      lineNumber: 137,
       columnNumber: 29
     }
   }, "\u0438\u0433\u0440\u0430 \u0432\u0440\u0430\u0442\u0430\u0440\u0451\u043C"), __jsx("p", {
@@ -8859,7 +8817,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 139,
+      lineNumber: 138,
       columnNumber: 29
     }
   }, "\u041A\u043B\u044E\u0447\u0435\u0432\u044B\u0435 \u0444\u0438\u0448\u043A\u0438 \u0438\u0433\u0440\u044B \u0432\u0440\u0430\u0442\u0430\u0440\u0435\u043C. \u041C\u044B \u043D\u0430\u0443\u0447\u0438\u043C \u043E\u0442\u0431\u0438\u0432\u0430\u0442\u044C \u0434\u0430\u0436\u0435 \u201C\u043C\u0451\u0440\u0442\u0432\u044B\u0435\u201D \u0443\u0434\u0430\u0440\u044B!")), __jsx("div", {
@@ -8867,7 +8825,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 142,
+      lineNumber: 141,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8875,7 +8833,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 143,
+      lineNumber: 142,
       columnNumber: 29
     }
   }, "\u0441\u0445\u0435\u043C\u044B"), __jsx("p", {
@@ -8883,7 +8841,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 144,
+      lineNumber: 143,
       columnNumber: 29
     }
   }, "\u0421\u0430\u043C\u044B\u0435 \u044D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 FIFA 20 \u0438 \u043F\u0435\u0440\u0435\u0441\u0442\u0440\u043E\u0435\u043D\u0438\u044F \u0432 \u0437\u0430\u0432\u0438\u0441\u0438\u043C\u043E\u0441\u0442\u0438 \u043E\u0442 \u0441\u0447\u0451\u0442\u0430")), __jsx("div", {
@@ -8891,7 +8849,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 146,
+      lineNumber: 145,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8899,7 +8857,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 147,
+      lineNumber: 146,
       columnNumber: 29
     }
   }, "\u0437\u0430\u0434\u0430\u0447\u0438 \u0438\u0433\u0440\u043E\u043A\u0430\u043C"), __jsx("p", {
@@ -8907,7 +8865,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 148,
+      lineNumber: 147,
       columnNumber: 29
     }
   }, "\u041A\u0430\u0436\u0434\u0430\u044F \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u0438\u043C\u0435\u0435\u0442 \u0441\u0432\u043E\u0439 \u044D\u0444\u0444\u0435\u043A\u0442. \u0418 \u0442\u044B \u0443\u0437\u043D\u0430\u0435\u0448\u044C, \u043A\u0430\u043A \u0441\u0434\u0435\u043B\u0430\u0442\u044C \u0442\u0430\u043A, \u0447\u0442\u043E\u0431\u044B \u043A\u043E\u043C\u0430\u043D\u0434\u0430 \u0440\u0430\u0431\u043E\u0442\u0430\u043B\u0430 \u043D\u0430 100%")), __jsx("div", {
@@ -8915,7 +8873,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 151,
+      lineNumber: 150,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8923,7 +8881,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 152,
+      lineNumber: 151,
       columnNumber: 29
     }
   }, "\u0437\u0430\u0449\u0438\u0442\u0430"), __jsx("p", {
@@ -8931,7 +8889,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 153,
+      lineNumber: 152,
       columnNumber: 29
     }
   }, "\u041F\u043E\u0434\u0431\u043E\u0440 \u043B\u0443\u0447\u0448\u0438\u0445 \u0437\u0430\u0449\u0438\u0442\u043D\u0438\u043A\u043E\u0432 \u0438 \u0440\u0430\u0437\u0431\u043E\u0440 \u0441\u0430\u043C\u044B\u0445 \u044D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u044B\u0445 \u0442\u0430\u043A\u0442\u0438\u043A \u043F\u0440\u0438 \u043E\u0431\u043E\u0440\u043E\u043D\u0435")), __jsx("div", {
@@ -8939,7 +8897,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 155,
+      lineNumber: 154,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8947,7 +8905,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 156,
+      lineNumber: 155,
       columnNumber: 29
     }
   }, "\u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C \u043C\u044F\u0447\u0430"), __jsx("p", {
@@ -8955,7 +8913,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 157,
+      lineNumber: 156,
       columnNumber: 29
     }
   }, "\u0412\u043B\u0430\u0434\u0435\u043D\u0438\u0435 = \u043F\u043E\u043B\u043D\u044B\u0439 \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C \u043D\u0430\u0434 \u0438\u0433\u0440\u043E\u0439, \u0434\u0430\u0436\u0435 \u043F\u0440\u0438 \u0432\u044B\u0441\u043E\u043A\u043E\u043C \u043F\u0440\u0435\u0441\u0441\u0438\u043D\u0433\u0435 \u0441\u043E\u043F\u0435\u0440\u043D\u0438\u043A\u0430")))), __jsx("div", {
@@ -8963,7 +8921,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 161,
+      lineNumber: 160,
       columnNumber: 17
     }
   }, __jsx("div", {
@@ -8971,7 +8929,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 162,
+      lineNumber: 161,
       columnNumber: 21
     }
   }, __jsx("span", {
@@ -8979,7 +8937,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 163,
+      lineNumber: 162,
       columnNumber: 25
     }
   }, "599\u20BD"), __jsx("span", {
@@ -8987,7 +8945,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 164,
+      lineNumber: 163,
       columnNumber: 25
     }
   }, "999\u20BD"), __jsx("span", {
@@ -8995,7 +8953,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 165,
+      lineNumber: 164,
       columnNumber: 25
     }
   }, "Save 40%")), __jsx("div", {
@@ -9003,7 +8961,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 167,
+      lineNumber: 166,
       columnNumber: 21
     }
   }, "SPECIAL OFFER"), __jsx("div", {
@@ -9011,7 +8969,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 168,
+      lineNumber: 167,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -9020,7 +8978,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 169,
+      lineNumber: 168,
       columnNumber: 25
     }
   }, "Buy course ($", materialsState && ((_materialsState$2 = materialsState[0]) === null || _materialsState$2 === void 0 ? void 0 : _materialsState$2.price), ".00)"), __jsx(next_link__WEBPACK_IMPORTED_MODULE_9___default.a, {
@@ -9028,7 +8986,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 170,
+      lineNumber: 169,
       columnNumber: 25
     }
   }, __jsx("a", {
@@ -9036,7 +8994,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 171,
+      lineNumber: 170,
       columnNumber: 29
     }
   }, "Watch free episodes"))), __jsx("span", {
@@ -9044,7 +9002,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 174,
+      lineNumber: 173,
       columnNumber: 21
     }
   }, "Satisfaction guaranteed"))), __jsx("div", {
@@ -9052,7 +9010,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 179,
+      lineNumber: 178,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -9060,7 +9018,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 180,
+      lineNumber: 179,
       columnNumber: 17
     }
   }, __jsx("div", {
@@ -9068,7 +9026,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 181,
+      lineNumber: 180,
       columnNumber: 21
     }
   }, __jsx("h2", {
@@ -9076,7 +9034,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 182,
+      lineNumber: 181,
       columnNumber: 25
     }
   }, "\u041E\u0411\u0423\u0427\u0415\u041D\u0418\u0415 \u041E\u0422 \u041B\u0423\u0427\u0428\u0418\u0425 \u2013 \u044D\u0442\u043E:"), __jsx("div", {
@@ -9084,7 +9042,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 183,
+      lineNumber: 182,
       columnNumber: 25
     }
   }, __jsx("div", {
@@ -9092,7 +9050,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 184,
+      lineNumber: 183,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9100,7 +9058,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 185,
+      lineNumber: 184,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9109,7 +9067,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 186,
+      lineNumber: 185,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9117,7 +9075,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 188,
+      lineNumber: 187,
       columnNumber: 33
     }
   }, "\u041D\u0410\u0421\u0422\u0420\u0410\u0418\u0412\u0410\u0422\u042C \u0418\u0413\u0420\u0423 \u041A\u0410\u041A \u041F\u0420\u041E"), __jsx("p", {
@@ -9125,7 +9083,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 189,
+      lineNumber: 188,
       columnNumber: 33
     }
   }, "\u041F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u043E\u043C\u043E\u0433\u0443\u0442 \u043B\u0443\u0447\u0448\u0435 \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0438 \u043F\u043E\u043D\u0438\u043C\u0430\u0442\u044C \u043C\u0435\u0445\u0430\u043D\u0438\u043A\u0443 \u0438\u0433\u0440\u044B")), __jsx("div", {
@@ -9133,7 +9091,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 191,
+      lineNumber: 190,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9141,7 +9099,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 192,
+      lineNumber: 191,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9150,7 +9108,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 193,
+      lineNumber: 192,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9158,7 +9116,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 195,
+      lineNumber: 194,
       columnNumber: 33
     }
   }, "\u0418\u0413\u0420\u0410\u0422\u042C \u0412 \u0417\u0410\u0429\u0418\u0422\u0415 \u041A\u0410\u041A \u041F\u0420\u041E"), __jsx("p", {
@@ -9166,7 +9124,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 196,
+      lineNumber: 195,
       columnNumber: 33
     }
   }, "\u042D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u0430\u044F \u0438\u0433\u0440\u0430 \u0432 \u043E\u0431\u043E\u0440\u043E\u043D\u0435 \u2013 \u043A\u043B\u044E\u0447 \u0434\u043B\u044F \u0432\u0430\u0448\u0438\u0445 \u0431\u0443\u0434\u0443\u0449\u0438\u0445 \u043F\u043E\u0431\u0435\u0434!")), __jsx("div", {
@@ -9174,7 +9132,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 198,
+      lineNumber: 197,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9182,7 +9140,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 199,
+      lineNumber: 198,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9191,7 +9149,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 200,
+      lineNumber: 199,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9199,7 +9157,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 202,
+      lineNumber: 201,
       columnNumber: 33
     }
   }, "\u0412\u041E\u0417\u041C\u041E\u0416\u041D\u041E\u0421\u0422\u042C \u0421\u0422\u0410\u0422\u042C \u041F\u0420\u041E"), __jsx("p", {
@@ -9207,7 +9165,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 203,
+      lineNumber: 202,
       columnNumber: 33
     }
   }, "\u041D\u0430\u0448 \u043A\u0443\u0440\u0441 \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0432\u0430\u043C \u0434\u043E\u0431\u0438\u0442\u044C\u0441\u044F \u043B\u0443\u0447\u0448\u0438\u0445 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432 \u043D\u0430 \u043B\u044E\u0431\u043E\u043C \u0443\u0440\u043E\u0432\u043D\u0435!"))), __jsx("div", {
@@ -9215,7 +9173,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 206,
+      lineNumber: 205,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -9223,7 +9181,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 207,
+      lineNumber: 206,
       columnNumber: 29
     }
   }, "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043A\u0443\u0440\u0441\u0430"), __jsx("p", {
@@ -9231,7 +9189,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 208,
+      lineNumber: 207,
       columnNumber: 29
     }
   }, "\u0421\u0430\u043C\u044B\u0439 \u0441\u0438\u043B\u044C\u043D\u044B\u0439 \u043A\u0438\u0431\u0435\u0440\u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D \u0420\u043E\u0441\u0441\u0438\u0438 \u0410\u043D\u0442\u043E\u043D \u041A\u043B\u0435\u043D\u043E\u0432 [KLENOFF] \u0438 \u043B\u0443\u0447\u0448\u0438\u0439 \u0430\u0432\u0442\u043E\u0440 \u0433\u0430\u0439\u0434\u043E\u0432 \u043F\u043E FIFA \u0410\u0440\u0442\u0451\u043C \u041A\u0440\u0430\u0441\u0443\u043B\u0438\u043D [MOZZ] \u043F\u043E\u0434\u0435\u043B\u044F\u0442\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u0441\u0430\u043C\u043E\u0439 \u0446\u0435\u043D\u043D\u043E\u0439 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0435\u0439 \u0438 \u0444\u0438\u0448\u043A\u0430\u043C\u0438 \u043F\u043E \u0424\u0418\u0424\u0410. \u041C\u044B \u043F\u043E\u043C\u043E\u0436\u0435\u043C \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0438\u0433\u0440\u0443, \u043F\u043E\u0434\u043E\u0431\u0440\u0430\u0442\u044C \u043B\u0443\u0447\u0448\u0438\u0445 \u0438\u0433\u0440\u043E\u043A\u043E\u0432 \u043D\u0430 \u043A\u0430\u0436\u0434\u0443\u044E \u043F\u043E\u0437\u0438\u0446\u0438\u044E \u0438 \u0434\u0435\u0442\u0430\u043B\u044C\u043D\u043E \u0440\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C \u0432\u0430\u0448\u0438 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0432 \u0437\u0430\u0449\u0438\u0442\u0435, \u043F\u0440\u0438 \u0438\u0433\u0440\u0435 \u0432\u0440\u0430\u0442\u0430\u0440\u0451\u043C, \u0430 \u0442\u0430\u043A\u0436\u0435 \u0440\u0430\u0441\u0441\u043A\u0430\u0436\u0435\u043C \u043A\u043B\u044E\u0447\u0435\u0432\u044B\u0435 \u043C\u043E\u043C\u0435\u043D\u0442\u044B \u043F\u043E \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044E \u043C\u044F\u0447\u0430.")))), __jsx("div", {
@@ -9239,14 +9197,14 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 219,
+      lineNumber: 218,
       columnNumber: 17
     }
   }, __jsx("h2", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 220,
+      lineNumber: 219,
       columnNumber: 21
     }
   }, "\u0427\u0422\u041E \u0412\u0410\u0421 \u0416\u0414\u0415\u0422 \u0412 \u041F\u0415\u0420\u0412\u041E\u0419 \u0427\u0410\u0421\u0422\u0418?"), __jsx("div", {
@@ -9254,7 +9212,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 221,
+      lineNumber: 220,
       columnNumber: 21
     }
   }, lessonsState === null || lessonsState === void 0 ? void 0 : lessonsState.map(function (item, index) {
@@ -9264,7 +9222,7 @@ var Main = function Main(_ref) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 222,
+        lineNumber: 221,
         columnNumber: 62
       }
     });
@@ -9273,7 +9231,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 224,
+      lineNumber: 223,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -9281,7 +9239,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 225,
+      lineNumber: 224,
       columnNumber: 25
     }
   }, "Show more"))), __jsx(_components_ui_Slider_Slider__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -9289,7 +9247,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 228,
+      lineNumber: 227,
       columnNumber: 17
     }
   }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (item) {
@@ -9299,7 +9257,7 @@ var Main = function Main(_ref) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 229,
+        lineNumber: 228,
         columnNumber: 55
       }
     });
@@ -9308,7 +9266,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 231,
+      lineNumber: 230,
       columnNumber: 17
     }
   }, testLessons.map(function (item, index) {
@@ -9318,7 +9276,7 @@ var Main = function Main(_ref) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 232,
+        lineNumber: 231,
         columnNumber: 72
       }
     });
@@ -9327,7 +9285,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 235,
+      lineNumber: 234,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -9335,7 +9293,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 236,
+      lineNumber: 235,
       columnNumber: 17
     }
   }, __jsx("h2", {
@@ -9343,7 +9301,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 237,
+      lineNumber: 236,
       columnNumber: 21
     }
   }, "\u0413\u041E\u0422\u041E\u0412 \u041D\u0410\u0427\u0410\u0422\u042C?"), __jsx("h3", {
@@ -9351,7 +9309,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 238,
+      lineNumber: 237,
       columnNumber: 21
     }
   }, "\u0423\u0427\u0418\u0421\u042C \u0423 \u041B\u0423\u0427\u0428\u0418\u0425 \u0412 \u041C\u0418\u0420\u0415!"), __jsx("div", {
@@ -9359,7 +9317,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 239,
+      lineNumber: 238,
       columnNumber: 21
     }
   }, __jsx("img", {
@@ -9368,7 +9326,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 240,
+      lineNumber: 239,
       columnNumber: 25
     }
   })), __jsx("a", {
@@ -9377,7 +9335,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 242,
+      lineNumber: 241,
       columnNumber: 21
     }
   }, "Get started"))));
@@ -9454,6 +9412,48 @@ var ActionsConstants = {
   SET_MATERIALS: 'SET_MATERIALS',
   SET_USER: 'SET_USER',
   RATE_MATERIAL: 'RATE_MATERIAL'
+};
+
+/***/ }),
+
+/***/ "./static/cloudpayments.js":
+/*!*********************************!*\
+  !*** ./static/cloudpayments.js ***!
+  \*********************************/
+/*! exports provided: pay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pay", function() { return pay; });
+var pay = function pay(amount, successAction) {
+  var widget = new cp.CloudPayments();
+  widget.charge({
+    // options
+    publicId: 'pk_d6ade581f1060d5e657f0d18ebd81',
+    //id из личного кабинета
+    description: 'Пример оплаты (деньги сниматься не будут)',
+    //назначение
+    amount: amount,
+    //сумма
+    currency: 'RUB',
+    //валюта
+    accountId: 'user@example.com',
+    //идентификатор плательщика (необязательно)
+    skin: "modern" //дизайн виджета
+    // data: {
+    //     myProp: 'myProp value' //произвольный набор параметров
+    // }
+
+  }, function (options) {
+    // success
+    //действие при успешной оплате
+    successAction();
+  }, function (reason, options) {
+    // fail
+    //действие при неуспешной оплате
+    console.log('Произошла ошибка');
+  });
 };
 
 /***/ }),

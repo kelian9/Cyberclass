@@ -1,6 +1,5 @@
 import styles from './Main.module.scss';
 import { useEffect, useState } from "react";
-import Header from "../../components/ui/Header/Header";
 import LessonCard from '../../components/ui/LessonCard/LessonCard';
 import Slider from '../../components/ui/Slider/Slider';
 import Comment from '../../components/ui/Comment/Comment';
@@ -13,7 +12,7 @@ import { LessonsResponse } from '../../api/models/response/lessons.response';
 import { setLessons } from '../../store/actions/lessons-actions';
 import Link from 'next/link';
 import Head from 'next/head';
-import {pay} from './cloudpayments';
+import {pay} from '../../../static/cloudpayments';
 import { OrderAPI } from '../../api/order';
 
 let testLessons = [
