@@ -1,0 +1,231 @@
+@import "../../../common/styles/mixins.scss";
+
+.footer {
+  padding: 180px 8% 70px 17%;
+  box-sizing: border-box;
+
+  @include md-down {
+    padding: 70px 0 40px;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  &__wrap {
+
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 100px;
+
+    @include sm-down {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+
+  &__news {
+    width: 100%;
+    max-width: 325px;
+    margin-right: 30px;
+
+    @include sm-down {
+      margin-bottom: 60px;
+      margin-right: 0;
+    }
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 16px;
+  }
+
+  &__subtext {
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+    margin-bottom: 15px;
+  }
+
+  &__form {
+    position: relative;
+    margin-bottom: 25px;
+  }
+
+  &__formInput {
+    // width: 100%;
+    padding: 8px 15px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    color: #212B36;
+    outline: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border: 1px solid #75F880;
+    }
+
+    &::placeholder {
+      color: #7C7E92;
+    }
+  }
+
+  &__formBtn {
+    display: inline-block;
+    padding: 9px 28px !important;
+    box-sizing: border-box;
+    margin-left: -20px;
+    box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    text-align: center;
+    color: #212B36;
+  }
+
+  &__agree {
+    font-size: 11px;
+    line-height: 17px;
+    color: #FFFFFF;
+  }
+
+  &__contact {
+    //width: 100%;
+    //max-width: 305px;
+    margin-right: 30px;
+
+    @include sm-down {
+      width: 100%;
+      max-width: 305px;
+      margin-bottom: 60px;
+      margin-right: 0;
+    }
+  }
+
+  &__contactInfo {
+    margin-bottom: 40px;
+  }
+
+
+  &__infoBlock {
+    margin-bottom: 10px;
+  }
+
+  &__contactName {
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+  }
+
+  &__contactLink {
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+    // text-decoration: underline;
+    transition: 0.2s;
+
+    &:hover {
+      color: #75F880;
+    }
+  }
+
+  &__follow {
+    margin-top: 40px;
+  }
+
+  &__followTitle {
+    font-weight: bold;
+    font-size: 19px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+
+  &__followGroup {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__followLink {
+    display: block;
+    margin-right: 10px;
+    transition: 0.2s;
+
+    &:hover {
+      svg {
+        path {
+          fill: #75F880;
+        }
+      }
+    }
+  }
+
+  &__followIcon {
+
+    svg {
+      display: block;
+      transition: 0.2s;
+    }
+  }
+
+  &__menu {
+    @include sm-down {
+      width: 100%;
+      max-width: 305px;
+      margin-bottom: 0;
+      margin-right: 0;
+    }
+  }
+
+  &__menuList {
+
+  }
+
+  &__menuItem {
+    margin-bottom: 14px;
+  }
+
+  &__menuLink {
+    font-size: 14px;
+    line-height: 28px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: 0.2s;
+
+    &:hover {
+      color: #75F880;
+    }
+  }
+
+  &__bottom {
+    
+  }
+
+  &__bottomPay {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  &__bottomCopy {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #FFFFFF;
+  }
+}
+

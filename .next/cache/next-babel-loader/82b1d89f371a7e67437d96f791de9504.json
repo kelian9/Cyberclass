@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { ActionsConstants } from \"../models/actions-constants.model\";\nexport const LessonsReducer = (state = [], action) => {\n  switch (action.type) {\n    case ActionsConstants.SET_LESSONS:\n      return [...action.lessons];\n\n    default:\n      return state;\n  }\n};","map":null,"metadata":{},"sourceType":"module"}

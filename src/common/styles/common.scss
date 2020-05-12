@@ -1,0 +1,259 @@
+@import './variables.scss';
+@import './mixins.scss';
+@import '../../../static/fonts/fonts.css';
+@import '../../pages/main/styles/What.scss';
+@import '../../pages/main/styles/Course.scss';
+
+body {
+    margin: 0;
+    padding: 0;
+    background: $bodyBackground;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+}
+
+.content-container {
+    width: 100%;
+    padding: 0 8% 0 17%;
+    box-sizing: border-box;
+
+    @include sm-down {
+        padding: 0 5% 0 5%;
+    }
+}
+
+h1,h2,h3,h4,h5,h6,
+p,
+span,
+a,
+button,
+label,
+input {
+    font-family: 'Montserrat';
+    font-weight: normal;
+    font-style: normal;
+}
+
+button {
+    outline: none;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+.topSeller {
+    padding: 6px 12px;
+    background: $purpleColor;
+    border-radius: 4px;
+    font-size: 10px;
+    line-height: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+// Buttons
+.common-btn,
+.purple-btn {
+    padding: 10px;
+    box-sizing: border-box;
+    background: #75F880;
+    border-radius: 10px;
+    border: 0;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    color: #212B36;
+    &:hover {
+        background-color: #5BE066;
+    }
+
+    &:active,
+    &:focus {
+        background-color: #5BE066;
+        box-shadow: none;
+    }
+
+    &--disabled {
+        color: #ABABAB;
+        background-color: #DBDBDB;
+        box-shadow: none;
+    }
+
+    &--outline {
+        background: #1B1E4A;
+        border: 1px solid #75F880;
+        color: #75F880;
+    }
+
+    &--discord {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        border: 0;
+        background-color: #E25AF0;
+        box-shadow: none;
+
+        span {
+            margin-left: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: #FFFFFF;
+        }
+    }
+}
+
+.purple-btn {
+    background: #E25AF0;
+    color: #FFFFFF;
+
+    &:hover {
+        background-color: #5BE066;
+    }
+
+    &:active,
+    &:focus {
+        background-color: #5BE066;
+        box-shadow: none;
+    }
+}
+
+.transparent-btn {
+    padding: 10px;
+    box-sizing: border-box;
+    background: transparent;
+    border: 1px solid #75F880;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #75F880;
+}
+
+
+// Inputs
+.common-input {
+    width: 100%;
+    max-width: 438px;
+    height: 47px;
+    padding: 0 13px;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 0.996795px solid #C2C3CC;
+    border-radius: 9.96795px;
+    font-weight: 500;
+    font-size: 13.9551px;
+    letter-spacing: 0.149519px;
+    color: #7C7E92;
+    outline: none;
+}
+
+.response-modal {
+    position: fixed;
+    top: calc(50% - 75px);
+    left: calc(50% - 150px);
+    width: 300px;
+    height: 150px;
+    padding: 20px;
+    box-sizing: border-box;
+    @extend %display-flex-column;
+    background: whitesmoke;
+    border-radius: 10px;
+    border: 2px solid;
+    z-index: 20;
+    img {
+        width: 44px;
+    }
+    span {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333232;
+    }
+}
+
+// Authorizatin & Registration
+.auth-component {
+    width: 100%;
+    height: 100vh;
+    @extend %display-flex-column;
+    justify-content: center;
+    background-color: rgb(247, 247, 247);
+    .terms {
+        width: 400px;
+        position: absolute;
+        bottom: 20px;
+        text-align: center;
+        line-height: 1.5;
+
+        @include xs-down {
+            width: 90%;
+        }
+
+        a {
+            text-decoration: underline;
+            color: #343434;
+        }
+    }
+}
+
+.auth-form {
+    position: relative;
+    width: 518px;
+    padding: 30px 40px;
+    box-sizing: border-box;
+    border: 6px solid rgb(241, 241, 241);
+    border-radius: 20px;
+
+    @include xs-down {
+        width: 90vw;
+        padding: 30px 15px;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 30px;
+        text-transform: uppercase;
+        color: #212529;
+    }
+    .common-input,
+    .common-btn {
+        width: 100%;
+        height: 47px;
+        margin-top: 32px;
+    }
+    .create-account-link,
+    .authorize-link {
+        margin-top: 10px;
+        width: 100%;
+        display: inline-block;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 500;
+        color: rgb(88, 230, 159);
+        transition: 0.3s;
+    
+        &:hover {
+            color: rgb(78, 209, 144);
+        }
+    }
+    .error {
+        position: absolute;
+        bottom: 10px;
+        left: calc(50% - 50px);
+        width: 100px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgb(235, 93, 93);
+    }
+}

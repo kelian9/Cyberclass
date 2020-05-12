@@ -1,0 +1,62 @@
+@import "../../../common/styles/mixins.scss";
+@import "../../../common/styles/variables.scss";
+
+.slider {
+  margin-top: 40px;
+  position: relative;
+  width: 100%;
+  min-height: 348px;
+  height: auto;
+  transition: 0.5s;
+  overflow: hidden;
+
+  &__container {
+    margin-top: 60px;
+    // width: 100%;
+    min-width: 100%;
+    height: auto;
+    @extend %display-flex-row;
+    justify-content: flex-start;
+    transition: 0.5s;
+  }
+
+  &__btnWrap {
+    display: flex;
+    align-items: center;
+
+    @include xs-down {}
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #FFFFFF;
+    border-radius: 3px;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    svg {
+      display: block;
+
+      path {
+        fill: #FFFFFF;
+      }
+    }
+
+    &Prev {
+      margin-right: 14px;
+    }
+
+    &Next {
+      transform: rotateY(180deg);
+    }
+
+  }
+}

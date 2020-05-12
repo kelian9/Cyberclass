@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const environment = {\n  apiEndPoint: 'http://194.177.23.9:377/api'\n};","map":null,"metadata":{},"sourceType":"module"}

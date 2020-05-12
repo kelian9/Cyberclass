@@ -1,0 +1,114 @@
+@import "../../../common/styles/mixins.scss";
+
+.header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  padding: 45px 48px 0;
+  box-sizing: border-box;
+  background-color: transparent;
+  z-index: 2;
+
+  .user-name {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+
+  &__wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    z-index: 1001;
+    margin-right: 80px;
+
+    @include xs-down {
+      margin-right: 20px;
+    }
+
+    &_link {
+      display: block;
+      width: 222px;
+
+      @include xs-down {
+        width: 135px;
+        width: 138px;
+        img {
+          width: 138px;
+        }
+      }
+
+      svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+
+  &__nav {
+    display: flex;
+    align-items: center;
+
+
+    &_list {
+      display: flex;
+      align-items: center;
+    }
+
+    &_item {
+      list-style-type: none;
+
+      &:not(:last-child) {
+        margin-right: 40px;
+
+        @include xs-down {
+          margin-right: 20px;
+        }
+      }
+
+    }
+
+    &_link {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      line-height: 19px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      cursor: pointer;
+
+      &:hover {
+        svg {
+          path {
+            transition: 0.2s;
+            fill: #75F880;
+          }
+        }
+
+        span {
+          transition: 0.2s;
+          color: #75F880;
+        }
+      }
+
+      svg {
+        display: block;
+      }
+
+      span {
+        display: block;
+        margin-left: 10px;
+        @include xs-down {
+          display: none;
+        }
+      }
+    }
+  }
+}

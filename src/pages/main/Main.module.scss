@@ -1,0 +1,124 @@
+@import '../../common/styles/variables.scss';
+@import '../../common/styles/mixins.scss';
+@import './styles/Ready.scss';
+
+.header {
+    width: 100%;
+    height: 691px;
+    padding: 0 8% 42px 17%;
+    box-sizing: border-box;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(15, 20, 52, 0) 0%, #0F1434 100%), url('/static/images/field.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    @include sm-down {
+        padding: 0 5% 0 5%;
+    }
+
+    .heading {
+        padding-top: 480px;
+        z-index: 2;
+        h3 {
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            &::after {
+                content: "";
+                display: inline-block;
+                margin: 4px 14px;
+                width: 78px;
+                height: 2px;
+                background: #FFFFFF;
+            }
+        }
+        h1 {
+            margin-top: 46px;
+            font-weight: 600;
+            font-size: 40px;
+            text-transform: uppercase;
+            color: #75F880;            
+        }
+        img {
+            margin: 37px 36px;
+            vertical-align: middle;
+        }
+    }
+}
+
+.headerBg {
+    position: absolute;
+    left: 55%;
+    top: 315px;
+    width: 409px;
+    height: 290px;
+    @extend %display-flex-row;
+    align-items: flex-end;
+    z-index: 1;
+
+    // @include sm-down {
+    //     display: none;
+    // }
+
+    img:nth-child(2) {
+        position: absolute;
+        bottom: 0;
+    }
+    img:nth-child(3) {
+        position: relative;
+        top: -16px;
+    }
+}
+
+.firstPart {
+    width: 100%;
+    margin-top: 125px;
+    @extend %display-flex-column;
+    justify-content: flex-start;
+
+    h2 {
+        font-weight: bold;
+        font-size: 40px;
+        line-height: 48px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #E25AF0;
+    }
+    .cardsContainer {
+        width: 100%;
+        margin-top: 118px;
+        margin-left: -20px;
+        @extend %display-flex-row;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        div {
+            // margin-left: 30px;
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+
+        @include xs-down {
+            margin-left: 0;
+        }
+
+        @include sm-down {
+            flex-direction: column;
+            div {
+                margin-top: 20px;
+            }
+        }
+
+        @include xl-down {
+            div {
+                margin-top: 20px;
+            }
+        }
+    }
+    a {
+        margin-top: 71px;
+        align-self: flex-end;
+    }
+}

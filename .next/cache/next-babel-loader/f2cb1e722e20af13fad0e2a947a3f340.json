@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { ActionsConstants } from \"../models/actions-constants.model\";\nexport var setLessons = function setLessons(action) {\n  return {\n    type: ActionsConstants.SET_LESSONS,\n    lessons: action\n  };\n};","map":null,"metadata":{},"sourceType":"module"}

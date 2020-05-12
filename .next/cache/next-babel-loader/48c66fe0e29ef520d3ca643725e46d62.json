@@ -1,0 +1,1 @@
+{"ast":null,"code":"// Check if user is not logged in and go to auth\nvar checkLoggedIn = function checkLoggedIn() {\n  var token = JSON.parse(localStorage.getItem('token'));\n  return token && token.token && +new Date(token.expireDate) > +new Date(Date.now());\n};\n\nexport default checkLoggedIn;","map":null,"metadata":{},"sourceType":"module"}

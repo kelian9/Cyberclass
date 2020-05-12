@@ -1,0 +1,107 @@
+@import "src/common/styles/mixins";
+
+.course {
+  width: 100%;
+  padding: 40px 0 60px;
+
+
+  &__wrap {
+    width: 100%;
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 48px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #E25AF0;
+    margin-bottom: 70px;
+
+    @include sm-down {
+      font-size: 30px;
+      line-height: 38px;
+      margin-bottom: 45px;
+    }
+  }
+
+  &__group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    @include sm-down {
+      align-items: center;
+    }
+  }
+
+  &__block {
+    width: 100%;
+    max-width: 330px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1B1E4A;
+    border-radius: 24px;
+    margin-bottom: 50px;
+    padding: 15px 17px 35px;
+    box-sizing: border-box;
+
+    @include sm-down {
+      max-width: 100%;
+    }
+  }
+
+  &__block-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: rgba(117, 248, 128, 0.2);
+    margin-bottom: 25px;
+    margin-top: -45px;
+
+    svg {
+      display: block;
+    }
+  }
+
+  &__block-title {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+  }
+
+  &__block-text {
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+    color: #FFFFFF;
+  }
+
+  &__desc {
+
+  }
+
+  &__desc-title {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+  }
+
+  &__desc-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F0EDED;
+  }
+}
