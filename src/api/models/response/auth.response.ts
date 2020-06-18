@@ -1,11 +1,13 @@
 export interface Person {
-    name: string;
+    phoneNumber: string;
 }
 
 export interface User {
     userID: number;
     person: Person;
     userType: number;
+    nickName: string;
+    avatar: string;
 }
 
 export interface Token {

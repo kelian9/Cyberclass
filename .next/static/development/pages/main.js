@@ -1932,31 +1932,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/components/ui/Comment/Comment.module.scss":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ref--5-oneOf-3-1!./node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!./node_modules/resolve-url-loader??ref--5-oneOf-3-3!./node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-3-4!./src/components/ui/Comment/Comment.module.scss ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-exports = ___CSS_LOADER_API_IMPORT___(true);
-// Module
-exports.push([module.i, "@charset \"UTF-8\";\n.Comment_quote__3_ULc {\n  min-width: 100%;\n  max-width: 340px;\n  display: flex;\n}\n@media only screen and (max-width: 576px) {\n  .Comment_quote__3_ULc {\n    flex-direction: column;\n  }\n}\n.Comment_quote__profile__2eS-t {\n  margin-right: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .Comment_quote__profile__2eS-t {\n    display: flex;\n    align-items: center;\n    margin-right: 0;\n    margin-bottom: 35px;\n  }\n}\n.Comment_quote__avatar__8euF2 {\n  width: 108px;\n  height: 108px;\n  margin-bottom: 30px;\n}\n@media only screen and (max-width: 576px) {\n  .Comment_quote__avatar__8euF2 {\n    width: 93px;\n    height: 93px;\n    margin-right: 15px;\n    margin-bottom: 0;\n  }\n}\n.Comment_quote__avatar__8euF2 img {\n  display: block;\n  width: 108px;\n  height: 108px;\n  border-radius: 14px;\n  background-color: #CCCCCC;\n}\n.Comment_quote__name__3rLZh {\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  font-size: 18px;\n  line-height: 22px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n@media only screen and (max-width: 576px) {\n  .Comment_quote__name__3rLZh {\n    margin-left: 10px;\n  }\n}\n.Comment_quote__text__1Gipq {\n  font-style: italic;\n  font-weight: bold;\n  font-size: 36px;\n  line-height: 54px;\n  letter-spacing: -1px;\n  display: -webkit-box;\n  color: #75F880;\n  -webkit-line-clamp: 6;\n  /* количество строк */\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n@media only screen and (max-width: 576px) {\n  .Comment_quote__text__1Gipq {\n    font-size: 24px;\n    line-height: 31px;\n  }\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/components/ui/Comment/Comment.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAAA,gBAAgB;AAEhB;EACE,eAAA;EACA,gBAAA;EACA,aAAA;AAAF;AC4BE;ED/BF;IAMI,sBAAA;EACF;AACF;AACE;EACE,kBAAA;AACJ;ACoBE;EDtBA;IAII,aAAA;IACA,mBAAA;IACA,eAAA;IACA,mBAAA;EAEJ;AACF;AACE;EACE,YAAA;EACA,aAAA;EACA,mBAAA;AACJ;ACOE;EDXA;IAMI,WAAA;IACA,YAAA;IACA,kBAAA;IACA,gBAAA;EAEJ;AACF;AAAI;EACE,cAAA;EACA,YAAA;EACA,aAAA;EACA,mBAAA;EACA,yBAAA;AAEN;AAEE;EACE,qCAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;EACA,yBAAA;EACA,cAAA;AAAJ;AChBE;EDUA;IASI,iBAAA;EACJ;AACF;AAEE;EACE,kBAAA;EACA,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,oBAAA;EACA,oBAAA;EACA,cAAA;EACA,qBAAA;EAAuB,qBAAA;EACvB,4BAAA;EACA,gBAAA;EACA,uBAAA;AACJ;ACnCE;EDuBA;IAcI,eAAA;IACA,iBAAA;EAEJ;AACF","file":"Comment.module.scss","sourcesContent":["@charset \"UTF-8\";\n.quote {\n  min-width: 100%;\n  max-width: 340px;\n  display: flex;\n}\n@media only screen and (max-width: 576px) {\n  .quote {\n    flex-direction: column;\n  }\n}\n.quote__profile {\n  margin-right: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .quote__profile {\n    display: flex;\n    align-items: center;\n    margin-right: 0;\n    margin-bottom: 35px;\n  }\n}\n.quote__avatar {\n  width: 108px;\n  height: 108px;\n  margin-bottom: 30px;\n}\n@media only screen and (max-width: 576px) {\n  .quote__avatar {\n    width: 93px;\n    height: 93px;\n    margin-right: 15px;\n    margin-bottom: 0;\n  }\n}\n.quote__avatar img {\n  display: block;\n  width: 108px;\n  height: 108px;\n  border-radius: 14px;\n  background-color: #CCCCCC;\n}\n.quote__name {\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: 600;\n  font-size: 18px;\n  line-height: 22px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n@media only screen and (max-width: 576px) {\n  .quote__name {\n    margin-left: 10px;\n  }\n}\n.quote__text {\n  font-style: italic;\n  font-weight: bold;\n  font-size: 36px;\n  line-height: 54px;\n  letter-spacing: -1px;\n  display: -webkit-box;\n  color: #75F880;\n  -webkit-line-clamp: 6;\n  /* количество строк */\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n@media only screen and (max-width: 576px) {\n  .quote__text {\n    font-size: 24px;\n    line-height: 31px;\n  }\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
-// Exports
-exports.locals = {
-	"quote": "Comment_quote__3_ULc",
-	"quote__profile": "Comment_quote__profile__2eS-t",
-	"quote__avatar": "Comment_quote__avatar__8euF2",
-	"quote__name": "Comment_quote__name__3rLZh",
-	"quote__text": "Comment_quote__text__1Gipq"
-};
-module.exports = exports;
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/components/ui/LessonCard/LessonCard.module.scss":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ref--5-oneOf-3-1!./node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!./node_modules/resolve-url-loader??ref--5-oneOf-3-3!./node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-3-4!./src/components/ui/LessonCard/LessonCard.module.scss ***!
@@ -1968,7 +1943,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".LessonCard_lessonCard__1cnPZ {\n  position: relative;\n  margin-left: 30px;\n  width: 340px;\n  height: 348px;\n  cursor: pointer;\n}\n.LessonCard_lessonCard__1cnPZ:first-child {\n  margin-left: 0;\n}\n@media only screen and (max-width: 1440px) {\n  .LessonCard_lessonCard__1cnPZ {\n    width: 100%;\n  }\n}\n@media only screen and (max-width: 576px) {\n  .LessonCard_lessonCard__1cnPZ {\n    margin-left: 0;\n  }\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_emptyPath__3GDvk {\n  width: 340px;\n  height: 244px;\n  border-radius: 10px;\n  background-color: #6da3d4;\n}\n@media only screen and (max-width: 1440px) {\n  .LessonCard_lessonCard__1cnPZ .LessonCard_emptyPath__3GDvk {\n    width: 90vw;\n  }\n}\n.LessonCard_lessonCard__1cnPZ img {\n  width: 100%;\n  height: 244px;\n  border-radius: 10px;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_play-icon__1nBNt {\n  position: absolute;\n  width: 42px;\n  height: 42px;\n  top: 101px;\n  left: calc(50% - 21px);\n  z-index: 2;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_duration__27-wx {\n  position: absolute;\n  top: 214px;\n  right: 10px;\n  font-size: 16px;\n  color: #75F880;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_duration-line__15ALY {\n  position: absolute;\n  top: 232px;\n  left: 10px;\n  display: block;\n  width: 320px;\n  height: 2px;\n  background: #E25AF0;\n}\n.LessonCard_lessonCard__1cnPZ h3 {\n  margin-top: 13px;\n  font-weight: 600;\n  font-size: 18px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.LessonCard_lessonCard__1cnPZ p {\n  margin-top: 16px;\n  font-size: 14px;\n  color: #7F7F7F;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/components/ui/LessonCard/LessonCard.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAEA;EACI,kBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,eAAA;AADJ;AAGI;EACI,cAAA;AADR;ACAE;EDPF;IAYQ,WAAA;EADN;AACF;ACmBE;ED/BF;IAgBQ,cAAA;EAAN;AACF;AAEI;EACI,YAAA;EACA,aAAA;EACA,mBAAA;EACA,yBAAA;AAAR;AChBE;EDYE;IAOQ,WAAA;EACV;AACF;AACI;EACI,WAAA;EACA,aAAA;EACA,mBAAA;AACR;AACI;EACI,kBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,sBAAA;EACA,UAAA;AACR;AACI;EACI,kBAAA;EACA,UAAA;EACA,WAAA;EACA,eAAA;EACA,cAAA;AACR;AAAQ;EACI,kBAAA;EACA,UAAA;EACA,UAAA;EACA,cAAA;EACA,YAAA;EACA,WAAA;EACA,mBAAA;AAEZ;AACI;EACI,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;AACR;AACI;EACI,gBAAA;EACA,eAAA;EACA,cAAA;AACR","file":"LessonCard.module.scss","sourcesContent":["@import '../../../common/styles/mixins.scss';\r\n\r\n.lessonCard {\r\n    position: relative;\r\n    margin-left: 30px;\r\n    width: 340px;\r\n    height: 348px;\r\n    cursor: pointer;\r\n\r\n    &:first-child {\r\n        margin-left: 0;\r\n    }\r\n\r\n    @include xl-down {\r\n        width: 100%;\r\n    }\r\n\r\n    @include xs-down {\r\n        margin-left: 0;\r\n    }\r\n\r\n    .emptyPath {\r\n        width: 340px;\r\n        height: 244px;\r\n        border-radius: 10px;\r\n        background-color: rgb(109, 163, 212);\r\n\r\n        @include xl-down {\r\n            width: 90vw;\r\n        }\r\n    }\r\n    img {\r\n        width: 100%;\r\n        height: 244px;\r\n        border-radius: 10px;\r\n    }\r\n    .play-icon {\r\n        position: absolute;\r\n        width: 42px;\r\n        height: 42px;\r\n        top: 101px;\r\n        left: calc(50% - 21px);\r\n        z-index: 2;\r\n    }\r\n    .duration {\r\n        position: absolute;\r\n        top: 214px;\r\n        right: 10px;\r\n        font-size: 16px;\r\n        color: #75F880;\r\n        &-line {\r\n            position: absolute;\r\n            top: 232px;\r\n            left: 10px;\r\n            display: block;\r\n            width: 320px;\r\n            height: 2px;\r\n            background: #E25AF0;\r\n        }\r\n    }\r\n    h3 {\r\n        margin-top: 13px;\r\n        font-weight: 600;\r\n        font-size: 18px;\r\n        text-transform: uppercase;\r\n        color: #FFFFFF;        \r\n    }\r\n    p {\r\n        margin-top: 16px;\r\n        font-size: 14px;\r\n        color: #7F7F7F;\r\n    }\r\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
+exports.push([module.i, ".LessonCard_lessonCard__1cnPZ {\n  position: relative;\n  margin-left: 30px;\n  width: 340px;\n  height: 348px;\n  cursor: pointer;\n}\n.LessonCard_lessonCard__1cnPZ:first-child {\n  margin-left: 0;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_emptyPath__3GDvk {\n  width: 340px;\n  height: 244px;\n  border-radius: 10px;\n  background-color: #6da3d4;\n}\n@media only screen and (max-width: 1440px) {\n  .LessonCard_lessonCard__1cnPZ .LessonCard_emptyPath__3GDvk {\n    width: 90vw;\n  }\n}\n.LessonCard_lessonCard__1cnPZ img {\n  width: 100%;\n  height: 244px;\n  border-radius: 10px;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_play-icon__1nBNt {\n  position: absolute;\n  width: 42px;\n  height: 42px;\n  top: 101px;\n  left: calc(50% - 21px);\n  z-index: 2;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_duration__27-wx {\n  position: absolute;\n  top: 214px;\n  right: 10px;\n  font-size: 16px;\n  color: #75F880;\n}\n.LessonCard_lessonCard__1cnPZ .LessonCard_duration-line__15ALY {\n  position: absolute;\n  top: 232px;\n  left: 10px;\n  display: block;\n  width: 320px;\n  height: 2px;\n  background: #E25AF0;\n}\n@media only screen and (max-width: 576px) {\n  .LessonCard_lessonCard__1cnPZ .LessonCard_duration-line__15ALY {\n    width: calc(100% - 20px);\n  }\n}\n.LessonCard_lessonCard__1cnPZ h3 {\n  margin-top: 13px;\n  font-weight: 600;\n  font-size: 18px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.LessonCard_lessonCard__1cnPZ p {\n  margin-top: 16px;\n  font-size: 14px;\n  color: #7F7F7F;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/components/ui/LessonCard/LessonCard.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAEA;EACI,kBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,eAAA;AADJ;AAGI;EACI,cAAA;AADR;AAII;EACI,YAAA;EACA,aAAA;EACA,mBAAA;EACA,yBAAA;AAFR;ACNE;EDIE;IAOQ,WAAA;EADV;AACF;AAGI;EACI,WAAA;EACA,aAAA;EACA,mBAAA;AADR;AAGI;EACI,kBAAA;EACA,WAAA;EACA,YAAA;EACA,UAAA;EACA,sBAAA;EACA,UAAA;AADR;AAGI;EACI,kBAAA;EACA,UAAA;EACA,WAAA;EACA,eAAA;EACA,cAAA;AADR;AAEQ;EACI,kBAAA;EACA,UAAA;EACA,UAAA;EACA,cAAA;EACA,YAAA;EACA,WAAA;EACA,mBAAA;AAAZ;AChBE;EDoBU;IACI,wBAAA;EADd;AACF;AAII;EACI,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;AAFR;AAII;EACI,gBAAA;EACA,eAAA;EACA,cAAA;AAFR","file":"LessonCard.module.scss","sourcesContent":["@import '../../../common/styles/mixins.scss';\r\n\r\n.lessonCard {\r\n    position: relative;\r\n    margin-left: 30px;\r\n    width: 340px;\r\n    height: 348px;\r\n    cursor: pointer;\r\n\r\n    &:first-child {\r\n        margin-left: 0;\r\n    }\r\n\r\n    .emptyPath {\r\n        width: 340px;\r\n        height: 244px;\r\n        border-radius: 10px;\r\n        background-color: rgb(109, 163, 212);\r\n\r\n        @include xl-down {\r\n            width: 90vw;\r\n        }\r\n    }\r\n    img {\r\n        width: 100%;\r\n        height: 244px;\r\n        border-radius: 10px;\r\n    }\r\n    .play-icon {\r\n        position: absolute;\r\n        width: 42px;\r\n        height: 42px;\r\n        top: 101px;\r\n        left: calc(50% - 21px);\r\n        z-index: 2;\r\n    }\r\n    .duration {\r\n        position: absolute;\r\n        top: 214px;\r\n        right: 10px;\r\n        font-size: 16px;\r\n        color: #75F880;\r\n        &-line {\r\n            position: absolute;\r\n            top: 232px;\r\n            left: 10px;\r\n            display: block;\r\n            width: 320px;\r\n            height: 2px;\r\n            background: #E25AF0;\r\n        }\r\n\r\n        @include xs-down {\r\n            &-line {\r\n                width: calc(100% - 20px);\r\n            }\r\n        }\r\n    }\r\n    h3 {\r\n        margin-top: 13px;\r\n        font-weight: 600;\r\n        font-size: 18px;\r\n        text-transform: uppercase;\r\n        color: #FFFFFF;        \r\n    }\r\n    p {\r\n        margin-top: 16px;\r\n        font-size: 14px;\r\n        color: #7F7F7F;\r\n    }\r\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
 // Exports
 exports.locals = {
 	"lessonCard": "LessonCard_lessonCard__1cnPZ",
@@ -1993,7 +1968,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".Slider_slider__container__2v40S {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Slider_slider__1H_mY {\n  margin-top: 40px;\n  position: relative;\n  width: 100%;\n  min-height: 348px;\n  height: auto;\n  transition: 0.5s;\n  overflow: hidden;\n}\n.Slider_slider__container__2v40S {\n  margin-top: 60px;\n  min-width: 100%;\n  height: auto;\n  justify-content: flex-start;\n  transition: 0.5s;\n}\n.Slider_slider__btnWrap__2L8Tt {\n  display: flex;\n  align-items: center;\n}\n.Slider_slider__btn__1Pyb5 {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 36px;\n  height: 36px;\n  border: 1px solid #FFFFFF;\n  border-radius: 3px;\n  transition: all 0.2s ease-in-out;\n  background-color: transparent;\n}\n.Slider_slider__btn__1Pyb5:hover {\n  opacity: 0.7;\n}\n.Slider_slider__btn__1Pyb5 svg {\n  display: block;\n}\n.Slider_slider__btn__1Pyb5 svg path {\n  fill: #FFFFFF;\n}\n.Slider_slider__btnPrev__pb52m {\n  margin-right: 14px;\n}\n.Slider_slider__btnNext__3v5jR {\n  transform: rotateY(180deg);\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/components/ui/Slider/Slider.module.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADSA,gBAAA;AAOA,gBAAA;AClBA;EACE,gBAAA;EACA,kBAAA;EACA,WAAA;EACA,iBAAA;EACA,YAAA;EACA,gBAAA;EACA,gBAAA;AAOF;AALE;EACE,gBAAA;EAEA,eAAA;EACA,YAAA;EAEA,2BAAA;EACA,gBAAA;AAKJ;AAFE;EACE,aAAA;EACA,mBAAA;AAIJ;AACE;EACE,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,WAAA;EACA,YAAA;EACA,yBAAA;EACA,kBAAA;EACA,gCAAA;EACA,6BAAA;AACJ;AACI;EACE,YAAA;AACN;AAEI;EACE,cAAA;AAAN;AAEM;EACE,aAAA;AAAR;AAII;EACE,kBAAA;AAFN;AAKI;EACE,0BAAA;AAHN","file":"Slider.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".slider__container {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.slider {\n  margin-top: 40px;\n  position: relative;\n  width: 100%;\n  min-height: 348px;\n  height: auto;\n  transition: 0.5s;\n  overflow: hidden;\n}\n.slider__container {\n  margin-top: 60px;\n  min-width: 100%;\n  height: auto;\n  justify-content: flex-start;\n  transition: 0.5s;\n}\n.slider__btnWrap {\n  display: flex;\n  align-items: center;\n}\n.slider__btn {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 36px;\n  height: 36px;\n  border: 1px solid #FFFFFF;\n  border-radius: 3px;\n  transition: all 0.2s ease-in-out;\n  background-color: transparent;\n}\n.slider__btn:hover {\n  opacity: 0.7;\n}\n.slider__btn svg {\n  display: block;\n}\n.slider__btn svg path {\n  fill: #FFFFFF;\n}\n.slider__btnPrev {\n  margin-right: 14px;\n}\n.slider__btnNext {\n  transform: rotateY(180deg);\n}"]}]);
+exports.push([module.i, ".Slider_slider__container__2v40S {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Slider_slider__1H_mY {\n  margin-top: 40px;\n  position: relative;\n  width: 100%;\n  min-height: 348px;\n  height: auto;\n  transition: 0.5s;\n  overflow: hidden;\n}\n.Slider_slider__container__2v40S {\n  margin-top: 60px;\n  min-width: 100%;\n  height: auto;\n  justify-content: flex-start;\n  transition: 0.5s;\n}\n.Slider_slider__btnWrap__2L8Tt {\n  display: flex;\n  align-items: center;\n}\n.Slider_slider__btn__1Pyb5 {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 36px;\n  height: 36px;\n  border: 1px solid #FFFFFF;\n  border-radius: 3px;\n  transition: all 0.2s ease-in-out;\n  background-color: transparent;\n}\n.Slider_slider__btn__1Pyb5:hover {\n  opacity: 0.7;\n}\n.Slider_slider__btn__1Pyb5 svg {\n  display: block;\n}\n.Slider_slider__btn__1Pyb5 svg path {\n  fill: #FFFFFF;\n}\n.Slider_slider__btnPrev__pb52m {\n  margin-right: 14px;\n}\n.Slider_slider__btnNext__3v5jR {\n  transform: rotateY(180deg);\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/components/ui/Slider/Slider.module.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADSA,gBAAA;AAOA,gBAAA;AClBA;EACE,gBAAA;EACA,kBAAA;EACA,WAAA;EACA,iBAAA;EACA,YAAA;EACA,gBAAA;EACA,gBAAA;AAOF;AALE;EACE,gBAAA;EAEA,eAAA;EACA,YAAA;EAEA,2BAAA;EACA,gBAAA;AAKJ;AAFE;EACE,aAAA;EACA,mBAAA;AAIJ;AADE;EACE,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,WAAA;EACA,YAAA;EACA,yBAAA;EACA,kBAAA;EACA,gCAAA;EACA,6BAAA;AAGJ;AADI;EACE,YAAA;AAGN;AAAI;EACE,cAAA;AAEN;AAAM;EACE,aAAA;AAER;AAEI;EACE,kBAAA;AAAN;AAGI;EACE,0BAAA;AADN","file":"Slider.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".slider__container {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.slider {\n  margin-top: 40px;\n  position: relative;\n  width: 100%;\n  min-height: 348px;\n  height: auto;\n  transition: 0.5s;\n  overflow: hidden;\n}\n.slider__container {\n  margin-top: 60px;\n  min-width: 100%;\n  height: auto;\n  justify-content: flex-start;\n  transition: 0.5s;\n}\n.slider__btnWrap {\n  display: flex;\n  align-items: center;\n}\n.slider__btn {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 36px;\n  height: 36px;\n  border: 1px solid #FFFFFF;\n  border-radius: 3px;\n  transition: all 0.2s ease-in-out;\n  background-color: transparent;\n}\n.slider__btn:hover {\n  opacity: 0.7;\n}\n.slider__btn svg {\n  display: block;\n}\n.slider__btn svg path {\n  fill: #FFFFFF;\n}\n.slider__btnPrev {\n  margin-right: 14px;\n}\n.slider__btnNext {\n  transform: rotateY(180deg);\n}"]}]);
 // Exports
 exports.locals = {
 	"slider__container": "Slider_slider__container__2v40S",
@@ -2019,7 +1994,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".Main_firstPart__hBdRM .Main_cardsContainer__2B354, .Main_headerBg__21G2E {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.Main_firstPart__hBdRM {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Main_ready__HwOHa {\n  margin-top: 65px;\n  padding: 120px 0 150px;\n  background-image: url(\"/static/images/ready-bg.png\");\n  background-position: center;\n  background-size: cover;\n}\n.Main_ready__wrap__2emEr {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.Main_ready__title__3BnAx {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 10px;\n}\n@media only screen and (max-width: 767px) {\n  .Main_ready__title__3BnAx {\n    font-size: 30px;\n    line-height: 38px;\n  }\n}\n.Main_ready__subtitle__3pEN_ {\n  font-size: 20px;\n  line-height: 24px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 30px;\n}\n.Main_ready__icon__2XxXb {\n  margin-bottom: 45px;\n}\n.Main_ready__icon__2XxXb svg {\n  display: block;\n}\n.Main_ready__btn__kzc_E {\n  width: 178px;\n}\n\n.Main_header__crZ5l {\n  width: 100%;\n  height: 691px;\n  padding: 0 8% 42px 17%;\n  box-sizing: border-box;\n  background: radial-gradient(50% 50% at 50% 50%, rgba(15, 20, 52, 0) 0%, #0F1434 100%), url(\"/static/images/field.jpg\");\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n@media only screen and (max-width: 767px) {\n  .Main_header__crZ5l {\n    padding: 0 5% 0 5%;\n  }\n}\n.Main_header__crZ5l .Main_heading__1cRei {\n  padding-top: 480px;\n  z-index: 2;\n}\n.Main_header__crZ5l .Main_heading__1cRei h3 {\n  font-weight: 600;\n  font-size: 12px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.Main_header__crZ5l .Main_heading__1cRei h3::after {\n  content: \"\";\n  display: inline-block;\n  margin: 4px 14px;\n  width: 78px;\n  height: 2px;\n  background: #FFFFFF;\n}\n.Main_header__crZ5l .Main_heading__1cRei h1 {\n  margin-top: 46px;\n  font-weight: 600;\n  font-size: 40px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.Main_header__crZ5l .Main_heading__1cRei img {\n  margin: 37px 36px;\n  vertical-align: middle;\n}\n\n.Main_headerBg__21G2E {\n  position: absolute;\n  left: 55%;\n  top: 315px;\n  width: 409px;\n  height: 290px;\n  align-items: flex-end;\n  z-index: 1;\n}\n.Main_headerBg__21G2E img:nth-child(2) {\n  position: absolute;\n  bottom: 0;\n}\n.Main_headerBg__21G2E img:nth-child(3) {\n  position: relative;\n  top: -16px;\n}\n\n.Main_firstPart__hBdRM {\n  width: 100%;\n  margin-top: 125px;\n  justify-content: flex-start;\n}\n.Main_firstPart__hBdRM h2 {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n.Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n  width: 100%;\n  margin-top: 118px;\n  margin-left: -20px;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.Main_firstPart__hBdRM .Main_cardsContainer__2B354 div:first-child {\n  margin-left: 0;\n}\n@media only screen and (max-width: 576px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n    flex-direction: column;\n  }\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 div {\n    margin-top: 20px;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 div {\n    margin-top: 20px;\n  }\n}\n.Main_firstPart__hBdRM a {\n  margin-top: 71px;\n  align-self: flex-end;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/pages/main/Main.module.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/Ready.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADEA;EACI,aAAA;EACA,sBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADEA,gBAAA;AAOA,gBAAA;AEnBA;EACE,gBAAA;EACA,sBAAA;EACA,oDAAA;EACA,2BAAA;EACA,sBAAA;ADeF;ACZE;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;ADcJ;ACXE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;ADaJ;AETE;EDXA;IAUI,eAAA;IACA,iBAAA;EDcJ;AACF;ACXE;EACE,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;ADaJ;ACVE;EACE,mBAAA;ADYJ;ACXI;EACE,cAAA;ADaN;ACRE;EACE,YAAA;ADUJ;;AAvDA;EACI,WAAA;EACA,aAAA;EACA,sBAAA;EACA,sBAAA;EACA,sHAAA;EACA,4BAAA;EACA,sBAAA;AA0DJ;AE1CE;EFvBF;IAUQ,kBAAA;EA2DN;AACF;AAzDI;EACI,kBAAA;EACA,UAAA;AA2DR;AA1DQ;EACI,gBAAA;EACA,eAAA;EACA,mBAAA;EACA,yBAAA;EACA,cAAA;AA4DZ;AA3DY;EACI,WAAA;EACA,qBAAA;EACA,gBAAA;EACA,WAAA;EACA,WAAA;EACA,mBAAA;AA6DhB;AA1DQ;EACI,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;AA4DZ;AA1DQ;EACI,iBAAA;EACA,sBAAA;AA4DZ;;AAvDA;EACI,kBAAA;EACA,SAAA;EACA,UAAA;EACA,YAAA;EACA,aAAA;EAEA,qBAAA;EACA,UAAA;AAyDJ;AAnDI;EACI,kBAAA;EACA,SAAA;AAqDR;AAnDI;EACI,kBAAA;EACA,UAAA;AAqDR;;AAjDA;EACI,WAAA;EACA,iBAAA;EAEA,2BAAA;AAmDJ;AAjDI;EACI,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;AAmDR;AAjDI;EACI,WAAA;EACA,iBAAA;EACA,kBAAA;EAEA,uBAAA;EACA,eAAA;AAkDR;AA9CY;EACI,cAAA;AAgDhB;AEjHE;EFsDE;IAgBQ,cAAA;EA+CV;AACF;AE5HE;EF4DE;IAoBQ,sBAAA;EAgDV;EA/CU;IACI,gBAAA;EAiDd;AACF;AEtJE;EFyGU;IACI,gBAAA;EAgDd;AACF;AA7CI;EACI,gBAAA;EACA,oBAAA;AA+CR","file":"Main.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".firstPart .cardsContainer, .headerBg {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.firstPart {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.ready {\n  margin-top: 65px;\n  padding: 120px 0 150px;\n  background-image: url(\"/static/images/ready-bg.png\");\n  background-position: center;\n  background-size: cover;\n}\n.ready__wrap {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.ready__title {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 10px;\n}\n@media only screen and (max-width: 767px) {\n  .ready__title {\n    font-size: 30px;\n    line-height: 38px;\n  }\n}\n.ready__subtitle {\n  font-size: 20px;\n  line-height: 24px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 30px;\n}\n.ready__icon {\n  margin-bottom: 45px;\n}\n.ready__icon svg {\n  display: block;\n}\n.ready__btn {\n  width: 178px;\n}\n\n.header {\n  width: 100%;\n  height: 691px;\n  padding: 0 8% 42px 17%;\n  box-sizing: border-box;\n  background: radial-gradient(50% 50% at 50% 50%, rgba(15, 20, 52, 0) 0%, #0F1434 100%), url(\"/static/images/field.jpg\");\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n@media only screen and (max-width: 767px) {\n  .header {\n    padding: 0 5% 0 5%;\n  }\n}\n.header .heading {\n  padding-top: 480px;\n  z-index: 2;\n}\n.header .heading h3 {\n  font-weight: 600;\n  font-size: 12px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.header .heading h3::after {\n  content: \"\";\n  display: inline-block;\n  margin: 4px 14px;\n  width: 78px;\n  height: 2px;\n  background: #FFFFFF;\n}\n.header .heading h1 {\n  margin-top: 46px;\n  font-weight: 600;\n  font-size: 40px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.header .heading img {\n  margin: 37px 36px;\n  vertical-align: middle;\n}\n\n.headerBg {\n  position: absolute;\n  left: 55%;\n  top: 315px;\n  width: 409px;\n  height: 290px;\n  align-items: flex-end;\n  z-index: 1;\n}\n.headerBg img:nth-child(2) {\n  position: absolute;\n  bottom: 0;\n}\n.headerBg img:nth-child(3) {\n  position: relative;\n  top: -16px;\n}\n\n.firstPart {\n  width: 100%;\n  margin-top: 125px;\n  justify-content: flex-start;\n}\n.firstPart h2 {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n.firstPart .cardsContainer {\n  width: 100%;\n  margin-top: 118px;\n  margin-left: -20px;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.firstPart .cardsContainer div:first-child {\n  margin-left: 0;\n}\n@media only screen and (max-width: 576px) {\n  .firstPart .cardsContainer {\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .firstPart .cardsContainer {\n    flex-direction: column;\n  }\n  .firstPart .cardsContainer div {\n    margin-top: 20px;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .firstPart .cardsContainer div {\n    margin-top: 20px;\n  }\n}\n.firstPart a {\n  margin-top: 71px;\n  align-self: flex-end;\n}","@import \"../../../common/styles/mixins.scss\";\r\n\r\n.ready {\r\n  margin-top: 65px;\r\n  padding: 120px 0 150px;\r\n  background-image: url(\"/static/images/ready-bg.png\");\r\n  background-position: center;\r\n  background-size: cover;\r\n\r\n\r\n  &__wrap {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 40px;\r\n    line-height: 48px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 10px;\r\n\r\n    @include sm-down {\r\n      font-size: 30px;\r\n      line-height: 38px;\r\n    }\r\n  }\r\n\r\n  &__subtitle {\r\n    font-size: 20px;\r\n    line-height: 24px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 30px;\r\n  }\r\n\r\n  &__icon {\r\n    margin-bottom: 45px;\r\n    svg {\r\n      display: block;\r\n\r\n    }\r\n  }\r\n\r\n  &__btn {\r\n    width: 178px;\r\n  }\r\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
+exports.push([module.i, ".Main_firstPart__hBdRM .Main_cardsContainer__2B354, .Main_headerBg__21G2E {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.Main_firstPart__hBdRM {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Main_ready__HwOHa {\n  margin-top: 65px;\n  padding: 120px 0 150px;\n  background-image: url(\"/static/images/ready-bg.png\");\n  background-position: center;\n  background-size: cover;\n}\n.Main_ready__wrap__2emEr {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.Main_ready__title__3BnAx {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 10px;\n}\n@media only screen and (max-width: 767px) {\n  .Main_ready__title__3BnAx {\n    font-size: 30px;\n    line-height: 38px;\n  }\n}\n.Main_ready__subtitle__3pEN_ {\n  font-size: 20px;\n  line-height: 24px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 30px;\n}\n.Main_ready__icon__2XxXb {\n  margin-bottom: 45px;\n}\n.Main_ready__icon__2XxXb svg {\n  display: block;\n}\n.Main_ready__btn__kzc_E {\n  width: 178px;\n}\n\n.Main_header__crZ5l {\n  width: 100%;\n  height: 691px;\n  padding: 0 8% 42px 17%;\n  box-sizing: border-box;\n  background: radial-gradient(50% 50% at 50% 50%, rgba(15, 20, 52, 0) 0%, #0F1434 100%), url(\"/static/images/field.jpg\");\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n@media only screen and (max-width: 767px) {\n  .Main_header__crZ5l {\n    padding: 0 5% 0 5%;\n  }\n}\n.Main_header__crZ5l .Main_heading__1cRei {\n  padding-top: 480px;\n  z-index: 2;\n}\n.Main_header__crZ5l .Main_heading__1cRei h3 {\n  font-weight: 600;\n  font-size: 12px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.Main_header__crZ5l .Main_heading__1cRei h3::after {\n  content: \"\";\n  display: inline-block;\n  margin: 4px 14px;\n  width: 78px;\n  height: 2px;\n  background: #FFFFFF;\n}\n.Main_header__crZ5l .Main_heading__1cRei h1 {\n  margin-top: 46px;\n  font-weight: 600;\n  font-size: 40px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.Main_header__crZ5l .Main_heading__1cRei img {\n  margin: 37px 36px;\n  vertical-align: middle;\n}\n\n.Main_headerBg__21G2E {\n  position: absolute;\n  left: 55%;\n  top: 315px;\n  width: 409px;\n  height: 290px;\n  align-items: flex-end;\n  z-index: 1;\n}\n.Main_headerBg__21G2E img:nth-child(2) {\n  position: absolute;\n  bottom: 0;\n}\n.Main_headerBg__21G2E img:nth-child(3) {\n  position: relative;\n  top: -16px;\n}\n\n.Main_section-heading__2e3Ub {\n  margin-top: 80px;\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n\n.Main_firstPart__hBdRM {\n  width: 100%;\n  margin-top: 125px;\n  justify-content: flex-start;\n}\n.Main_firstPart__hBdRM h2 {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n.Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n  width: 100%;\n  margin-top: 118px;\n  margin-left: -20px;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.Main_firstPart__hBdRM .Main_cardsContainer__2B354 div:first-child {\n  margin-left: 0;\n}\n@media only screen and (max-width: 1170px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 div {\n    width: 100%;\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 div {\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n    margin-left: 0;\n    width: 120%;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 {\n    flex-direction: column;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .Main_firstPart__hBdRM .Main_cardsContainer__2B354 div {\n    margin-top: 20px;\n  }\n}\n.Main_firstPart__hBdRM a {\n  margin-top: 71px;\n  align-self: flex-end;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/pages/main/Main.module.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/Ready.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADEA;EACI,aAAA;EACA,sBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADEA,gBAAA;AAOA,gBAAA;AEnBA;EACE,gBAAA;EACA,sBAAA;EACA,oDAAA;EACA,2BAAA;EACA,sBAAA;ADeF;ACZE;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;ADcJ;ACXE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;ADaJ;AETE;EDXA;IAUI,eAAA;IACA,iBAAA;EDcJ;AACF;ACXE;EACE,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;ADaJ;ACVE;EACE,mBAAA;ADYJ;ACXI;EACE,cAAA;ADaN;ACRE;EACE,YAAA;ADUJ;;AAvDA;EACI,WAAA;EACA,aAAA;EACA,sBAAA;EACA,sBAAA;EACA,sHAAA;EACA,4BAAA;EACA,sBAAA;AA0DJ;AE1CE;EFvBF;IAUQ,kBAAA;EA2DN;AACF;AAzDI;EACI,kBAAA;EACA,UAAA;AA2DR;AA1DQ;EACI,gBAAA;EACA,eAAA;EACA,mBAAA;EACA,yBAAA;EACA,cAAA;AA4DZ;AA3DY;EACI,WAAA;EACA,qBAAA;EACA,gBAAA;EACA,WAAA;EACA,WAAA;EACA,mBAAA;AA6DhB;AA1DQ;EACI,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;AA4DZ;AA1DQ;EACI,iBAAA;EACA,sBAAA;AA4DZ;;AAvDA;EACI,kBAAA;EACA,SAAA;EACA,UAAA;EACA,YAAA;EACA,aAAA;EAEA,qBAAA;EACA,UAAA;AAyDJ;AAnDI;EACI,kBAAA;EACA,SAAA;AAqDR;AAnDI;EACI,kBAAA;EACA,UAAA;AAqDR;;AAjDA;EACI,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;AAoDJ;;AAjDA;EACI,WAAA;EACA,iBAAA;EAEA,2BAAA;AAmDJ;AAjDI;EACI,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;AAmDR;AAhDI;EACI,WAAA;EACA,iBAAA;EACA,kBAAA;EAEA,uBAAA;EACA,eAAA;AAiDR;AA7CY;EACI,cAAA;AA+ChB;AE7IE;EF2FM;IAOQ,WAAA;IACA,cAAA;EA+Cd;AACF;AEvIE;EF+EM;IAYQ,cAAA;EAgDd;AACF;AE9JE;EFyFE;IAyBQ,cAAA;IACA,WAAA;EAgDV;AACF;AElJE;EFuEE;IA8BQ,sBAAA;EAiDV;AACF;AEzKE;EF8HU;IACI,gBAAA;EA8Cd;AACF;AA3CI;EACI,gBAAA;EACA,oBAAA;AA6CR","file":"Main.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".firstPart .cardsContainer, .headerBg {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.firstPart {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.ready {\n  margin-top: 65px;\n  padding: 120px 0 150px;\n  background-image: url(\"/static/images/ready-bg.png\");\n  background-position: center;\n  background-size: cover;\n}\n.ready__wrap {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.ready__title {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 10px;\n}\n@media only screen and (max-width: 767px) {\n  .ready__title {\n    font-size: 30px;\n    line-height: 38px;\n  }\n}\n.ready__subtitle {\n  font-size: 20px;\n  line-height: 24px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 30px;\n}\n.ready__icon {\n  margin-bottom: 45px;\n}\n.ready__icon svg {\n  display: block;\n}\n.ready__btn {\n  width: 178px;\n}\n\n.header {\n  width: 100%;\n  height: 691px;\n  padding: 0 8% 42px 17%;\n  box-sizing: border-box;\n  background: radial-gradient(50% 50% at 50% 50%, rgba(15, 20, 52, 0) 0%, #0F1434 100%), url(\"/static/images/field.jpg\");\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n@media only screen and (max-width: 767px) {\n  .header {\n    padding: 0 5% 0 5%;\n  }\n}\n.header .heading {\n  padding-top: 480px;\n  z-index: 2;\n}\n.header .heading h3 {\n  font-weight: 600;\n  font-size: 12px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.header .heading h3::after {\n  content: \"\";\n  display: inline-block;\n  margin: 4px 14px;\n  width: 78px;\n  height: 2px;\n  background: #FFFFFF;\n}\n.header .heading h1 {\n  margin-top: 46px;\n  font-weight: 600;\n  font-size: 40px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.header .heading img {\n  margin: 37px 36px;\n  vertical-align: middle;\n}\n\n.headerBg {\n  position: absolute;\n  left: 55%;\n  top: 315px;\n  width: 409px;\n  height: 290px;\n  align-items: flex-end;\n  z-index: 1;\n}\n.headerBg img:nth-child(2) {\n  position: absolute;\n  bottom: 0;\n}\n.headerBg img:nth-child(3) {\n  position: relative;\n  top: -16px;\n}\n\n.section-heading {\n  margin-top: 80px;\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n\n.firstPart {\n  width: 100%;\n  margin-top: 125px;\n  justify-content: flex-start;\n}\n.firstPart h2 {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n}\n.firstPart .cardsContainer {\n  width: 100%;\n  margin-top: 118px;\n  margin-left: -20px;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.firstPart .cardsContainer div:first-child {\n  margin-left: 0;\n}\n@media only screen and (max-width: 1170px) {\n  .firstPart .cardsContainer div {\n    width: 100%;\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .firstPart .cardsContainer div {\n    margin-left: 0;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .firstPart .cardsContainer {\n    margin-left: 0;\n    width: 120%;\n  }\n}\n@media only screen and (max-width: 767px) {\n  .firstPart .cardsContainer {\n    flex-direction: column;\n  }\n}\n@media only screen and (max-width: 1440px) {\n  .firstPart .cardsContainer div {\n    margin-top: 20px;\n  }\n}\n.firstPart a {\n  margin-top: 71px;\n  align-self: flex-end;\n}","@import \"../../../common/styles/mixins.scss\";\r\n\r\n.ready {\r\n  margin-top: 65px;\r\n  padding: 120px 0 150px;\r\n  background-image: url(\"/static/images/ready-bg.png\");\r\n  background-position: center;\r\n  background-size: cover;\r\n\r\n\r\n  &__wrap {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 40px;\r\n    line-height: 48px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 10px;\r\n\r\n    @include sm-down {\r\n      font-size: 30px;\r\n      line-height: 38px;\r\n    }\r\n  }\r\n\r\n  &__subtitle {\r\n    font-size: 20px;\r\n    line-height: 24px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 30px;\r\n  }\r\n\r\n  &__icon {\r\n    margin-bottom: 45px;\r\n    svg {\r\n      display: block;\r\n\r\n    }\r\n  }\r\n\r\n  &__btn {\r\n    width: 178px;\r\n  }\r\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
 // Exports
 exports.locals = {
 	"firstPart": "Main_firstPart__hBdRM",
@@ -2032,7 +2007,8 @@ exports.locals = {
 	"ready__icon": "Main_ready__icon__2XxXb",
 	"ready__btn": "Main_ready__btn__kzc_E",
 	"header": "Main_header__crZ5l",
-	"heading": "Main_heading__1cRei"
+	"heading": "Main_heading__1cRei",
+	"section-heading": "Main_section-heading__2e3Ub"
 };
 module.exports = exports;
 
@@ -7664,6 +7640,13 @@ var LessonsAPI = {
       }
     });
   },
+  getPaidLessons: function getPaidLessons() {
+    return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiEndPoint, "/Lesson/GetPaidLessons"), {
+      headers: {
+        'Authorization': "Bearer ".concat(JSON.parse(localStorage.getItem('token')).token)
+      }
+    });
+  },
   getNotAuthorizeLessons: function getNotAuthorizeLessons(materialID) {
     return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiEndPoint, "/NotAutorize/GetLessonsNotAutarize"), {
       params: {
@@ -7730,180 +7713,6 @@ var checkLoggedIn = function checkLoggedIn() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (checkLoggedIn);
-
-/***/ }),
-
-/***/ "./src/components/ui/Comment/Comment.module.scss":
-/*!*******************************************************!*\
-  !*** ./src/components/ui/Comment/Comment.module.scss ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var api = __webpack_require__(/*! ../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-            var content = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--5-oneOf-3-1!../../../../node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!../../../../node_modules/resolve-url-loader??ref--5-oneOf-3-3!../../../../node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-3-4!./Comment.module.scss */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/components/ui/Comment/Comment.module.scss");
-
-            content = content.__esModule ? content.default : content;
-
-            if (typeof content === 'string') {
-              content = [[module.i, content, '']];
-            }
-
-var options = {};
-
-options.insert = function(element){// These elements should always exist. If they do not,
-// this code should fail.
-var anchorElement=document.querySelector('#__next_css__DO_NOT_USE__');var parentNode=anchorElement.parentNode;// Normally <head>
-// Each style tag should be placed right before our
-// anchor. By inserting before and not after, we do not
-// need to track the last inserted element.
-parentNode.insertBefore(element,anchorElement)// Remember: this is development only code.
-//
-// After styles are injected, we need to remove the
-// <style> tags that set `body { display: none; }`.
-//
-// We use `requestAnimationFrame` as a way to defer
-// this operation since there may be multiple style
-// tags.
-;(self.requestAnimationFrame||setTimeout)(function(){for(var x=document.querySelectorAll('[data-next-hide-fouc]'),i=x.length;i--;){x[i].parentNode.removeChild(x[i]);}});};
-options.singleton = false;
-
-var update = api(content, options);
-
-
-if (true) {
-  if (!content.locals || module.hot.invalidate) {
-    var isEqualLocals = function isEqualLocals(a, b) {
-  if (!a && b || a && !b) {
-    return false;
-  }
-
-  var p;
-
-  for (p in a) {
-    if (a[p] !== b[p]) {
-      return false;
-    }
-  }
-
-  for (p in b) {
-    if (!a[p]) {
-      return false;
-    }
-  }
-
-  return true;
-};
-    var oldLocals = content.locals;
-
-    module.hot.accept(
-      /*! !../../../../node_modules/css-loader/dist/cjs.js??ref--5-oneOf-3-1!../../../../node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!../../../../node_modules/resolve-url-loader??ref--5-oneOf-3-3!../../../../node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-3-4!./Comment.module.scss */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/components/ui/Comment/Comment.module.scss",
-      function () {
-        var newContent = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--5-oneOf-3-1!../../../../node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!../../../../node_modules/resolve-url-loader??ref--5-oneOf-3-3!../../../../node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-3-4!./Comment.module.scss */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/components/ui/Comment/Comment.module.scss");
-
-              newContent = newContent.__esModule ? newContent.default : newContent;
-
-              if (typeof newContent === 'string') {
-                newContent = [[module.i, newContent, '']];
-              }
-
-              if (!isEqualLocals(oldLocals, newContent.locals)) {
-                module.hot.invalidate();
-
-                return;
-              }
-
-              oldLocals = newContent.locals;
-
-              update(newContent);
-      }
-    )
-  }
-
-  module.hot.dispose(function() {
-    update();
-  });
-}
-
-module.exports = content.locals || {};
-
-/***/ }),
-
-/***/ "./src/components/ui/Comment/Comment.tsx":
-/*!***********************************************!*\
-  !*** ./src/components/ui/Comment/Comment.tsx ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Comment.module.scss */ "./src/components/ui/Comment/Comment.module.scss");
-/* harmony import */ var _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Comment_module_scss__WEBPACK_IMPORTED_MODULE_1__);
-var _this = undefined,
-    _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Comment\\Comment.tsx";
-
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-var Comment = function Comment(_ref) {
-  var comment = _ref.comment;
-  return __jsx("div", {
-    className: _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.quote,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 6,
-      columnNumber: 9
-    }
-  }, __jsx("div", {
-    className: _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.quote__profile,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 7,
-      columnNumber: 13
-    }
-  }, __jsx("div", {
-    className: _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.quote__avatar,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 8,
-      columnNumber: 17
-    }
-  }, __jsx("img", {
-    src: "",
-    alt: "",
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 9,
-      columnNumber: 21
-    }
-  })), __jsx("span", {
-    className: _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.quote__name,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11,
-      columnNumber: 17
-    }
-  }, "- Justin Regelvio")), __jsx("blockquote", {
-    className: _Comment_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.quote__text,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 13
-    }
-  }, "I used to struggle alot while gaming one day i saw an ad called gamerzclass i clicked on it and opened it and bought course of Ivan Lapanje aka BorasLegend my whole gameplay changed since then my winning streak is going up up and up gameplay is getting on the level of pros!\u0432\u043B\u0430\u043B\u0430\u0432"));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Comment);
 
 /***/ }),
 
@@ -8019,8 +7828,8 @@ __webpack_require__.r(__webpack_exports__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\LessonCard\\LessonCard.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -8036,7 +7845,7 @@ var LessonCard = function LessonCard(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10,
+      lineNumber: 11,
       columnNumber: 9
     }
   }, __jsx("img", {
@@ -8046,16 +7855,16 @@ var LessonCard = function LessonCard(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11,
+      lineNumber: 12,
       columnNumber: 13
     }
   }), lesson.preview ? __jsx("img", {
-    src: lesson.preview,
+    src: 'http://194.177.23.9:577/' + lesson.preview,
     alt: "",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12,
+      lineNumber: 13,
       columnNumber: 31
     }
   }) : __jsx("div", {
@@ -8063,15 +7872,15 @@ var LessonCard = function LessonCard(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 68
+      lineNumber: 13,
+      columnNumber: 97
     }
   }), __jsx("span", {
     className: _LessonCard_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.duration,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13,
+      lineNumber: 14,
       columnNumber: 13
     }
   }, lesson.duration, ":00"), __jsx("span", {
@@ -8079,21 +7888,21 @@ var LessonCard = function LessonCard(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14,
+      lineNumber: 15,
       columnNumber: 13
     }
   }), __jsx("h3", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 16,
       columnNumber: 13
     }
   }, lesson.name), __jsx("p", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
+      lineNumber: 17,
       columnNumber: 13
     }
   }, lesson.description));
@@ -8215,8 +8024,8 @@ __webpack_require__.r(__webpack_exports__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Slider\\Slider.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -8282,7 +8091,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 55,
+      lineNumber: 56,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -8290,7 +8099,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 56,
+      lineNumber: 57,
       columnNumber: 13
     }
   }, __jsx("button", {
@@ -8299,7 +8108,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 57,
+      lineNumber: 58,
       columnNumber: 17
     }
   }, __jsx("img", {
@@ -8308,7 +8117,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 58,
+      lineNumber: 59,
       columnNumber: 21
     }
   })), __jsx("button", {
@@ -8317,7 +8126,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 60,
+      lineNumber: 61,
       columnNumber: 17
     }
   }, __jsx("img", {
@@ -8326,7 +8135,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61,
+      lineNumber: 62,
       columnNumber: 21
     }
   }))), __jsx("div", {
@@ -8338,7 +8147,7 @@ var Slider = function Slider(props) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64,
+      lineNumber: 65,
       columnNumber: 13
     }
   }, props.children));
@@ -8459,22 +8268,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Main_module_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Main_module_scss__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_ui_LessonCard_LessonCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/ui/LessonCard/LessonCard */ "./src/components/ui/LessonCard/LessonCard.tsx");
 /* harmony import */ var _components_ui_Slider_Slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/ui/Slider/Slider */ "./src/components/ui/Slider/Slider.tsx");
-/* harmony import */ var _components_ui_Comment_Comment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/ui/Comment/Comment */ "./src/components/ui/Comment/Comment.tsx");
-/* harmony import */ var _api_lessons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../api/lessons */ "./src/api/lessons.ts");
-/* harmony import */ var _common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/checkLoggedIn */ "./src/common/checkLoggedIn.ts");
-/* harmony import */ var _store_actions_materials_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../store/actions/materials-actions */ "./src/store/actions/materials-actions.ts");
-/* harmony import */ var _store_actions_lessons_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../store/actions/lessons-actions */ "./src/store/actions/lessons-actions.ts");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! next/head */ "./node_modules/next/dist/next-server/lib/head.js");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _static_cloudpayments__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../static/cloudpayments */ "./static/cloudpayments.js");
-/* harmony import */ var _api_order__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../api/order */ "./src/api/order.ts");
+/* harmony import */ var _api_lessons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../api/lessons */ "./src/api/lessons.ts");
+/* harmony import */ var _common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../common/checkLoggedIn */ "./src/common/checkLoggedIn.ts");
+/* harmony import */ var _store_actions_materials_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../store/actions/materials-actions */ "./src/store/actions/materials-actions.ts");
+/* harmony import */ var _store_actions_lessons_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../store/actions/lessons-actions */ "./src/store/actions/lessons-actions.ts");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! next/head */ "./node_modules/next/dist/next-server/lib/head.js");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _static_cloudpayments_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../static/cloudpayments.js */ "./static/cloudpayments.js");
+/* harmony import */ var _api_order__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../api/order */ "./src/api/order.ts");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! next/router */ "./node_modules/next/dist/client/router.js");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_12__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\pages\\main\\index.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -8513,6 +8323,7 @@ var Main = function Main(_ref) {
 
   var pageWidth = _ref.pageWidth,
       store = _ref.store;
+  var router = Object(next_router__WEBPACK_IMPORTED_MODULE_12__["useRouter"])();
   var materialsState = store.getState().MaterialsReducer;
   var lessonsState = store.getState().LessonsReducer;
 
@@ -8520,9 +8331,16 @@ var Main = function Main(_ref) {
       lessonsURL = _useState[0],
       setLessonURL = _useState[1];
 
-  var _useState2 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
-      ballShift = _useState2[0],
-      changeBallShift = _useState2[1];
+  var _useState2 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    error: false,
+    response: ''
+  }),
+      responseModal = _useState2[0],
+      setResponseModal = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
+      ballShift = _useState3[0],
+      changeBallShift = _useState3[1];
 
   var listener = function listener(e) {
     if (pageYOffset < 600) {
@@ -8530,24 +8348,18 @@ var Main = function Main(_ref) {
     }
   };
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
-    error: false,
-    response: ''
-  }),
-      responseModal = _useState3[0],
-      setResponseModal = _useState3[1];
-
   var createOrder = function createOrder() {
-    _api_order__WEBPACK_IMPORTED_MODULE_12__["OrderAPI"].createOrder(materialsState[0].id).then(function (response) {
+    _api_order__WEBPACK_IMPORTED_MODULE_11__["OrderAPI"].createOrder(materialsState[0].id).then(function (response) {
       setResponseModal({
         error: false,
         response: 'Заказ получен'
       });
       setTimeout(function () {
-        return setResponseModal({
+        setResponseModal({
           error: false,
           response: ''
         });
+        router.push(lessonsURL);
       }, 3000);
     })["catch"](function (err) {
       return console.log(err);
@@ -8557,23 +8369,15 @@ var Main = function Main(_ref) {
   var buyCourse = function buyCourse() {
     var _materialsState$;
 
-    Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__["default"])() ? Object(_static_cloudpayments__WEBPACK_IMPORTED_MODULE_11__["pay"])((_materialsState$ = materialsState[0]) === null || _materialsState$ === void 0 ? void 0 : _materialsState$.price, createOrder) : function () {
-      setResponseModal({
-        error: true,
-        response: 'Войдите для совершения покупки'
-      });
-      setTimeout(function () {
-        return setResponseModal({
-          error: false,
-          response: ''
-        });
-      }, 3000);
+    Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_5__["default"])() ? Object(_static_cloudpayments_js__WEBPACK_IMPORTED_MODULE_10__["default"])((_materialsState$ = materialsState[0]) === null || _materialsState$ === void 0 ? void 0 : _materialsState$.price, createOrder) : function () {
+      router.push('/registration'); // setResponseModal({error: true, response: 'Войдите для совершения покупки'})
+      // setTimeout(() => setResponseModal({error: false, response: ''}), 3000)
     }();
   };
 
   var getCourse = function getCourse() {
-    (Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__["default"])() ? _api_lessons__WEBPACK_IMPORTED_MODULE_5__["LessonsAPI"].getMaterials() : _api_lessons__WEBPACK_IMPORTED_MODULE_5__["LessonsAPI"].getNotAuthorizeMaterials()).then(function (response) {
-      store.dispatch(Object(_store_actions_materials_actions__WEBPACK_IMPORTED_MODULE_7__["setMaterials"])(response.data));
+    (Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_5__["default"])() ? _api_lessons__WEBPACK_IMPORTED_MODULE_4__["LessonsAPI"].getMaterials() : _api_lessons__WEBPACK_IMPORTED_MODULE_4__["LessonsAPI"].getNotAuthorizeMaterials()).then(function (response) {
+      store.dispatch(Object(_store_actions_materials_actions__WEBPACK_IMPORTED_MODULE_6__["setMaterials"])(response.data));
       getLessons(response.data[0].id);
       setLessonURL('/lesson/' + response.data[0].id);
     })["catch"](function (err) {
@@ -8582,8 +8386,8 @@ var Main = function Main(_ref) {
   };
 
   var getLessons = function getLessons(materialID) {
-    (Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_6__["default"])() ? _api_lessons__WEBPACK_IMPORTED_MODULE_5__["LessonsAPI"].getLessons(materialID) : _api_lessons__WEBPACK_IMPORTED_MODULE_5__["LessonsAPI"].getNotAuthorizeLessons(materialID)).then(function (response) {
-      store.dispatch(Object(_store_actions_lessons_actions__WEBPACK_IMPORTED_MODULE_8__["setLessons"])(response.data));
+    (Object(_common_checkLoggedIn__WEBPACK_IMPORTED_MODULE_5__["default"])() ? _api_lessons__WEBPACK_IMPORTED_MODULE_4__["LessonsAPI"].getLessons(materialID) : _api_lessons__WEBPACK_IMPORTED_MODULE_4__["LessonsAPI"].getNotAuthorizeLessons(materialID)).then(function (response) {
+      store.dispatch(Object(_store_actions_lessons_actions__WEBPACK_IMPORTED_MODULE_7__["setLessons"])(response.data));
     })["catch"](function (err) {
       console.log(err);
     });
@@ -8597,18 +8401,18 @@ var Main = function Main(_ref) {
       document.body.scrollTop > 1 ? document.removeEventListener('scroll', listener) : null;
     };
   });
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_10___default.a, {
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_9___default.a, {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 94,
+      lineNumber: 104,
       columnNumber: 13
     }
   }, __jsx("title", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 95,
+      lineNumber: 105,
       columnNumber: 17
     }
   }, "Main Page"), __jsx("script", {
@@ -8616,7 +8420,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96,
+      lineNumber: 106,
       columnNumber: 17
     }
   })), responseModal.response ? __jsx("div", {
@@ -8627,7 +8431,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 99,
+      lineNumber: 109,
       columnNumber: 17
     }
   }, __jsx("img", {
@@ -8636,14 +8440,14 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 104,
+      lineNumber: 114,
       columnNumber: 21
     }
   }), __jsx("span", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 105,
+      lineNumber: 115,
       columnNumber: 21
     }
   }, responseModal.response)) : null, __jsx("header", {
@@ -8651,7 +8455,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 109,
+      lineNumber: 119,
       columnNumber: 13
     }
   }, pageWidth > 768 ? __jsx("div", {
@@ -8659,7 +8463,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 111,
+      lineNumber: 121,
       columnNumber: 21
     }
   }, __jsx("img", {
@@ -8668,7 +8472,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 112,
+      lineNumber: 122,
       columnNumber: 25
     }
   }), __jsx("img", {
@@ -8681,7 +8485,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 113,
+      lineNumber: 123,
       columnNumber: 25
     }
   }), __jsx("img", {
@@ -8690,7 +8494,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 117,
+      lineNumber: 127,
       columnNumber: 25
     }
   })) : null, __jsx("div", {
@@ -8698,21 +8502,21 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 120,
+      lineNumber: 130,
       columnNumber: 17
     }
   }, __jsx("h3", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 121,
+      lineNumber: 131,
       columnNumber: 21
     }
   }, "Teaches FIFA 20"), __jsx("h1", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 122,
+      lineNumber: 132,
       columnNumber: 21
     }
   }, "cyberclass: FIFA 20"), __jsx("span", {
@@ -8720,7 +8524,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 123,
+      lineNumber: 133,
       columnNumber: 21
     }
   }, "Top seller"), __jsx("img", {
@@ -8729,7 +8533,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 124,
+      lineNumber: 134,
       columnNumber: 21
     }
   }))), __jsx("div", {
@@ -8737,7 +8541,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 127,
+      lineNumber: 137,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -8745,7 +8549,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 128,
+      lineNumber: 138,
       columnNumber: 17
     }
   }, __jsx("h2", {
@@ -8753,7 +8557,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 129,
+      lineNumber: 139,
       columnNumber: 21
     }
   }, "\u0427\u0415\u041C\u0423 \u0412\u042B \u041D\u0410\u0423\u0427\u0418\u0422\u0415\u0421\u042C?"), __jsx("h3", {
@@ -8761,7 +8565,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 130,
+      lineNumber: 140,
       columnNumber: 21
     }
   }, "\u0418\u043C\u0435\u0439\u0442\u0435 \u0432 \u0432\u0438\u0434\u0443, \u0447\u0442\u043E \u044D\u0442\u043E \u043B\u0438\u0448\u044C \u043F\u0435\u0440\u0432\u0430\u044F \u0447\u0430\u0441\u0442\u044C \u0438\u0437 5, \u0438 \u043D\u0430\u0447\u043D\u0435\u043C \u043C\u044B \u0441 \u043E\u0441\u043D\u043E\u0432"), __jsx("div", {
@@ -8769,7 +8573,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 131,
+      lineNumber: 141,
       columnNumber: 21
     }
   }, __jsx("div", {
@@ -8777,7 +8581,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 132,
+      lineNumber: 142,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8785,7 +8589,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 133,
+      lineNumber: 143,
       columnNumber: 29
     }
   }, "\u0423\u041F\u0420\u0410\u0412\u041B\u0415\u041D\u0418\u0415"), __jsx("p", {
@@ -8793,7 +8597,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 134,
+      lineNumber: 144,
       columnNumber: 29
     }
   }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435 \u0438\u0433\u0440\u0443 \u043F\u043E \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0430\u043C \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u043A\u0438\u0431\u0435\u0440\u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u043E\u0432")), __jsx("div", {
@@ -8801,7 +8605,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 136,
+      lineNumber: 146,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8809,7 +8613,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 137,
+      lineNumber: 147,
       columnNumber: 29
     }
   }, "\u0438\u0433\u0440\u0430 \u0432\u0440\u0430\u0442\u0430\u0440\u0451\u043C"), __jsx("p", {
@@ -8817,7 +8621,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 138,
+      lineNumber: 148,
       columnNumber: 29
     }
   }, "\u041A\u043B\u044E\u0447\u0435\u0432\u044B\u0435 \u0444\u0438\u0448\u043A\u0438 \u0438\u0433\u0440\u044B \u0432\u0440\u0430\u0442\u0430\u0440\u0435\u043C. \u041C\u044B \u043D\u0430\u0443\u0447\u0438\u043C \u043E\u0442\u0431\u0438\u0432\u0430\u0442\u044C \u0434\u0430\u0436\u0435 \u201C\u043C\u0451\u0440\u0442\u0432\u044B\u0435\u201D \u0443\u0434\u0430\u0440\u044B!")), __jsx("div", {
@@ -8825,7 +8629,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 141,
+      lineNumber: 151,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8833,7 +8637,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 142,
+      lineNumber: 152,
       columnNumber: 29
     }
   }, "\u0441\u0445\u0435\u043C\u044B"), __jsx("p", {
@@ -8841,7 +8645,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 143,
+      lineNumber: 153,
       columnNumber: 29
     }
   }, "\u0421\u0430\u043C\u044B\u0435 \u044D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 FIFA 20 \u0438 \u043F\u0435\u0440\u0435\u0441\u0442\u0440\u043E\u0435\u043D\u0438\u044F \u0432 \u0437\u0430\u0432\u0438\u0441\u0438\u043C\u043E\u0441\u0442\u0438 \u043E\u0442 \u0441\u0447\u0451\u0442\u0430")), __jsx("div", {
@@ -8849,7 +8653,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 145,
+      lineNumber: 155,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8857,7 +8661,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 146,
+      lineNumber: 156,
       columnNumber: 29
     }
   }, "\u0437\u0430\u0434\u0430\u0447\u0438 \u0438\u0433\u0440\u043E\u043A\u0430\u043C"), __jsx("p", {
@@ -8865,7 +8669,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 147,
+      lineNumber: 157,
       columnNumber: 29
     }
   }, "\u041A\u0430\u0436\u0434\u0430\u044F \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u0438\u043C\u0435\u0435\u0442 \u0441\u0432\u043E\u0439 \u044D\u0444\u0444\u0435\u043A\u0442. \u0418 \u0442\u044B \u0443\u0437\u043D\u0430\u0435\u0448\u044C, \u043A\u0430\u043A \u0441\u0434\u0435\u043B\u0430\u0442\u044C \u0442\u0430\u043A, \u0447\u0442\u043E\u0431\u044B \u043A\u043E\u043C\u0430\u043D\u0434\u0430 \u0440\u0430\u0431\u043E\u0442\u0430\u043B\u0430 \u043D\u0430 100%")), __jsx("div", {
@@ -8873,7 +8677,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 150,
+      lineNumber: 160,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8881,7 +8685,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 151,
+      lineNumber: 161,
       columnNumber: 29
     }
   }, "\u0437\u0430\u0449\u0438\u0442\u0430"), __jsx("p", {
@@ -8889,7 +8693,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 152,
+      lineNumber: 162,
       columnNumber: 29
     }
   }, "\u041F\u043E\u0434\u0431\u043E\u0440 \u043B\u0443\u0447\u0448\u0438\u0445 \u0437\u0430\u0449\u0438\u0442\u043D\u0438\u043A\u043E\u0432 \u0438 \u0440\u0430\u0437\u0431\u043E\u0440 \u0441\u0430\u043C\u044B\u0445 \u044D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u044B\u0445 \u0442\u0430\u043A\u0442\u0438\u043A \u043F\u0440\u0438 \u043E\u0431\u043E\u0440\u043E\u043D\u0435")), __jsx("div", {
@@ -8897,7 +8701,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 154,
+      lineNumber: 164,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -8905,7 +8709,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 155,
+      lineNumber: 165,
       columnNumber: 29
     }
   }, "\u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C \u043C\u044F\u0447\u0430"), __jsx("p", {
@@ -8913,7 +8717,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 156,
+      lineNumber: 166,
       columnNumber: 29
     }
   }, "\u0412\u043B\u0430\u0434\u0435\u043D\u0438\u0435 = \u043F\u043E\u043B\u043D\u044B\u0439 \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C \u043D\u0430\u0434 \u0438\u0433\u0440\u043E\u0439, \u0434\u0430\u0436\u0435 \u043F\u0440\u0438 \u0432\u044B\u0441\u043E\u043A\u043E\u043C \u043F\u0440\u0435\u0441\u0441\u0438\u043D\u0433\u0435 \u0441\u043E\u043F\u0435\u0440\u043D\u0438\u043A\u0430")))), __jsx("div", {
@@ -8921,7 +8725,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 160,
+      lineNumber: 170,
       columnNumber: 17
     }
   }, __jsx("div", {
@@ -8929,7 +8733,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 161,
+      lineNumber: 171,
       columnNumber: 21
     }
   }, __jsx("span", {
@@ -8937,7 +8741,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 162,
+      lineNumber: 172,
       columnNumber: 25
     }
   }, "599\u20BD"), __jsx("span", {
@@ -8945,7 +8749,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 163,
+      lineNumber: 173,
       columnNumber: 25
     }
   }, "999\u20BD"), __jsx("span", {
@@ -8953,7 +8757,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 164,
+      lineNumber: 174,
       columnNumber: 25
     }
   }, "Save 40%")), __jsx("div", {
@@ -8961,7 +8765,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 166,
+      lineNumber: 176,
       columnNumber: 21
     }
   }, "SPECIAL OFFER"), __jsx("div", {
@@ -8969,7 +8773,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 167,
+      lineNumber: 177,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -8978,15 +8782,15 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 168,
+      lineNumber: 178,
       columnNumber: 25
     }
-  }, "Buy course ($", materialsState && ((_materialsState$2 = materialsState[0]) === null || _materialsState$2 === void 0 ? void 0 : _materialsState$2.price), ".00)"), __jsx(next_link__WEBPACK_IMPORTED_MODULE_9___default.a, {
+  }, "Buy course (\u20BD", materialsState && ((_materialsState$2 = materialsState[0]) === null || _materialsState$2 === void 0 ? void 0 : _materialsState$2.price), ".00)"), __jsx(next_link__WEBPACK_IMPORTED_MODULE_8___default.a, {
     href: lessonsURL,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 169,
+      lineNumber: 179,
       columnNumber: 25
     }
   }, __jsx("a", {
@@ -8994,7 +8798,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 170,
+      lineNumber: 180,
       columnNumber: 29
     }
   }, "Watch free episodes"))), __jsx("span", {
@@ -9002,7 +8806,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 173,
+      lineNumber: 183,
       columnNumber: 21
     }
   }, "Satisfaction guaranteed"))), __jsx("div", {
@@ -9010,7 +8814,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 178,
+      lineNumber: 188,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -9018,7 +8822,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 179,
+      lineNumber: 189,
       columnNumber: 17
     }
   }, __jsx("div", {
@@ -9026,7 +8830,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 180,
+      lineNumber: 190,
       columnNumber: 21
     }
   }, __jsx("h2", {
@@ -9034,7 +8838,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 181,
+      lineNumber: 191,
       columnNumber: 25
     }
   }, "\u041E\u0411\u0423\u0427\u0415\u041D\u0418\u0415 \u041E\u0422 \u041B\u0423\u0427\u0428\u0418\u0425 \u2013 \u044D\u0442\u043E:"), __jsx("div", {
@@ -9042,7 +8846,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 182,
+      lineNumber: 192,
       columnNumber: 25
     }
   }, __jsx("div", {
@@ -9050,7 +8854,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 183,
+      lineNumber: 193,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9058,7 +8862,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 184,
+      lineNumber: 194,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9067,7 +8871,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 185,
+      lineNumber: 195,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9075,7 +8879,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 187,
+      lineNumber: 197,
       columnNumber: 33
     }
   }, "\u041D\u0410\u0421\u0422\u0420\u0410\u0418\u0412\u0410\u0422\u042C \u0418\u0413\u0420\u0423 \u041A\u0410\u041A \u041F\u0420\u041E"), __jsx("p", {
@@ -9083,7 +8887,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 188,
+      lineNumber: 198,
       columnNumber: 33
     }
   }, "\u041F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u043E\u043C\u043E\u0433\u0443\u0442 \u043B\u0443\u0447\u0448\u0435 \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0438 \u043F\u043E\u043D\u0438\u043C\u0430\u0442\u044C \u043C\u0435\u0445\u0430\u043D\u0438\u043A\u0443 \u0438\u0433\u0440\u044B")), __jsx("div", {
@@ -9091,7 +8895,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 190,
+      lineNumber: 200,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9099,7 +8903,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 191,
+      lineNumber: 201,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9108,7 +8912,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 192,
+      lineNumber: 202,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9116,7 +8920,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 194,
+      lineNumber: 204,
       columnNumber: 33
     }
   }, "\u0418\u0413\u0420\u0410\u0422\u042C \u0412 \u0417\u0410\u0429\u0418\u0422\u0415 \u041A\u0410\u041A \u041F\u0420\u041E"), __jsx("p", {
@@ -9124,7 +8928,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 195,
+      lineNumber: 205,
       columnNumber: 33
     }
   }, "\u042D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u0430\u044F \u0438\u0433\u0440\u0430 \u0432 \u043E\u0431\u043E\u0440\u043E\u043D\u0435 \u2013 \u043A\u043B\u044E\u0447 \u0434\u043B\u044F \u0432\u0430\u0448\u0438\u0445 \u0431\u0443\u0434\u0443\u0449\u0438\u0445 \u043F\u043E\u0431\u0435\u0434!")), __jsx("div", {
@@ -9132,7 +8936,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 197,
+      lineNumber: 207,
       columnNumber: 29
     }
   }, __jsx("div", {
@@ -9140,7 +8944,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 198,
+      lineNumber: 208,
       columnNumber: 33
     }
   }, __jsx("img", {
@@ -9149,7 +8953,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 199,
+      lineNumber: 209,
       columnNumber: 37
     }
   })), __jsx("h4", {
@@ -9157,7 +8961,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 201,
+      lineNumber: 211,
       columnNumber: 33
     }
   }, "\u0412\u041E\u0417\u041C\u041E\u0416\u041D\u041E\u0421\u0422\u042C \u0421\u0422\u0410\u0422\u042C \u041F\u0420\u041E"), __jsx("p", {
@@ -9165,7 +8969,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 202,
+      lineNumber: 212,
       columnNumber: 33
     }
   }, "\u041D\u0430\u0448 \u043A\u0443\u0440\u0441 \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0432\u0430\u043C \u0434\u043E\u0431\u0438\u0442\u044C\u0441\u044F \u043B\u0443\u0447\u0448\u0438\u0445 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432 \u043D\u0430 \u043B\u044E\u0431\u043E\u043C \u0443\u0440\u043E\u0432\u043D\u0435!"))), __jsx("div", {
@@ -9173,7 +8977,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 205,
+      lineNumber: 215,
       columnNumber: 25
     }
   }, __jsx("h3", {
@@ -9181,7 +8985,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 206,
+      lineNumber: 216,
       columnNumber: 29
     }
   }, "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043A\u0443\u0440\u0441\u0430"), __jsx("p", {
@@ -9189,7 +8993,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 207,
+      lineNumber: 217,
       columnNumber: 29
     }
   }, "\u0421\u0430\u043C\u044B\u0439 \u0441\u0438\u043B\u044C\u043D\u044B\u0439 \u043A\u0438\u0431\u0435\u0440\u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D \u0420\u043E\u0441\u0441\u0438\u0438 \u0410\u043D\u0442\u043E\u043D \u041A\u043B\u0435\u043D\u043E\u0432 [KLENOFF] \u0438 \u043B\u0443\u0447\u0448\u0438\u0439 \u0430\u0432\u0442\u043E\u0440 \u0433\u0430\u0439\u0434\u043E\u0432 \u043F\u043E FIFA \u0410\u0440\u0442\u0451\u043C \u041A\u0440\u0430\u0441\u0443\u043B\u0438\u043D [MOZZ] \u043F\u043E\u0434\u0435\u043B\u044F\u0442\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u0441\u0430\u043C\u043E\u0439 \u0446\u0435\u043D\u043D\u043E\u0439 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0435\u0439 \u0438 \u0444\u0438\u0448\u043A\u0430\u043C\u0438 \u043F\u043E \u0424\u0418\u0424\u0410. \u041C\u044B \u043F\u043E\u043C\u043E\u0436\u0435\u043C \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0438\u0433\u0440\u0443, \u043F\u043E\u0434\u043E\u0431\u0440\u0430\u0442\u044C \u043B\u0443\u0447\u0448\u0438\u0445 \u0438\u0433\u0440\u043E\u043A\u043E\u0432 \u043D\u0430 \u043A\u0430\u0436\u0434\u0443\u044E \u043F\u043E\u0437\u0438\u0446\u0438\u044E \u0438 \u0434\u0435\u0442\u0430\u043B\u044C\u043D\u043E \u0440\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C \u0432\u0430\u0448\u0438 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0432 \u0437\u0430\u0449\u0438\u0442\u0435, \u043F\u0440\u0438 \u0438\u0433\u0440\u0435 \u0432\u0440\u0430\u0442\u0430\u0440\u0451\u043C, \u0430 \u0442\u0430\u043A\u0436\u0435 \u0440\u0430\u0441\u0441\u043A\u0430\u0436\u0435\u043C \u043A\u043B\u044E\u0447\u0435\u0432\u044B\u0435 \u043C\u043E\u043C\u0435\u043D\u0442\u044B \u043F\u043E \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044E \u043C\u044F\u0447\u0430.")))), __jsx("div", {
@@ -9197,14 +9001,14 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 218,
+      lineNumber: 228,
       columnNumber: 17
     }
   }, __jsx("h2", {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 219,
+      lineNumber: 229,
       columnNumber: 21
     }
   }, "\u0427\u0422\u041E \u0412\u0410\u0421 \u0416\u0414\u0415\u0422 \u0412 \u041F\u0415\u0420\u0412\u041E\u0419 \u0427\u0410\u0421\u0422\u0418?"), __jsx("div", {
@@ -9212,26 +9016,26 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 220,
+      lineNumber: 230,
       columnNumber: 21
     }
-  }, lessonsState === null || lessonsState === void 0 ? void 0 : lessonsState.map(function (item, index) {
+  }, lessonsState === null || lessonsState === void 0 ? void 0 : lessonsState.slice(0, 3).map(function (item, index) {
     return __jsx(_components_ui_LessonCard_LessonCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
       lesson: item,
       key: index,
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 221,
-        columnNumber: 62
+        lineNumber: 231,
+        columnNumber: 73
       }
     });
-  })), __jsx(next_link__WEBPACK_IMPORTED_MODULE_9___default.a, {
+  })), __jsx(next_link__WEBPACK_IMPORTED_MODULE_8___default.a, {
     href: lessonsURL,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 223,
+      lineNumber: 233,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -9239,34 +9043,23 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 224,
+      lineNumber: 234,
       columnNumber: 25
     }
-  }, "Show more"))), __jsx(_components_ui_Slider_Slider__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    itemsCount: 9,
+  }, "Show more"))), __jsx("h2", {
+    className: _Main_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a['section-heading'],
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 227,
+      lineNumber: 241,
       columnNumber: 17
     }
-  }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (item) {
-    return __jsx(_components_ui_Comment_Comment__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      comment: item,
-      key: item,
-      __self: _this,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 228,
-        columnNumber: 55
-      }
-    });
-  })), __jsx(_components_ui_Slider_Slider__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "\u041D\u041E\u0412\u042B\u0419 \u041A\u0423\u0420\u0421 \u2013 \u041A\u0410\u0416\u0414\u042B\u0419 \u041C\u0415\u0421\u042F\u0426"), __jsx(_components_ui_Slider_Slider__WEBPACK_IMPORTED_MODULE_3__["default"], {
     itemsCount: testLessons.length,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 230,
+      lineNumber: 242,
       columnNumber: 17
     }
   }, testLessons.map(function (item, index) {
@@ -9276,7 +9069,7 @@ var Main = function Main(_ref) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 231,
+        lineNumber: 243,
         columnNumber: 72
       }
     });
@@ -9285,7 +9078,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 234,
+      lineNumber: 246,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -9293,7 +9086,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 235,
+      lineNumber: 247,
       columnNumber: 17
     }
   }, __jsx("h2", {
@@ -9301,7 +9094,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 236,
+      lineNumber: 248,
       columnNumber: 21
     }
   }, "\u0413\u041E\u0422\u041E\u0412 \u041D\u0410\u0427\u0410\u0422\u042C?"), __jsx("h3", {
@@ -9309,7 +9102,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 237,
+      lineNumber: 249,
       columnNumber: 21
     }
   }, "\u0423\u0427\u0418\u0421\u042C \u0423 \u041B\u0423\u0427\u0428\u0418\u0425 \u0412 \u041C\u0418\u0420\u0415!"), __jsx("div", {
@@ -9317,7 +9110,7 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 238,
+      lineNumber: 250,
       columnNumber: 21
     }
   }, __jsx("img", {
@@ -9326,19 +9119,26 @@ var Main = function Main(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 239,
+      lineNumber: 251,
       columnNumber: 25
     }
-  })), __jsx("a", {
-    href: "#",
+  })), __jsx(next_link__WEBPACK_IMPORTED_MODULE_8___default.a, {
+    href: "/registration",
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 253,
+      columnNumber: 21
+    }
+  }, __jsx("a", {
     className: _Main_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.ready__btn + ' common-btn',
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 241,
-      columnNumber: 21
+      lineNumber: 254,
+      columnNumber: 25
     }
-  }, "Get started"))));
+  }, "Get started")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Main);
@@ -9411,6 +9211,7 @@ var ActionsConstants = {
   SET_LESSONS: 'SET_LESSONS',
   SET_MATERIALS: 'SET_MATERIALS',
   SET_USER: 'SET_USER',
+  SET_AVATAR: 'SET_AVATAR',
   RATE_MATERIAL: 'RATE_MATERIAL'
 };
 
@@ -9420,12 +9221,11 @@ var ActionsConstants = {
 /*!*********************************!*\
   !*** ./static/cloudpayments.js ***!
   \*********************************/
-/*! exports provided: pay */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pay", function() { return pay; });
 var pay = function pay(amount, successAction) {
   var widget = new cp.CloudPayments();
   widget.charge({
@@ -9455,6 +9255,8 @@ var pay = function pay(amount, successAction) {
     console.log('Произошла ошибка');
   });
 };
+
+/* harmony default export */ __webpack_exports__["default"] = (pay);
 
 /***/ }),
 

@@ -1,4 +1,5 @@
 @import "../../../common/styles/mixins.scss";
+@import "../../../common/styles/variables.scss";
 
 .header {
   position: absolute;
@@ -10,10 +11,61 @@
   background-color: transparent;
   z-index: 2;
 
+  @include xs-down {
+    padding: 45px 30px;
+  }
+
   .user-name {
-    font-size: 13px;
+    position: relative;
+    @extend %display-flex-row;
+    justify-content: flex-start;
+    font-size: 15px;
     text-transform: uppercase;
     color: #FFFFFF;
+    cursor: pointer;
+
+    img {
+      margin-right: 6px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #E25AF0;
+    }
+
+    // &::before {
+    //   margin-right: 5px;
+    //   content: '';
+    //   display: inline-block;
+    //   width: 5px;
+    //   height: 5px;
+    //   border: 1px solid #E25AF0;
+    //   background-color: #E25AF0;
+    //   border-radius: 50%;
+    // }
+  }
+
+  .profile-menu {
+    position: absolute;
+    top: 115%;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    list-style-type: none;
+    background-color: rgb(25, 31, 73);
+    border: 2px solid rgb(92, 47, 97);
+    border-radius: 10px;
+    text-align: right;
+    li {
+      margin-top: 5px;
+      padding: 5px;
+      font-size: 13px;
+      text-transform: uppercase;
+      color: rgb(224, 222, 222);
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
 
   &__wrap {
@@ -69,6 +121,9 @@
 
         @include xs-down {
           margin-right: 20px;
+          &:first-child {
+            display: none;
+          }
         }
       }
 
@@ -78,7 +133,6 @@
       display: flex;
       align-items: center;
       font-size: 13px;
-      line-height: 19px;
       text-align: center;
       text-transform: uppercase;
       color: #FFFFFF;
@@ -92,22 +146,8 @@
           }
         }
 
-        span {
-          transition: 0.2s;
-          color: #75F880;
-        }
-      }
-
-      svg {
-        display: block;
-      }
-
-      span {
-        display: block;
-        margin-left: 10px;
-        @include xs-down {
-          display: none;
-        }
+        transition: 0.2s;
+        color: #75F880;
       }
     }
   }

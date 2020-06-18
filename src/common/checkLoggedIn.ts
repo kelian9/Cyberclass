@@ -1,6 +1,3 @@
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-
 // Check if user is not logged in and go to auth
 const checkLoggedIn = () => {
     const token = JSON.parse(localStorage.getItem('token'))

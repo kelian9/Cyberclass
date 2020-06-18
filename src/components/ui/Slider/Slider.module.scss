@@ -23,8 +23,6 @@
   &__btnWrap {
     display: flex;
     align-items: center;
-
-    @include xs-down {}
   }
 
   &__btn {

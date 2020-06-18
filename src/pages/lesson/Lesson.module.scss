@@ -7,14 +7,15 @@
     // height: 691px;
 
     iframe {
-        margin-top: 140px;
+        margin-top: 130px;
         width: 100%;
-        height: 691px;
+        height: 501px;
         padding: 0 8% 0 17%;
         box-sizing: border-box;
 
         @include sm-down {
-            height: 300px;
+            margin-top: 110px;
+            height: 140px;
             padding: 0 5%;
         }
     }
@@ -133,18 +134,39 @@
                 margin-left: 0;
             }
         }
+        .tab-btn_active {
+            text-decoration: underline;
+            text-decoration-color: $purpleColor;
+            text-decoration-skip-ink: auto;
+        }
     }
     &_view {
         margin-top: 81px;
+        margin-left: -30px;
         width: 100%;
         @extend %display-flex-row;
         justify-content: flex-start;
         flex-wrap: wrap;
         div {
-            margin-top: 20px;
+            margin-top: 80px;
+            margin-left: 30px;
+            &:first-child {
+                margin-left: 30px;
+            }
+
+            @include xs-down {
+                margin-left: 0;
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        @include xs-down {
+            margin-left: 0;
         }
     }
     button {
-        margin-top: 30px;
+        margin-top: 90px;
     }
 }

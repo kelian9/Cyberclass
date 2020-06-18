@@ -2061,6 +2061,114 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./src/api/auth.ts":
+/*!*************************!*\
+  !*** ./src/api/auth.ts ***!
+  \*************************/
+/*! exports provided: AuthAPI */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthAPI", function() { return AuthAPI; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _environment_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./environment/environment */ "./src/api/environment/environment.ts");
+
+
+const AuthAPI = {
+  auth(login, password) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(`${_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint}/Account/AuthUser`, {
+      login: login,
+      password: password
+    });
+  },
+
+  register(phone, password, email, nickName) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(`${_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint}/Account/RegisterUser`, {
+      phoneNumber: phone,
+      password: password,
+      email: email,
+      nickName: nickName
+    });
+  },
+
+  sendActivationCode(login) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint}/Code/SendActivationCode`, {
+      params: {
+        login: login
+      }
+    });
+  },
+
+  checkCode(login, code) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(`${_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint}/Account/CheckCode`, {}, {
+      params: {
+        login: login,
+        code: code
+      }
+    });
+  },
+
+  subscribeToNews(email) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(`${_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint}/Sub/CreateSub`, {
+      email: email
+    });
+  }
+
+};
+
+/***/ }),
+
+/***/ "./src/api/environment/environment.ts":
+/*!********************************************!*\
+  !*** ./src/api/environment/environment.ts ***!
+  \********************************************/
+/*! exports provided: environment */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
+const environment = {
+  apiEndPoint: 'http://194.177.23.9:377/api'
+};
+
+/***/ }),
+
+/***/ "./src/common/customHooks/useFormState.ts":
+/*!************************************************!*\
+  !*** ./src/common/customHooks/useFormState.ts ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const useFormState = inititalValue => {
+  const {
+    0: value,
+    1: setValue
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(inititalValue);
+
+  const handleChange = e => {
+    setValue(e.target.value);
+  };
+
+  return {
+    value: value,
+    onChange: handleChange
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (useFormState);
+
+/***/ }),
+
 /***/ "./src/common/styles/common.scss":
 /*!***************************************!*\
   !*** ./src/common/styles/common.scss ***!
@@ -2086,8 +2194,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ui_Header_Header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Header/Header */ "./src/components/ui/Header/Header.tsx");
 /* harmony import */ var _ui_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Footer/Footer */ "./src/components/ui/Footer/Footer.tsx");
 var _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\layouts\\AppLayout\\AppLayout.tsx";
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -2100,14 +2208,14 @@ const AppLayout = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8,
+      lineNumber: 9,
       columnNumber: 13
     }
   }), children, __jsx(_ui_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10,
+      lineNumber: 11,
       columnNumber: 13
     }
   }));
@@ -2126,9 +2234,11 @@ const AppLayout = ({
 
 // Exports
 module.exports = {
+	"footer__bottom": "Footer_footer__bottom__1efR2",
 	"footer": "Footer_footer__3cDgJ",
 	"footer__top": "Footer_footer__top__lWbDJ",
 	"footer__news": "Footer_footer__news__1AYjw",
+	"response": "Footer_response__FzcSx",
 	"footer__title": "Footer_footer__title__3aNjI",
 	"footer__subtext": "Footer_footer__subtext__MspB-",
 	"footer__form": "Footer_footer__form__1TL5Q",
@@ -2148,6 +2258,8 @@ module.exports = {
 	"footer__menu": "Footer_footer__menu__3N5OO",
 	"footer__menuItem": "Footer_footer__menuItem__2_czA",
 	"footer__menuLink": "Footer_footer__menuLink__19f-e",
+	"footer__bottom_center": "Footer_footer__bottom_center__1I56g",
+	"footer__bottom_right": "Footer_footer__bottom_right__2c6pi",
 	"footer__bottomPay": "Footer_footer__bottomPay__2EhX8",
 	"footer__bottomCopy": "Footer_footer__bottomCopy__1_na5"
 };
@@ -2168,18 +2280,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Footer.module.scss */ "./src/components/ui/Footer/Footer.module.scss");
 /* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Footer_module_scss__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _api_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../api/auth */ "./src/api/auth.ts");
+/* harmony import */ var _common_customHooks_useFormState__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../common/customHooks/useFormState */ "./src/common/customHooks/useFormState.ts");
 var _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Footer\\Footer.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
+
 
 
 
 const Footer = () => {
+  const email = Object(_common_customHooks_useFormState__WEBPACK_IMPORTED_MODULE_3__["default"])('');
+  const {
+    0: res,
+    1: setRes
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
+
+  const subscribe = e => {
+    e.preventDefault();
+    _api_auth__WEBPACK_IMPORTED_MODULE_2__["AuthAPI"].subscribeToNews(email.value).then(response => {
+      setRes('Вы подписались');
+      setTimeout(() => setRes(''), 3000);
+    }).catch(err => {
+      setRes(err.response.data.en);
+      setTimeout(() => setRes(''), 3000);
+    });
+  };
+
   return __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 6,
+      lineNumber: 27,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -2187,7 +2323,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7,
+      lineNumber: 28,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -2195,7 +2331,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8,
+      lineNumber: 29,
       columnNumber: 17
     }
   }, __jsx("div", {
@@ -2203,7 +2339,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9,
+      lineNumber: 30,
       columnNumber: 21
     }
   }, __jsx("h3", {
@@ -2211,7 +2347,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10,
+      lineNumber: 31,
       columnNumber: 25
     }
   }, "News & updates"), __jsx("p", {
@@ -2219,49 +2355,52 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11,
+      lineNumber: 32,
       columnNumber: 25
     }
-  }, "Sign up to get the latest on sales, new releases and more..."), __jsx("div", {
+  }, "Enter your email to  get the latest on sales, new releases and more..."), __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__form,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12,
+      lineNumber: 33,
       columnNumber: 25
     }
-  }, __jsx("input", {
-    type: "text",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__formInput,
-    placeholder: "Enter your Email",
+  }, __jsx("input", _extends({
+    type: "email",
+    name: "email",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__formInput
+  }, email, {
+    placeholder: "Email",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13,
+      lineNumber: 34,
       columnNumber: 29
     }
-  }), __jsx("button", {
+  })), __jsx("button", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__formBtn + ' common-btn',
+    onClick: subscribe,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14,
+      lineNumber: 35,
       columnNumber: 29
     }
-  }, "Sign up")), __jsx("p", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__agree,
+  }, "Subscribe"), res ? __jsx("span", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.response,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
-      columnNumber: 25
+      lineNumber: 36,
+      columnNumber: 37
     }
-  }, "By clicking Sign Up, you agree to our")), __jsx("div", {
+  }, res) : null)), __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contact,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18,
+      lineNumber: 39,
       columnNumber: 21
     }
   }, __jsx("h3", {
@@ -2269,7 +2408,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19,
+      lineNumber: 40,
       columnNumber: 25
     }
   }, "Contact us"), __jsx("div", {
@@ -2277,7 +2416,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20,
+      lineNumber: 41,
       columnNumber: 25
     }
   }, __jsx("div", {
@@ -2285,7 +2424,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21,
+      lineNumber: 42,
       columnNumber: 29
     }
   }, __jsx("h5", {
@@ -2293,74 +2432,24 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22,
+      lineNumber: 43,
       columnNumber: 33
     }
-  }, "Business:"), __jsx("a", {
+  }, "For business & support:"), __jsx("a", {
     href: "#",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactLink,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23,
+      lineNumber: 44,
       columnNumber: 33
     }
-  }, "support@gamerzclass.com")), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__infoBlock,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 25,
-      columnNumber: 29
-    }
-  }, __jsx("h5", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactName,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 26,
-      columnNumber: 33
-    }
-  }, "Support:"), __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactLink,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 27,
-      columnNumber: 33
-    }
-  }, "support@gamerzclass.com"))), __jsx("a", {
-    href: "#",
-    className: 'common-btn--discord',
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 30,
-      columnNumber: 25
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/discord.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 31,
-      columnNumber: 29
-    }
-  }), __jsx("span", {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 32,
-      columnNumber: 29
-    }
-  }, "Join us on discord")), __jsx("div", {
+  }, "info@cyberclass.team"))), __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__follow,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 55,
       columnNumber: 25
     }
   }, __jsx("h4", {
@@ -2368,7 +2457,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
+      lineNumber: 56,
       columnNumber: 29
     }
   }, "Follow us"), __jsx("div", {
@@ -2376,7 +2465,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 57,
       columnNumber: 29
     }
   }, __jsx("a", {
@@ -2385,7 +2474,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 78,
       columnNumber: 33
     }
   }, __jsx("div", {
@@ -2393,111 +2482,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
-      columnNumber: 37
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/tw.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 39,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 42,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 43,
-      columnNumber: 37
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/yt.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 44,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 47,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 48,
-      columnNumber: 37
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/in.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 49,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 52,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 53,
-      columnNumber: 37
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/fb.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 54,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 57,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 58,
+      lineNumber: 79,
       columnNumber: 37
     }
   }, __jsx("img", {
@@ -2506,7 +2491,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 59,
+      lineNumber: 80,
       columnNumber: 41
     }
   })))))), __jsx("div", {
@@ -2514,7 +2499,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65,
+      lineNumber: 86,
       columnNumber: 21
     }
   }, __jsx("h3", {
@@ -2522,7 +2507,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 87,
       columnNumber: 25
     }
   }, "Main menu"), __jsx("ul", {
@@ -2530,7 +2515,7 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67,
+      lineNumber: 88,
       columnNumber: 25
     }
   }, __jsx("li", {
@@ -2538,67 +2523,75 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68,
+      lineNumber: 89,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
+    href: "/static/docs/CyberClass. Terms.pdf",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
+      lineNumber: 90,
       columnNumber: 33
     }
-  }, "Support")), __jsx("li", {
+  }, "Terms")), __jsx("li", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuItem,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 71,
+      lineNumber: 92,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
+    href: "/static/docs/CyberClass. Privacy.pdf",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72,
+      lineNumber: 93,
       columnNumber: 33
     }
-  }, "Privacy Policy")), __jsx("li", {
+  }, "Privacy")), __jsx("li", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuItem,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 74,
+      lineNumber: 95,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
+    href: "/static/docs/Payments. Security. Refund.pdf",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 75,
+      lineNumber: 96,
       columnNumber: 33
     }
-  }, "Terms of Service"))))), __jsx("div", {
+  }, "Payments. Security. Refund"))))), __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottom,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 80,
+      lineNumber: 101,
       columnNumber: 17
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottom_center,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 102,
+      columnNumber: 21
     }
   }, __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottomPay,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 81,
-      columnNumber: 21
+      lineNumber: 103,
+      columnNumber: 25
     }
   }, __jsx("img", {
     src: "/static/images/footer/pay.png",
@@ -2606,18 +2599,40 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82,
-      columnNumber: 25
+      lineNumber: 104,
+      columnNumber: 29
     }
   })), __jsx("div", {
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottomCopy,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84,
+      lineNumber: 106,
+      columnNumber: 25
+    }
+  }, "\xA9 2020 \u0421yberClass")), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottom_right,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 108,
       columnNumber: 21
     }
-  }, "\xA9 2020 \u0421yberClass"))));
+  }, __jsx("p", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 109,
+      columnNumber: 25
+    }
+  }, "\u0418\u041F \u0416\u0443\u0440\u0430\u0432\u0435\u043B\u044C \u0410\u043D\u0430\u0441\u0442\u0430\u0441\u0438\u044F \u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u043E\u0432\u043D\u0430"), __jsx("p", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110,
+      columnNumber: 25
+    }
+  }, "\u0418\u041D\u041D 772619676401, \u041E\u0413\u0420\u041D\u0418\u041F 319774600696590")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Footer);
@@ -2635,6 +2650,7 @@ const Footer = () => {
 module.exports = {
 	"header": "Header_header__1LgJ3",
 	"user-name": "Header_user-name__3uBZB",
+	"profile-menu": "Header_profile-menu__CSxRR",
 	"header__wrap": "Header_header__wrap__1ZvRB",
 	"header__logo": "Header_header__logo__3P3yc",
 	"header__logo_link": "Header_header__logo_link__3043A",
@@ -2663,7 +2679,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Header_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Header.module.scss */ "./src/components/ui/Header/Header.module.scss");
 /* harmony import */ var _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Header_module_scss__WEBPACK_IMPORTED_MODULE_2__);
 var _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Header\\Header.tsx";
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -2672,9 +2687,22 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const Header = ({
   store
 }) => {
-  const userState = store.getState().UserReducer;
+  const {
+    0: user,
+    1: setUser
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
+  const {
+    0: menuVision,
+    1: toggleMenuVision
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    console.log(userState.userID);
+    user === null && localStorage.getItem('user') ? setUser(JSON.parse(localStorage.getItem('user'))) : null;
   });
   return __jsx("header", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header,
@@ -2682,7 +2710,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 20,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -2690,7 +2718,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
+      lineNumber: 21,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -2698,7 +2726,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18,
+      lineNumber: 23,
       columnNumber: 17
     }
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
@@ -2706,7 +2734,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19,
+      lineNumber: 24,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -2714,7 +2742,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20,
+      lineNumber: 25,
       columnNumber: 25
     }
   }, __jsx("img", {
@@ -2723,7 +2751,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21,
+      lineNumber: 26,
       columnNumber: 29
     }
   })))), __jsx("nav", {
@@ -2731,7 +2759,7 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26,
+      lineNumber: 31,
       columnNumber: 17
     }
   }, __jsx("ul", {
@@ -2739,91 +2767,107 @@ const Header = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27,
+      lineNumber: 32,
       columnNumber: 21
     }
-  }, __jsx("li", {
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 28,
-      columnNumber: 25
-    }
-  }, __jsx("a", {
-    href: "#",
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 29,
-      columnNumber: 29
-    }
-  }, __jsx("img", {
-    src: "/static/images/navigation/search.svg",
-    alt: "",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 30,
-      columnNumber: 33
-    }
-  }), __jsx("span", {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 31,
-      columnNumber: 33
-    }
-  }, "Search"))), __jsx("li", {
+  }, !(user === null || user === void 0 ? void 0 : user.userID) && !(user === null || user === void 0 ? void 0 : user.nickName) ? __jsx("li", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 34,
-      columnNumber: 25
+      columnNumber: 29
     }
-  }, userState && !(userState === null || userState === void 0 ? void 0 : userState.userID) ? __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-    href: "/authorization",
+  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/registration",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 35,
       columnNumber: 33
     }
-  }, __jsx("div", {
+  }, __jsx("span", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 36,
       columnNumber: 37
     }
+  }, "SIGN UP"))) : null, __jsx("li", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 25
+    }
+  }, !(user === null || user === void 0 ? void 0 : user.userID) && !(user === null || user === void 0 ? void 0 : user.nickName) ? __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/authorization",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 43,
+      columnNumber: 33
+    }
+  }, __jsx("span", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 44,
+      columnNumber: 37
+    }
+  }, "LOG IN")) : __jsx("p", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['user-name'],
+    onClick: () => toggleMenuVision(!menuVision),
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 46,
+      columnNumber: 33
+    }
   }, __jsx("img", {
-    src: "/static/images/navigation/login.svg",
+    src: (user === null || user === void 0 ? void 0 : user.avatar) ? 'http://194.177.23.9:577/' + (user === null || user === void 0 ? void 0 : user.avatar) : '/static/images/avatar.svg',
     alt: "",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
-      columnNumber: 41
+      lineNumber: 47,
+      columnNumber: 37
     }
-  }), __jsx("span", {
+  }), (user === null || user === void 0 ? void 0 : user.nickName) || (user === null || user === void 0 ? void 0 : user.person.phoneNumber), menuVision ? __jsx("ul", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['profile-menu'],
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 50,
       columnNumber: 41
     }
-  }, "Log in"))) : __jsx("span", {
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['user-name'],
+  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/profile",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42,
-      columnNumber: 33
+      lineNumber: 51,
+      columnNumber: 45
     }
-  }, userState.person.name))))));
+  }, __jsx("li", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 52,
+      columnNumber: 49
+    }
+  }, "Profile")), __jsx("li", {
+    onClick: logout,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 54,
+      columnNumber: 45
+    }
+  }, "Logout")) : null))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -2853,10 +2897,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_redux_wrapper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! next-redux-wrapper */ "next-redux-wrapper");
 /* harmony import */ var next_redux_wrapper__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_redux_wrapper__WEBPACK_IMPORTED_MODULE_6__);
 var _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\pages\\_app.tsx";
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -2902,7 +2946,7 @@ const App = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31,
+      lineNumber: 32,
       columnNumber: 9
     }
   }, router.pathname != '/authorization' && !router.pathname.includes('/registration') ? __jsx(_components_layouts_AppLayout_AppLayout__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -2910,7 +2954,7 @@ const App = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 34,
       columnNumber: 17
     }
   }, __jsx(Component, _extends({
@@ -2920,7 +2964,7 @@ const App = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 35,
       columnNumber: 21
     }
   }))) : __jsx(Component, _extends({
@@ -2930,12 +2974,12 @@ const App = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 17
     }
   })));
 };
-/* harmony default export */ __webpack_exports__["default"] = (next_redux_wrapper__WEBPACK_IMPORTED_MODULE_6___default()(makeStore)(App));
+/* harmony default export */ __webpack_exports__["default"] = (next_redux_wrapper__WEBPACK_IMPORTED_MODULE_6___default()((initialState, options) => Object(_store_store__WEBPACK_IMPORTED_MODULE_4__["default"])())(App));
 
 /***/ }),
 
@@ -2953,6 +2997,7 @@ const ActionsConstants = {
   SET_LESSONS: 'SET_LESSONS',
   SET_MATERIALS: 'SET_MATERIALS',
   SET_USER: 'SET_USER',
+  SET_AVATAR: 'SET_AVATAR',
   RATE_MATERIAL: 'RATE_MATERIAL'
 };
 
@@ -3032,9 +3077,11 @@ __webpack_require__.r(__webpack_exports__);
 const UserReducer = (state = {
   userID: NaN,
   person: {
-    name: ''
+    phoneNumber: ''
   },
-  userType: NaN
+  userType: NaN,
+  nickName: '',
+  avatar: ''
 }, action) => {
   switch (action.type) {
     case _models_actions_constants_model__WEBPACK_IMPORTED_MODULE_0__["ActionsConstants"].SET_USER:
@@ -3042,6 +3089,15 @@ const UserReducer = (state = {
         userID: action.userID,
         person: action.person,
         userType: action.userType
+      };
+
+    case _models_actions_constants_model__WEBPACK_IMPORTED_MODULE_0__["ActionsConstants"].SET_AVATAR:
+      return {
+        userID: state.userID,
+        person: state.person,
+        userType: state.userType,
+        nickName: state.nickName,
+        avatar: action.avatar
       };
 
     default:
@@ -3089,6 +3145,17 @@ const getStore = () => Object(redux__WEBPACK_IMPORTED_MODULE_3__["createStore"])
 
 module.exports = __webpack_require__(/*! private-next-pages/_app.tsx */"./src/pages/_app.tsx");
 
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
 
 /***/ }),
 

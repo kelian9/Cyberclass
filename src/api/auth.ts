@@ -10,10 +10,12 @@ export const AuthAPI = {
         })
     },
 
-    register(phone:string, password:string):Promise<AxiosResponse<RegisterResponse>> {
+    register(phone:string, password:string, email:string, nickName:string):Promise<AxiosResponse<RegisterResponse>> {
         return axios.post(`${environment.apiEndPoint}/Account/RegisterUser`, {
             phoneNumber: phone,
-            password: password
+            password: password,
+            email: email,
+            nickName: nickName
         })
     },
 
@@ -26,11 +28,17 @@ export const AuthAPI = {
     },
 
     checkCode(login:string, code:string):Promise<AxiosResponse> {
-        return axios.get(`${environment.apiEndPoint}/Code/CheckCode`, {
+        return axios.post(`${environment.apiEndPoint}/Account/CheckCode`, {},{
             params: {
-                code: code,
-                login: login
-            } 
+                login: login,
+                code: code
+            }
         })
-    }
+    },
+
+    subscribeToNews(email:string):Promise<AxiosResponse<RegisterResponse>> {
+        return axios.post(`${environment.apiEndPoint}/Sub/CreateSub`, {
+            email: email
+        })
+    },
 }

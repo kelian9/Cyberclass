@@ -11,14 +11,6 @@
         margin-left: 0;
     }
 
-    @include xl-down {
-        width: 100%;
-    }
-
-    @include xs-down {
-        margin-left: 0;
-    }
-
     .emptyPath {
         width: 340px;
         height: 244px;
@@ -56,6 +48,12 @@
             width: 320px;
             height: 2px;
             background: #E25AF0;
+        }
+
+        @include xs-down {
+            &-line {
+                width: calc(100% - 20px);
+            }
         }
     }
     h3 {

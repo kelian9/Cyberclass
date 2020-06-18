@@ -1,4 +1,5 @@
 @import "../../../common/styles/mixins.scss";
+@import "../../../common/styles/variables.scss";
 
 .footer {
   padding: 180px 8% 70px 17%;
@@ -29,11 +30,22 @@
   }
 
   &__news {
+    position: relative;
     width: 100%;
     max-width: 325px;
     margin-right: 30px;
 
+    .response {
+      position: absolute;
+      left: 0;
+      top: 110%;
+      font-size: 14px;
+      line-height: 21px;
+      color: $limeColor;
+    }
+
     @include sm-down {
+      max-width: 300px;
       margin-bottom: 60px;
       margin-right: 0;
     }
@@ -50,7 +62,6 @@
 
   &__subtext {
     font-size: 14px;
-    line-height: 21px;
     color: #FFFFFF;
     margin-bottom: 15px;
   }
@@ -62,7 +73,7 @@
 
   &__formInput {
     // width: 100%;
-    padding: 8px 15px;
+    padding: 8px 32px 8px 15px;
     box-sizing: border-box;
     border: 1px solid transparent;
     border-radius: 10px;
@@ -82,13 +93,17 @@
     &::placeholder {
       color: #7C7E92;
     }
+
+    @include sm-down {
+      width: 200px;
+    }
   }
 
   &__formBtn {
     display: inline-block;
-    padding: 9px 28px !important;
+    padding: 9px 20px !important;
     box-sizing: border-box;
-    margin-left: -20px;
+    margin-left: -29px;
     box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);
     border-radius: 10px;
     font-weight: 600;
@@ -178,8 +193,9 @@
 
   &__followIcon {
 
-    svg {
+    img {
       display: block;
+      height: 27px;
       transition: 0.2s;
     }
   }
@@ -213,7 +229,37 @@
   }
 
   &__bottom {
-    
+    @extend %display-flex-row;
+    justify-content: flex-end;
+
+    &_center {
+      margin: 0 150px;
+    }
+
+    &_right {
+      p {
+        text-align: right;
+        font-size: 14px;
+        line-height: 28px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    @include xs-down {
+      flex-direction: column;
+
+      &_right {
+        order: 1;
+        p {
+          text-align: center;
+        }
+      }
+
+      &_center {
+        order: 2;
+        margin-top: 50px;
+      }
+    }
   }
 
   &__bottomPay {

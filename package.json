@@ -1,8 +1,8 @@
 {
-  "name": "create-next-app-cli",
+  "name": "cyberclass",
   "version": "0.1.0",
   "description": "",
-  "main": "index.tsx",
+  "main": "main/index.tsx",
   "scripts": {
     "dev": "next",
     "build": "next build",

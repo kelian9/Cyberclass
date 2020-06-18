@@ -2,5 +2,6 @@ export const ActionsConstants = {
     SET_LESSONS: 'SET_LESSONS',
     SET_MATERIALS: 'SET_MATERIALS',
     SET_USER: 'SET_USER',
+    SET_AVATAR: 'SET_AVATAR',
     RATE_MATERIAL: 'RATE_MATERIAL'
 }

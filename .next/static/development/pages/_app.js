@@ -176,6 +176,1819 @@ function _unsupportedIterableToArray(o, minLen) {
 
 /***/ }),
 
+/***/ "./node_modules/axios/index.js":
+/*!*************************************!*\
+  !*** ./node_modules/axios/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/lib/axios.js");
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/adapters/xhr.js":
+/*!************************************************!*\
+  !*** ./node_modules/axios/lib/adapters/xhr.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var settle = __webpack_require__(/*! ./../core/settle */ "./node_modules/axios/lib/core/settle.js");
+var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
+var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "./node_modules/axios/lib/core/buildFullPath.js");
+var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
+var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
+var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    var fullPath = buildFullPath(config.baseURL, config.url);
+    request.open(config.method.toUpperCase(), buildURL(fullPath, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request.onreadystatechange = function handleLoad() {
+      if (!request || request.readyState !== 4) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        status: request.status,
+        statusText: request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle browser request cancellation (as opposed to a manual cancellation)
+    request.onabort = function handleAbort() {
+      if (!request) {
+        return;
+      }
+
+      reject(createError('Request aborted', config, 'ECONNABORTED', request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config, null, request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
+      if (config.timeoutErrorMessage) {
+        timeoutErrorMessage = config.timeoutErrorMessage;
+      }
+      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
+        request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__(/*! ./../helpers/cookies */ "./node_modules/axios/lib/helpers/cookies.js");
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
+        cookies.read(config.xsrfCookieName) :
+        undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (!utils.isUndefined(config.withCredentials)) {
+      request.withCredentials = !!config.withCredentials;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/axios.js":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/lib/axios.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
+var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
+var Axios = __webpack_require__(/*! ./core/Axios */ "./node_modules/axios/lib/core/Axios.js");
+var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
+var defaults = __webpack_require__(/*! ./defaults */ "./node_modules/axios/lib/defaults.js");
+
+/**
+ * Create an instance of Axios
+ *
+ * @param {Object} defaultConfig The default config for the instance
+ * @return {Axios} A new instance of Axios
+ */
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  var instance = bind(Axios.prototype.request, context);
+
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+
+  // Copy context to instance
+  utils.extend(instance, context);
+
+  return instance;
+}
+
+// Create the default instance to be exported
+var axios = createInstance(defaults);
+
+// Expose Axios class to allow class inheritance
+axios.Axios = Axios;
+
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
+};
+
+// Expose Cancel & CancelToken
+axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
+axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "./node_modules/axios/lib/cancel/CancelToken.js");
+axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
+
+// Expose all/spread
+axios.all = function all(promises) {
+  return Promise.all(promises);
+};
+axios.spread = __webpack_require__(/*! ./helpers/spread */ "./node_modules/axios/lib/helpers/spread.js");
+
+module.exports = axios;
+
+// Allow use of default import syntax in TypeScript
+module.exports.default = axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/Cancel.js":
+/*!*************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/Cancel.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/CancelToken.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/CancelToken.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Cancel = __webpack_require__(/*! ./Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/isCancel.js":
+/*!***************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/isCancel.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/Axios.js":
+/*!**********************************************!*\
+  !*** ./node_modules/axios/lib/core/Axios.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
+var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
+var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
+var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
+
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */
+function Axios(instanceConfig) {
+  this.defaults = instanceConfig;
+  this.interceptors = {
+    request: new InterceptorManager(),
+    response: new InterceptorManager()
+  };
+}
+
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */
+Axios.prototype.request = function request(config) {
+  /*eslint no-param-reassign:0*/
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = arguments[1] || {};
+    config.url = arguments[0];
+  } else {
+    config = config || {};
+  }
+
+  config = mergeConfig(this.defaults, config);
+
+  // Set config.method
+  if (config.method) {
+    config.method = config.method.toLowerCase();
+  } else if (this.defaults.method) {
+    config.method = this.defaults.method.toLowerCase();
+  } else {
+    config.method = 'get';
+  }
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+Axios.prototype.getUri = function getUri(config) {
+  config = mergeConfig(this.defaults, config);
+  return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
+};
+
+// Provide aliases for supported request methods
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, data, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url,
+      data: data
+    }));
+  };
+});
+
+module.exports = Axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/InterceptorManager.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/axios/lib/core/InterceptorManager.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function eject(id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `eject`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function forEach(fn) {
+  utils.forEach(this.handlers, function forEachHandler(h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/buildFullPath.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/core/buildFullPath.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isAbsoluteURL = __webpack_require__(/*! ../helpers/isAbsoluteURL */ "./node_modules/axios/lib/helpers/isAbsoluteURL.js");
+var combineURLs = __webpack_require__(/*! ../helpers/combineURLs */ "./node_modules/axios/lib/helpers/combineURLs.js");
+
+/**
+ * Creates a new URL by combining the baseURL with the requestedURL,
+ * only when the requestedURL is not already an absolute URL.
+ * If the requestURL is absolute, this function returns the requestedURL untouched.
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} requestedURL Absolute or relative URL to combine
+ * @returns {string} The combined full path
+ */
+module.exports = function buildFullPath(baseURL, requestedURL) {
+  if (baseURL && !isAbsoluteURL(requestedURL)) {
+    return combineURLs(baseURL, requestedURL);
+  }
+  return requestedURL;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/createError.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/core/createError.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var enhanceError = __webpack_require__(/*! ./enhanceError */ "./node_modules/axios/lib/core/enhanceError.js");
+
+/**
+ * Create an Error with the specified message, config, error code, request and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, request, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, request, response);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/dispatchRequest.js":
+/*!********************************************************!*\
+  !*** ./node_modules/axios/lib/core/dispatchRequest.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var transformData = __webpack_require__(/*! ./transformData */ "./node_modules/axios/lib/core/transformData.js");
+var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
+var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
+  // Ensure headers exist
+  config.headers = config.headers || {};
+
+  // Transform request data
+  config.data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Flatten headers
+  config.headers = utils.merge(
+    config.headers.common || {},
+    config.headers[config.method] || {},
+    config.headers
+  );
+
+  utils.forEach(
+    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+    function cleanHeaderConfig(method) {
+      delete config.headers[method];
+    }
+  );
+
+  var adapter = config.adapter || defaults.adapter;
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
+
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
+      // Transform response data
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
+          config.transformResponse
+        );
+      }
+    }
+
+    return Promise.reject(reason);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/enhanceError.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/axios/lib/core/enhanceError.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, request, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+
+  error.request = request;
+  error.response = response;
+  error.isAxiosError = true;
+
+  error.toJSON = function() {
+    return {
+      // Standard
+      message: this.message,
+      name: this.name,
+      // Microsoft
+      description: this.description,
+      number: this.number,
+      // Mozilla
+      fileName: this.fileName,
+      lineNumber: this.lineNumber,
+      columnNumber: this.columnNumber,
+      stack: this.stack,
+      // Axios
+      config: this.config,
+      code: this.code
+    };
+  };
+  return error;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/mergeConfig.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/core/mergeConfig.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ../utils */ "./node_modules/axios/lib/utils.js");
+
+/**
+ * Config-specific merge-function which creates a new config-object
+ * by merging two configuration objects together.
+ *
+ * @param {Object} config1
+ * @param {Object} config2
+ * @returns {Object} New object resulting from merging config2 to config1
+ */
+module.exports = function mergeConfig(config1, config2) {
+  // eslint-disable-next-line no-param-reassign
+  config2 = config2 || {};
+  var config = {};
+
+  var valueFromConfig2Keys = ['url', 'method', 'params', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'url', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress',
+    'maxContentLength', 'validateStatus', 'maxRedirects', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath'
+  ];
+
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    }
+  });
+
+  utils.forEach(mergeDeepPropertiesKeys, function mergeDeepProperties(prop) {
+    if (utils.isObject(config2[prop])) {
+      config[prop] = utils.deepMerge(config1[prop], config2[prop]);
+    } else if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (utils.isObject(config1[prop])) {
+      config[prop] = utils.deepMerge(config1[prop]);
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys);
+
+  var otherKeys = Object
+    .keys(config2)
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, function otherKeysDefaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  return config;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/settle.js":
+/*!***********************************************!*\
+  !*** ./node_modules/axios/lib/core/settle.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__(/*! ./createError */ "./node_modules/axios/lib/core/createError.js");
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  if (!validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response.request,
+      response
+    ));
+  }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/transformData.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/core/transformData.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  /*eslint no-param-reassign:0*/
+  utils.forEach(fns, function transform(fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/defaults.js":
+/*!********************************************!*\
+  !*** ./node_modules/axios/lib/defaults.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
+var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "./node_modules/axios/lib/helpers/normalizeHeaderName.js");
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
+  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Accept');
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/bind.js":
+/*!************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/bind.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/buildURL.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/buildURL.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      } else {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    var hashmarkIndex = url.indexOf('#');
+    if (hashmarkIndex !== -1) {
+      url = url.slice(0, hashmarkIndex);
+    }
+
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/combineURLs.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/combineURLs.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Creates a new URL by combining the specified URLs
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+module.exports = function combineURLs(baseURL, relativeURL) {
+  return relativeURL
+    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/cookies.js":
+/*!***************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/cookies.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs support document.cookie
+    (function standardBrowserEnv() {
+      return {
+        write: function write(name, value, expires, path, domain, secure) {
+          var cookie = [];
+          cookie.push(name + '=' + encodeURIComponent(value));
+
+          if (utils.isNumber(expires)) {
+            cookie.push('expires=' + new Date(expires).toGMTString());
+          }
+
+          if (utils.isString(path)) {
+            cookie.push('path=' + path);
+          }
+
+          if (utils.isString(domain)) {
+            cookie.push('domain=' + domain);
+          }
+
+          if (secure === true) {
+            cookie.push('secure');
+          }
+
+          document.cookie = cookie.join('; ');
+        },
+
+        read: function read(name) {
+          var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+          return (match ? decodeURIComponent(match[3]) : null);
+        },
+
+        remove: function remove(name) {
+          this.write(name, '', Date.now() - 86400000);
+        }
+      };
+    })() :
+
+  // Non standard browser env (web workers, react-native) lack needed support.
+    (function nonStandardBrowserEnv() {
+      return {
+        write: function write() {},
+        read: function read() { return null; },
+        remove: function remove() {}
+      };
+    })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/isAbsoluteURL.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/isAbsoluteURL.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the specified URL is absolute
+ *
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+module.exports = function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/isURLSameOrigin.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs have full support of the APIs needed to test
+  // whether the request URL is of the same origin as current location.
+    (function standardBrowserEnv() {
+      var msie = /(msie|trident)/i.test(navigator.userAgent);
+      var urlParsingNode = document.createElement('a');
+      var originURL;
+
+      /**
+    * Parse a URL to discover it's components
+    *
+    * @param {String} url The URL to be parsed
+    * @returns {Object}
+    */
+      function resolveURL(url) {
+        var href = url;
+
+        if (msie) {
+        // IE needs attribute set twice to normalize properties
+          urlParsingNode.setAttribute('href', href);
+          href = urlParsingNode.href;
+        }
+
+        urlParsingNode.setAttribute('href', href);
+
+        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+        return {
+          href: urlParsingNode.href,
+          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+          host: urlParsingNode.host,
+          search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+          hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+          hostname: urlParsingNode.hostname,
+          port: urlParsingNode.port,
+          pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+            urlParsingNode.pathname :
+            '/' + urlParsingNode.pathname
+        };
+      }
+
+      originURL = resolveURL(window.location.href);
+
+      /**
+    * Determine if a URL shares the same origin as the current location
+    *
+    * @param {String} requestURL The URL to test
+    * @returns {boolean} True if URL shares the same origin, otherwise false
+    */
+      return function isURLSameOrigin(requestURL) {
+        var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+        return (parsed.protocol === originURL.protocol &&
+            parsed.host === originURL.host);
+      };
+    })() :
+
+  // Non standard browser envs (web workers, react-native) lack needed support.
+    (function nonStandardBrowserEnv() {
+      return function isURLSameOrigin() {
+        return true;
+      };
+    })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/normalizeHeaderName.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/normalizeHeaderName.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/parseHeaders.js":
+/*!********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/parseHeaders.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/spread.js":
+/*!**************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/spread.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/utils.js":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/lib/utils.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is a Buffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Buffer, otherwise false
+ */
+function isBuffer(val) {
+  return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
+    && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  var result;
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } else {
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+  return result;
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Determine if a value is a Function
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Function, otherwise false
+ */
+function isFunction(val) {
+  return toString.call(val) === '[object Function]';
+}
+
+/**
+ * Determine if a value is a Stream
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Stream, otherwise false
+ */
+function isStream(val) {
+  return isObject(val) && isFunction(val.pipe);
+}
+
+/**
+ * Determine if a value is a URLSearchParams object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+ */
+function isURLSearchParams(val) {
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  navigator.product -> 'ReactNative'
+ * nativescript
+ *  navigator.product -> 'NativeScript' or 'NS'
+ */
+function isStandardBrowserEnv() {
+  if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
+                                           navigator.product === 'NativeScript' ||
+                                           navigator.product === 'NS')) {
+    return false;
+  }
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object') {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = merge(result[key], val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Function equal to merge with the difference being that no reference
+ * to original objects is kept.
+ *
+ * @see merge
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function deepMerge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = deepMerge(result[key], val);
+    } else if (typeof val === 'object') {
+      result[key] = deepMerge({}, val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Extends object a by mutably adding to it the properties of object b.
+ *
+ * @param {Object} a The object to be extended
+ * @param {Object} b The object to copy properties from
+ * @param {Object} thisArg The object to bind function to
+ * @return {Object} The resulting value of object a
+ */
+function extend(a, b, thisArg) {
+  forEach(b, function assignValue(val, key) {
+    if (thisArg && typeof val === 'function') {
+      a[key] = bind(val, thisArg);
+    } else {
+      a[key] = val;
+    }
+  });
+  return a;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isBuffer: isBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isFunction: isFunction,
+  isStream: isStream,
+  isURLSearchParams: isURLSearchParams,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  deepMerge: deepMerge,
+  extend: extend,
+  trim: trim
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/next/dist/compiled/postcss-loader/index.js?!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./src/common/styles/common.scss":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ref--5-oneOf-6-1!./node_modules/next/dist/compiled/postcss-loader??__nextjs_postcss!./node_modules/resolve-url-loader??ref--5-oneOf-6-3!./node_modules/sass-loader/dist/cjs.js??ref--5-oneOf-6-4!./src/common/styles/common.scss ***!
@@ -189,7 +2002,7 @@ var ___CSS_LOADER_AT_RULE_IMPORT_0___ = __webpack_require__(/*! -!../../../node_
 exports = ___CSS_LOADER_API_IMPORT___(true);
 exports.i(___CSS_LOADER_AT_RULE_IMPORT_0___);
 // Module
-exports.push([module.i, ".auth-component, .response-modal {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.what {\n  display: flex;\n  justify-content: space-between;\n  position: relative;\n  background: #1B1E4A;\n  padding: 60px 65px 110px;\n  margin-top: 42px;\n  margin-left: 17%;\n  box-sizing: border-box;\n  border-radius: 30px 0 0 30px;\n  -webkit-filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\n          filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\n}\n@media only screen and (max-width: 1170px) {\n  .what {\n    flex-direction: column;\n    align-items: center;\n  }\n}\n@media only screen and (max-width: 576px) {\n  .what {\n    margin-left: 30px;\n    padding: 35px 30px 50px;\n    -webkit-filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\n            filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\n  }\n}\n@media only screen and (max-width: 1170px) {\n  .what__content {\n    margin-bottom: 60px;\n  }\n}\n.what__title {\n  font-weight: bold;\n  font-size: 23px;\n  line-height: 29px;\n  color: #E25AF0;\n}\n.what__subtitle {\n  margin-top: 10px;\n  font-size: 13px;\n  line-height: 21px;\n  color: #FFFFFF;\n}\n.what__group {\n  display: flex;\n  flex-wrap: wrap;\n  padding-top: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .what__group {\n    padding-top: 50px;\n  }\n}\n.what__block {\n  max-width: 320px;\n  width: 100%;\n  margin-top: 40px;\n  margin-right: 50px;\n}\n@media only screen and (max-width: 576px) {\n  .what__block {\n    margin-right: 0;\n  }\n}\n.what__block-title {\n  font-weight: 600;\n  font-size: 16px;\n  line-height: 19px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.what__block-text {\n  margin-top: 15px;\n  font-size: 16px;\n  line-height: 24px;\n  color: #BFBEBE;\n}\n.what__buy {\n  max-width: 320px;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.what__price-wrap {\n  display: flex;\n}\n.what__price-finish {\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: bold;\n  font-size: 35px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #E25AF0;\n  margin-right: 15px;\n}\n.what__price-full {\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 20px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-right: 15px;\n}\n.what__price-sale {\n  width: 100%;\n  white-space: nowrap;\n  font-size: 20px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.what__offer {\n  margin-top: 30px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: bold;\n  font-size: 22px;\n  line-height: 26px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.what__btn-group {\n  margin-top: 28px;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.what__btn {\n  max-width: 255px;\n  width: 100%;\n}\n.what__btn:not(:last-child) {\n  margin-bottom: 14px;\n}\n.what__guard {\n  margin-top: 28px;\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 13px;\n  line-height: 19px;\n  text-align: center;\n  text-transform: capitalize;\n  color: #FFFFFF;\n}\n\n.course {\n  width: 100%;\n  padding: 40px 0 60px;\n}\n.course__wrap {\n  width: 100%;\n}\n.course__title {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n  margin-bottom: 70px;\n}\n@media only screen and (max-width: 767px) {\n  .course__title {\n    font-size: 30px;\n    line-height: 38px;\n    margin-bottom: 45px;\n  }\n}\n.course__group {\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n}\n@media only screen and (max-width: 767px) {\n  .course__group {\n    align-items: center;\n  }\n}\n.course__block {\n  width: 100%;\n  max-width: 330px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  background: #1B1E4A;\n  border-radius: 24px;\n  margin-bottom: 50px;\n  padding: 15px 17px 35px;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 767px) {\n  .course__block {\n    max-width: 100%;\n  }\n}\n.course__block-icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 76px;\n  height: 76px;\n  border-radius: 50%;\n  background: rgba(117, 248, 128, 0.2);\n  margin-bottom: 25px;\n  margin-top: -45px;\n}\n.course__block-icon svg {\n  display: block;\n}\n.course__block-title {\n  font-weight: bold;\n  font-size: 18px;\n  line-height: 22px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 20px;\n}\n.course__block-text {\n  font-size: 14px;\n  line-height: 19px;\n  text-align: center;\n  color: #FFFFFF;\n}\n.course__desc-title {\n  font-weight: bold;\n  font-size: 24px;\n  line-height: 29px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 50px;\n}\n.course__desc-text {\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 16px;\n  line-height: 24px;\n  color: #F0EDED;\n}\n\nbody {\n  margin: 0;\n  padding: 0;\n  background: #0F1434;\n}\n\n*,\n*::before,\n*::after {\n  margin: 0;\n  padding: 0;\n}\n\n.content-container {\n  width: 100%;\n  padding: 0 8% 0 17%;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 767px) {\n  .content-container {\n    padding: 0 5% 0 5%;\n  }\n}\n\nh1, h2, h3, h4, h5, h6,\np,\nspan,\na,\nbutton,\nlabel,\ninput {\n  font-family: \"Montserrat\";\n  font-weight: normal;\n  font-style: normal;\n}\n\nbutton {\n  outline: none;\n  cursor: pointer;\n}\n\na {\n  text-decoration: none;\n}\n\n.topSeller {\n  padding: 6px 12px;\n  background: #E25AF0;\n  border-radius: 4px;\n  font-size: 10px;\n  line-height: 10px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n\n.common-btn,\n.purple-btn {\n  padding: 10px;\n  box-sizing: border-box;\n  background: #75F880;\n  border-radius: 10px;\n  border: 0;\n  font-weight: 600;\n  font-size: 14px;\n  text-align: center;\n  color: #212B36;\n}\n.common-btn:hover,\n.purple-btn:hover {\n  background-color: #5BE066;\n}\n.common-btn:active, .common-btn:focus,\n.purple-btn:active,\n.purple-btn:focus {\n  background-color: #5BE066;\n  box-shadow: none;\n}\n.common-btn--disabled,\n.purple-btn--disabled {\n  color: #ABABAB;\n  background-color: #DBDBDB;\n  box-shadow: none;\n}\n.common-btn--outline,\n.purple-btn--outline {\n  background: #1B1E4A;\n  border: 1px solid #75F880;\n  color: #75F880;\n}\n.common-btn--discord,\n.purple-btn--discord {\n  padding: 10px;\n  display: flex;\n  align-items: center;\n  border-radius: 10px;\n  border: 0;\n  background-color: #E25AF0;\n  box-shadow: none;\n}\n.common-btn--discord span,\n.purple-btn--discord span {\n  margin-left: 10px;\n  font-weight: 600;\n  font-size: 14px;\n  line-height: 20px;\n  color: #FFFFFF;\n}\n\n.purple-btn {\n  background: #E25AF0;\n  color: #FFFFFF;\n}\n.purple-btn:hover {\n  background-color: #5BE066;\n}\n.purple-btn:active, .purple-btn:focus {\n  background-color: #5BE066;\n  box-shadow: none;\n}\n\n.transparent-btn {\n  padding: 10px;\n  box-sizing: border-box;\n  background: transparent;\n  border: 1px solid #75F880;\n  border-radius: 10px;\n  font-size: 14px;\n  text-align: center;\n  color: #75F880;\n}\n\n.common-input {\n  width: 100%;\n  max-width: 438px;\n  height: 47px;\n  padding: 0 13px;\n  box-sizing: border-box;\n  background: #FFFFFF;\n  border: 0.996795px solid #C2C3CC;\n  border-radius: 9.96795px;\n  font-weight: 500;\n  font-size: 13.9551px;\n  letter-spacing: 0.149519px;\n  color: #7C7E92;\n  outline: none;\n}\n\n.response-modal {\n  position: fixed;\n  top: calc(50% - 75px);\n  left: calc(50% - 150px);\n  width: 300px;\n  height: 150px;\n  padding: 20px;\n  box-sizing: border-box;\n  background: whitesmoke;\n  border-radius: 10px;\n  border: 2px solid;\n  z-index: 20;\n}\n.response-modal img {\n  width: 44px;\n}\n.response-modal span {\n  text-align: center;\n  font-size: 16px;\n  font-weight: 500;\n  color: #333232;\n}\n\n.auth-component {\n  width: 100%;\n  height: 100vh;\n  justify-content: center;\n  background-color: #f7f7f7;\n}\n.auth-component .terms {\n  width: 400px;\n  position: absolute;\n  bottom: 20px;\n  text-align: center;\n  line-height: 1.5;\n}\n@media only screen and (max-width: 576px) {\n  .auth-component .terms {\n    width: 90%;\n  }\n}\n.auth-component .terms a {\n  text-decoration: underline;\n  color: #343434;\n}\n\n.auth-form {\n  position: relative;\n  width: 518px;\n  padding: 30px 40px;\n  box-sizing: border-box;\n  border: 6px solid #f1f1f1;\n  border-radius: 20px;\n}\n@media only screen and (max-width: 576px) {\n  .auth-form {\n    width: 90vw;\n    padding: 30px 15px;\n  }\n}\n.auth-form h1 {\n  text-align: center;\n  font-weight: bold;\n  font-size: 30px;\n  text-transform: uppercase;\n  color: #212529;\n}\n.auth-form .common-input,\n.auth-form .common-btn {\n  width: 100%;\n  height: 47px;\n  margin-top: 32px;\n}\n.auth-form .create-account-link,\n.auth-form .authorize-link {\n  margin-top: 10px;\n  width: 100%;\n  display: inline-block;\n  text-align: center;\n  font-size: 17px;\n  font-weight: 500;\n  color: #58e69f;\n  transition: 0.3s;\n}\n.auth-form .create-account-link:hover,\n.auth-form .authorize-link:hover {\n  color: #4ed190;\n}\n.auth-form .error {\n  position: absolute;\n  bottom: 10px;\n  left: calc(50% - 50px);\n  width: 100px;\n  text-align: center;\n  font-size: 13px;\n  font-weight: 500;\n  color: #eb5d5d;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/common/styles/common.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/What.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/Course.scss"],"names":[],"mappings":"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","file":"common.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n","@import './variables.scss';\r\n@import './mixins.scss';\r\n@import '../../../static/fonts/fonts.css';\r\n@import '../../pages/main/styles/What.scss';\r\n@import '../../pages/main/styles/Course.scss';\r\n\r\nbody {\r\n    margin: 0;\r\n    padding: 0;\r\n    background: $bodyBackground;\r\n}\r\n\r\n*,\r\n*::before,\r\n*::after {\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.content-container {\r\n    width: 100%;\r\n    padding: 0 8% 0 17%;\r\n    box-sizing: border-box;\r\n\r\n    @include sm-down {\r\n        padding: 0 5% 0 5%;\r\n    }\r\n}\r\n\r\nh1,h2,h3,h4,h5,h6,\r\np,\r\nspan,\r\na,\r\nbutton,\r\nlabel,\r\ninput {\r\n    font-family: 'Montserrat';\r\n    font-weight: normal;\r\n    font-style: normal;\r\n}\r\n\r\nbutton {\r\n    outline: none;\r\n    cursor: pointer;\r\n}\r\n\r\na {\r\n    text-decoration: none;\r\n}\r\n\r\n.topSeller {\r\n    padding: 6px 12px;\r\n    background: $purpleColor;\r\n    border-radius: 4px;\r\n    font-size: 10px;\r\n    line-height: 10px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n}\r\n\r\n// Buttons\r\n.common-btn,\r\n.purple-btn {\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    background: #75F880;\r\n    border-radius: 10px;\r\n    border: 0;\r\n    font-weight: 600;\r\n    font-size: 14px;\r\n    text-align: center;\r\n    color: #212B36;\r\n    &:hover {\r\n        background-color: #5BE066;\r\n    }\r\n\r\n    &:active,\r\n    &:focus {\r\n        background-color: #5BE066;\r\n        box-shadow: none;\r\n    }\r\n\r\n    &--disabled {\r\n        color: #ABABAB;\r\n        background-color: #DBDBDB;\r\n        box-shadow: none;\r\n    }\r\n\r\n    &--outline {\r\n        background: #1B1E4A;\r\n        border: 1px solid #75F880;\r\n        color: #75F880;\r\n    }\r\n\r\n    &--discord {\r\n        padding: 10px;\r\n        display: flex;\r\n        align-items: center;\r\n        border-radius: 10px;\r\n        border: 0;\r\n        background-color: #E25AF0;\r\n        box-shadow: none;\r\n\r\n        span {\r\n            margin-left: 10px;\r\n            font-weight: 600;\r\n            font-size: 14px;\r\n            line-height: 20px;\r\n            color: #FFFFFF;\r\n        }\r\n    }\r\n}\r\n\r\n.purple-btn {\r\n    background: #E25AF0;\r\n    color: #FFFFFF;\r\n\r\n    &:hover {\r\n        background-color: #5BE066;\r\n    }\r\n\r\n    &:active,\r\n    &:focus {\r\n        background-color: #5BE066;\r\n        box-shadow: none;\r\n    }\r\n}\r\n\r\n.transparent-btn {\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    background: transparent;\r\n    border: 1px solid #75F880;\r\n    border-radius: 10px;\r\n    font-size: 14px;\r\n    text-align: center;\r\n    color: #75F880;\r\n}\r\n\r\n\r\n// Inputs\r\n.common-input {\r\n    width: 100%;\r\n    max-width: 438px;\r\n    height: 47px;\r\n    padding: 0 13px;\r\n    box-sizing: border-box;\r\n    background: #FFFFFF;\r\n    border: 0.996795px solid #C2C3CC;\r\n    border-radius: 9.96795px;\r\n    font-weight: 500;\r\n    font-size: 13.9551px;\r\n    letter-spacing: 0.149519px;\r\n    color: #7C7E92;\r\n    outline: none;\r\n}\r\n\r\n.response-modal {\r\n    position: fixed;\r\n    top: calc(50% - 75px);\r\n    left: calc(50% - 150px);\r\n    width: 300px;\r\n    height: 150px;\r\n    padding: 20px;\r\n    box-sizing: border-box;\r\n    @extend %display-flex-column;\r\n    background: whitesmoke;\r\n    border-radius: 10px;\r\n    border: 2px solid;\r\n    z-index: 20;\r\n    img {\r\n        width: 44px;\r\n    }\r\n    span {\r\n        text-align: center;\r\n        font-size: 16px;\r\n        font-weight: 500;\r\n        color: #333232;\r\n    }\r\n}\r\n\r\n// Authorizatin & Registration\r\n.auth-component {\r\n    width: 100%;\r\n    height: 100vh;\r\n    @extend %display-flex-column;\r\n    justify-content: center;\r\n    background-color: rgb(247, 247, 247);\r\n    .terms {\r\n        width: 400px;\r\n        position: absolute;\r\n        bottom: 20px;\r\n        text-align: center;\r\n        line-height: 1.5;\r\n\r\n        @include xs-down {\r\n            width: 90%;\r\n        }\r\n\r\n        a {\r\n            text-decoration: underline;\r\n            color: #343434;\r\n        }\r\n    }\r\n}\r\n\r\n.auth-form {\r\n    position: relative;\r\n    width: 518px;\r\n    padding: 30px 40px;\r\n    box-sizing: border-box;\r\n    border: 6px solid rgb(241, 241, 241);\r\n    border-radius: 20px;\r\n\r\n    @include xs-down {\r\n        width: 90vw;\r\n        padding: 30px 15px;\r\n    }\r\n\r\n    h1 {\r\n        text-align: center;\r\n        font-weight: bold;\r\n        font-size: 30px;\r\n        text-transform: uppercase;\r\n        color: #212529;\r\n    }\r\n    .common-input,\r\n    .common-btn {\r\n        width: 100%;\r\n        height: 47px;\r\n        margin-top: 32px;\r\n    }\r\n    .create-account-link,\r\n    .authorize-link {\r\n        margin-top: 10px;\r\n        width: 100%;\r\n        display: inline-block;\r\n        text-align: center;\r\n        font-size: 17px;\r\n        font-weight: 500;\r\n        color: rgb(88, 230, 159);\r\n        transition: 0.3s;\r\n    \r\n        &:hover {\r\n            color: rgb(78, 209, 144);\r\n        }\r\n    }\r\n    .error {\r\n        position: absolute;\r\n        bottom: 10px;\r\n        left: calc(50% - 50px);\r\n        width: 100px;\r\n        text-align: center;\r\n        font-size: 13px;\r\n        font-weight: 500;\r\n        color: rgb(235, 93, 93);\r\n    }\r\n}","@import \"src/common/styles/mixins\";\r\n\r\n.what {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  //flex-wrap: wrap;\r\n  position: relative;\r\n  background: #1B1E4A;\r\n  padding: 60px 65px 110px;\r\n  margin-top: 42px;\r\n  margin-left: 17%;\r\n  box-sizing: border-box;\r\n  border-radius: 30px 0 0 30px;\r\n  filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\r\n\r\n  @include lg-down {\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  @include xs-down {\r\n    margin-left: 30px;\r\n    padding: 35px 30px 50px;\r\n    filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\r\n  }\r\n\r\n  &__content {\r\n\r\n    @include lg-down {\r\n      margin-bottom: 60px;\r\n    }\r\n\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 23px;\r\n    line-height: 29px;\r\n    color: #E25AF0;\r\n  }\r\n\r\n  &__subtitle {\r\n    margin-top: 10px;\r\n    font-size: 13px;\r\n    line-height: 21px;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__group {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    padding-top: 40px;\r\n\r\n    @include xs-down {\r\n      padding-top: 50px;\r\n    }\r\n  }\r\n\r\n  &__block {\r\n    max-width: 320px;\r\n    width: 100%;\r\n    margin-top: 40px;\r\n    margin-right: 50px;\r\n\r\n    @include xs-down {\r\n      margin-right: 0;\r\n    }\r\n  }\r\n\r\n  &__block-title {\r\n    font-weight: 600;\r\n    font-size: 16px;\r\n    line-height: 19px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__block-text {\r\n    margin-top: 15px;\r\n    font-size: 16px;\r\n    line-height: 24px;\r\n    color: #BFBEBE;\r\n  }\r\n\r\n  &__buy {\r\n    max-width: 320px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n\r\n  }\r\n\r\n  &__price-wrap {\r\n    display: flex;\r\n  }\r\n\r\n  &__price-finish {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-weight: bold;\r\n    font-size: 35px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #E25AF0;\r\n    margin-right: 15px;\r\n  }\r\n\r\n  &__price-full {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 20px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-right: 15px;\r\n  }\r\n\r\n  &__price-sale {\r\n    width: 100%;\r\n    white-space: nowrap;\r\n    font-size: 20px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #75F880;\r\n  }\r\n\r\n  &__offer {\r\n    margin-top: 30px;\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-weight: bold;\r\n    font-size: 22px;\r\n    line-height: 26px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__btn-group {\r\n    margin-top: 28px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  &__btn {\r\n    max-width: 255px;\r\n    width: 100%;\r\n\r\n    &:not(:last-child) {\r\n      margin-bottom: 14px;\r\n    }\r\n  }\r\n\r\n  &__btn--outline {\r\n  }\r\n\r\n  &__guard {\r\n    margin-top: 28px;\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 13px;\r\n    line-height: 19px;\r\n    text-align: center;\r\n    text-transform: capitalize;\r\n    color: #FFFFFF;\r\n  }\r\n}\r\n\r\n\r\n","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}","@import \"src/common/styles/mixins\";\r\n\r\n.course {\r\n  width: 100%;\r\n  padding: 40px 0 60px;\r\n\r\n\r\n  &__wrap {\r\n    width: 100%;\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 40px;\r\n    line-height: 48px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #E25AF0;\r\n    margin-bottom: 70px;\r\n\r\n    @include sm-down {\r\n      font-size: 30px;\r\n      line-height: 38px;\r\n      margin-bottom: 45px;\r\n    }\r\n  }\r\n\r\n  &__group {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    flex-wrap: wrap;\r\n\r\n    @include sm-down {\r\n      align-items: center;\r\n    }\r\n  }\r\n\r\n  &__block {\r\n    width: 100%;\r\n    max-width: 330px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    background: #1B1E4A;\r\n    border-radius: 24px;\r\n    margin-bottom: 50px;\r\n    padding: 15px 17px 35px;\r\n    box-sizing: border-box;\r\n\r\n    @include sm-down {\r\n      max-width: 100%;\r\n    }\r\n  }\r\n\r\n  &__block-icon {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    width: 76px;\r\n    height: 76px;\r\n    border-radius: 50%;\r\n    background: rgba(117, 248, 128, 0.2);\r\n    margin-bottom: 25px;\r\n    margin-top: -45px;\r\n\r\n    svg {\r\n      display: block;\r\n    }\r\n  }\r\n\r\n  &__block-title {\r\n    font-weight: bold;\r\n    font-size: 18px;\r\n    line-height: 22px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 20px;\r\n  }\r\n\r\n  &__block-text {\r\n    font-size: 14px;\r\n    line-height: 19px;\r\n    text-align: center;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__desc {\r\n\r\n  }\r\n\r\n  &__desc-title {\r\n    font-weight: bold;\r\n    font-size: 24px;\r\n    line-height: 29px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 50px;\r\n  }\r\n\r\n  &__desc-text {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 16px;\r\n    line-height: 24px;\r\n    color: #F0EDED;\r\n  }\r\n}"]}]);
+exports.push([module.i, ".auth-component, .response-modal {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.what {\n  display: flex;\n  justify-content: space-between;\n  position: relative;\n  background: #1B1E4A;\n  padding: 60px 65px 110px;\n  margin-top: 42px;\n  margin-left: 17%;\n  box-sizing: border-box;\n  border-radius: 30px 0 0 30px;\n  -webkit-filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\n          filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\n}\n@media only screen and (max-width: 1170px) {\n  .what {\n    flex-direction: column;\n    align-items: center;\n  }\n}\n@media only screen and (max-width: 576px) {\n  .what {\n    margin-left: 30px;\n    padding: 35px 30px 50px;\n    -webkit-filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\n            filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\n  }\n}\n@media only screen and (max-width: 1170px) {\n  .what__content {\n    margin-bottom: 60px;\n  }\n}\n.what__title {\n  font-weight: bold;\n  font-size: 23px;\n  line-height: 29px;\n  color: #E25AF0;\n}\n.what__subtitle {\n  margin-top: 10px;\n  font-size: 13px;\n  line-height: 21px;\n  color: #FFFFFF;\n}\n.what__group {\n  display: flex;\n  flex-wrap: wrap;\n  padding-top: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .what__group {\n    padding-top: 50px;\n  }\n}\n.what__block {\n  max-width: 320px;\n  width: 100%;\n  margin-top: 40px;\n  margin-right: 50px;\n}\n@media only screen and (max-width: 576px) {\n  .what__block {\n    margin-right: 0;\n  }\n}\n.what__block-title {\n  font-weight: 600;\n  font-size: 16px;\n  line-height: 19px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.what__block-text {\n  margin-top: 15px;\n  font-size: 16px;\n  line-height: 24px;\n  color: #BFBEBE;\n}\n.what__buy {\n  max-width: 320px;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.what__price-wrap {\n  display: flex;\n}\n.what__price-finish {\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: bold;\n  font-size: 35px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #E25AF0;\n  margin-right: 15px;\n}\n.what__price-full {\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 20px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-right: 15px;\n}\n.what__price-sale {\n  width: 100%;\n  white-space: nowrap;\n  font-size: 20px;\n  line-height: 42px;\n  text-transform: uppercase;\n  color: #75F880;\n}\n.what__offer {\n  margin-top: 30px;\n  font-family: \"Montserrat\", sans-serif;\n  font-weight: bold;\n  font-size: 22px;\n  line-height: 26px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.what__btn-group {\n  margin-top: 28px;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.what__btn {\n  max-width: 255px;\n  width: 100%;\n}\n.what__btn:not(:last-child) {\n  margin-bottom: 14px;\n}\n.what__guard {\n  margin-top: 28px;\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 13px;\n  line-height: 19px;\n  text-align: center;\n  text-transform: capitalize;\n  color: #FFFFFF;\n}\n\n.course {\n  width: 100%;\n  padding: 40px 0 60px;\n}\n.course__wrap {\n  width: 100%;\n}\n.course__title {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: 48px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #E25AF0;\n  margin-bottom: 70px;\n}\n@media only screen and (max-width: 767px) {\n  .course__title {\n    font-size: 30px;\n    line-height: 38px;\n    margin-bottom: 45px;\n  }\n}\n.course__group {\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n}\n@media only screen and (max-width: 767px) {\n  .course__group {\n    align-items: center;\n  }\n}\n.course__block {\n  width: 100%;\n  max-width: 330px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  background: #1B1E4A;\n  border-radius: 24px;\n  margin-bottom: 50px;\n  padding: 15px 17px 35px;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 767px) {\n  .course__block {\n    max-width: 100%;\n  }\n}\n.course__block-icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 76px;\n  height: 76px;\n  border-radius: 50%;\n  background: rgba(117, 248, 128, 0.2);\n  margin-bottom: 25px;\n  margin-top: -45px;\n}\n.course__block-icon svg {\n  display: block;\n}\n.course__block-title {\n  font-weight: bold;\n  font-size: 18px;\n  line-height: 22px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 20px;\n}\n.course__block-text {\n  font-size: 14px;\n  line-height: 19px;\n  text-align: center;\n  color: #FFFFFF;\n}\n.course__desc-title {\n  font-weight: bold;\n  font-size: 24px;\n  line-height: 29px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 50px;\n}\n.course__desc-text {\n  font-family: \"Montserrat\", sans-serif;\n  font-size: 16px;\n  line-height: 24px;\n  color: #F0EDED;\n}\n\nbody {\n  margin: 0;\n  padding: 0;\n  background: #0F1434;\n}\n\n*,\n*::before,\n*::after {\n  margin: 0;\n  padding: 0;\n}\n\n.content-container {\n  width: 100%;\n  padding: 0 115px 0 140px;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 767px) {\n  .content-container {\n    padding: 0 5% 0 5%;\n  }\n}\n\nh1, h2, h3, h4, h5, h6,\np,\nspan,\na,\nbutton,\nlabel,\ninput {\n  font-family: \"Montserrat\";\n  font-weight: normal;\n  font-style: normal;\n}\n\nbutton {\n  outline: none;\n  cursor: pointer;\n}\n\na {\n  text-decoration: none;\n}\n\n.topSeller {\n  padding: 6px 12px;\n  background: #E25AF0;\n  border-radius: 4px;\n  font-size: 10px;\n  line-height: 10px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n\n.common-btn,\n.purple-btn {\n  padding: 10px;\n  box-sizing: border-box;\n  background: #75F880;\n  border-radius: 10px;\n  border: 0;\n  font-weight: 600;\n  font-size: 14px;\n  text-align: center;\n  color: #212B36;\n  transition: 0.3s;\n  cursor: pointer;\n}\n.common-btn:hover,\n.purple-btn:hover {\n  background-color: #5BE066;\n}\n.common-btn:active, .common-btn:focus,\n.purple-btn:active,\n.purple-btn:focus {\n  background-color: #5BE066;\n  box-shadow: none;\n}\n.common-btn--disabled,\n.purple-btn--disabled {\n  color: #ABABAB;\n  background-color: #DBDBDB;\n  box-shadow: none;\n}\n.common-btn--outline,\n.purple-btn--outline {\n  background: #1B1E4A;\n  border: 1px solid #75F880;\n  color: #75F880;\n}\n.common-btn--discord,\n.purple-btn--discord {\n  padding: 10px;\n  display: flex;\n  align-items: center;\n  border-radius: 10px;\n  border: 0;\n  background-color: #E25AF0;\n  box-shadow: none;\n}\n.common-btn--discord span,\n.purple-btn--discord span {\n  margin-left: 10px;\n  font-weight: 600;\n  font-size: 14px;\n  line-height: 20px;\n  color: #FFFFFF;\n}\n\n.purple-btn {\n  background: #E25AF0;\n  color: #FFFFFF;\n}\n.purple-btn:hover {\n  background-color: #5BE066;\n}\n.purple-btn:active, .purple-btn:focus {\n  background-color: #5BE066;\n  box-shadow: none;\n}\n\n.transparent-btn {\n  padding: 10px;\n  box-sizing: border-box;\n  background: transparent;\n  border: 1px solid #75F880;\n  border-radius: 10px;\n  font-size: 14px;\n  text-align: center;\n  color: #75F880;\n}\n\n.common-input {\n  width: 100%;\n  max-width: 438px;\n  height: 47px;\n  padding: 0 13px;\n  box-sizing: border-box;\n  background: #FFFFFF;\n  border: 0.996795px solid #C2C3CC;\n  border-radius: 9.96795px;\n  font-weight: 500;\n  font-size: 13.9551px;\n  letter-spacing: 0.149519px;\n  color: #7C7E92;\n  outline: none;\n}\n\n.social-input {\n  position: relative;\n  width: 100%;\n  height: 47px;\n}\n.social-input img {\n  position: absolute;\n  top: 11.5px;\n  left: 8px;\n}\n.social-input .common-input {\n  width: 100%;\n}\n\n.response-modal {\n  position: fixed;\n  top: calc(50% - 75px);\n  left: calc(50% - 150px);\n  width: 300px;\n  height: 150px;\n  padding: 20px;\n  box-sizing: border-box;\n  background: whitesmoke;\n  border-radius: 10px;\n  border: 2px solid;\n  z-index: 20;\n}\n.response-modal img {\n  width: 44px;\n}\n.response-modal span {\n  text-align: center;\n  font-size: 16px;\n  font-weight: 500;\n  color: #333232;\n}\n\n.auth-component {\n  width: 100%;\n  height: 100vh;\n  justify-content: center;\n  background-color: #f7f7f7;\n}\n.auth-component .terms {\n  margin-top: 30px;\n  width: 400px;\n  text-align: center;\n  line-height: 1.5;\n}\n@media only screen and (max-width: 576px) {\n  .auth-component .terms {\n    width: 90%;\n  }\n}\n.auth-component .terms a {\n  text-decoration: underline;\n  color: #343434;\n}\n\n.auth-form {\n  position: relative;\n  width: 518px;\n  padding: 30px 40px;\n  box-sizing: border-box;\n  border: 6px solid #f1f1f1;\n  border-radius: 20px;\n}\n@media only screen and (max-width: 576px) {\n  .auth-form {\n    width: 90vw;\n    padding: 30px 15px;\n  }\n}\n.auth-form h1 {\n  text-align: center;\n  font-weight: bold;\n  font-size: 30px;\n  text-transform: uppercase;\n  color: #212529;\n}\n.auth-form .common-input,\n.auth-form .common-btn {\n  width: 100%;\n  height: 47px;\n  margin-top: 32px;\n}\n.auth-form .create-account-link,\n.auth-form .authorize-link {\n  margin-top: 10px;\n  width: 100%;\n  display: inline-block;\n  text-align: center;\n  font-size: 17px;\n  font-weight: 500;\n  color: #58e69f;\n  transition: 0.3s;\n}\n.auth-form .create-account-link:hover,\n.auth-form .authorize-link:hover {\n  color: #4ed190;\n}\n.auth-form .error {\n  position: absolute;\n  bottom: 80px;\n  left: calc(50% - 100px);\n  width: 200px;\n  text-align: center;\n  font-size: 13px;\n  font-weight: 500;\n  color: #eb5d5d;\n}\n\n@media screen and (max-height: 750px) {\n  .auth-component {\n    height: auto;\n    min-height: 100vh;\n    padding: 30px;\n    box-sizing: border-box;\n  }\n  .auth-component .auth-form {\n    margin-top: 50px;\n    padding: 10px 30px;\n  }\n  .auth-component .common-input,\n.auth-component .common-btn {\n    margin-top: 15px;\n  }\n  .auth-component .terms {\n    margin-top: 20px;\n    font-size: 12px;\n  }\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/common/styles/common.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/What.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss","C:/Users/User/Projects/cyberclass/src/pages/main/styles/Course.scss"],"names":[],"mappings":"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","file":"common.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n","@import './variables.scss';\r\n@import './mixins.scss';\r\n@import '../../../static/fonts/fonts.css';\r\n@import '../../pages/main/styles/What.scss';\r\n@import '../../pages/main/styles/Course.scss';\r\n\r\nbody {\r\n    margin: 0;\r\n    padding: 0;\r\n    background: $bodyBackground;\r\n}\r\n\r\n*,\r\n*::before,\r\n*::after {\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.content-container {\r\n    width: 100%;\r\n    padding: 0 115px 0 140px;\r\n    box-sizing: border-box;\r\n\r\n    @include sm-down {\r\n        padding: 0 5% 0 5%;\r\n    }\r\n}\r\n\r\nh1,h2,h3,h4,h5,h6,\r\np,\r\nspan,\r\na,\r\nbutton,\r\nlabel,\r\ninput {\r\n    font-family: 'Montserrat';\r\n    font-weight: normal;\r\n    font-style: normal;\r\n}\r\n\r\nbutton {\r\n    outline: none;\r\n    cursor: pointer;\r\n}\r\n\r\na {\r\n    text-decoration: none;\r\n}\r\n\r\n.topSeller {\r\n    padding: 6px 12px;\r\n    background: $purpleColor;\r\n    border-radius: 4px;\r\n    font-size: 10px;\r\n    line-height: 10px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n}\r\n\r\n// Buttons\r\n.common-btn,\r\n.purple-btn {\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    background: #75F880;\r\n    border-radius: 10px;\r\n    border: 0;\r\n    font-weight: 600;\r\n    font-size: 14px;\r\n    text-align: center;\r\n    color: #212B36;\r\n    transition: 0.3s;\r\n    cursor: pointer;\r\n    &:hover {\r\n        background-color: #5BE066;\r\n    }\r\n\r\n    &:active,\r\n    &:focus {\r\n        background-color: #5BE066;\r\n        box-shadow: none;\r\n    }\r\n\r\n    &--disabled {\r\n        color: #ABABAB;\r\n        background-color: #DBDBDB;\r\n        box-shadow: none;\r\n    }\r\n\r\n    &--outline {\r\n        background: #1B1E4A;\r\n        border: 1px solid #75F880;\r\n        color: #75F880;\r\n    }\r\n\r\n    &--discord {\r\n        padding: 10px;\r\n        display: flex;\r\n        align-items: center;\r\n        border-radius: 10px;\r\n        border: 0;\r\n        background-color: #E25AF0;\r\n        box-shadow: none;\r\n\r\n        span {\r\n            margin-left: 10px;\r\n            font-weight: 600;\r\n            font-size: 14px;\r\n            line-height: 20px;\r\n            color: #FFFFFF;\r\n        }\r\n    }\r\n}\r\n\r\n.purple-btn {\r\n    background: #E25AF0;\r\n    color: #FFFFFF;\r\n\r\n    &:hover {\r\n        background-color: #5BE066;\r\n    }\r\n\r\n    &:active,\r\n    &:focus {\r\n        background-color: #5BE066;\r\n        box-shadow: none;\r\n    }\r\n}\r\n\r\n.transparent-btn {\r\n    padding: 10px;\r\n    box-sizing: border-box;\r\n    background: transparent;\r\n    border: 1px solid #75F880;\r\n    border-radius: 10px;\r\n    font-size: 14px;\r\n    text-align: center;\r\n    color: #75F880;\r\n}\r\n\r\n\r\n// Inputs\r\n.common-input {\r\n    width: 100%;\r\n    max-width: 438px;\r\n    height: 47px;\r\n    padding: 0 13px;\r\n    box-sizing: border-box;\r\n    background: #FFFFFF;\r\n    border: 0.996795px solid #C2C3CC;\r\n    border-radius: 9.96795px;\r\n    font-weight: 500;\r\n    font-size: 13.9551px;\r\n    letter-spacing: 0.149519px;\r\n    color: #7C7E92;\r\n    outline: none;\r\n}\r\n\r\n.social-input {\r\n    position: relative;\r\n    width: 100%;\r\n    height: 47px;\r\n    img {\r\n        position: absolute;\r\n        top: 11.5px;\r\n        left: 8px;\r\n    }\r\n    .common-input {\r\n        width: 100%;\r\n    }\r\n}\r\n\r\n.response-modal {\r\n    position: fixed;\r\n    top: calc(50% - 75px);\r\n    left: calc(50% - 150px);\r\n    width: 300px;\r\n    height: 150px;\r\n    padding: 20px;\r\n    box-sizing: border-box;\r\n    @extend %display-flex-column;\r\n    background: whitesmoke;\r\n    border-radius: 10px;\r\n    border: 2px solid;\r\n    z-index: 20;\r\n    img {\r\n        width: 44px;\r\n    }\r\n    span {\r\n        text-align: center;\r\n        font-size: 16px;\r\n        font-weight: 500;\r\n        color: #333232;\r\n    }\r\n}\r\n\r\n// Authorizatin & Registration\r\n.auth-component {\r\n    width: 100%;\r\n    height: 100vh;\r\n    @extend %display-flex-column;\r\n    justify-content: center;\r\n    background-color: rgb(247, 247, 247);\r\n    .terms {\r\n        margin-top: 30px;\r\n        width: 400px;\r\n        // position: absolute;\r\n        // bottom: 20px;\r\n        text-align: center;\r\n        line-height: 1.5;\r\n\r\n        @include xs-down {\r\n            width: 90%;\r\n        }\r\n\r\n        a {\r\n            text-decoration: underline;\r\n            color: #343434;\r\n        }\r\n    }\r\n}\r\n\r\n.auth-form {\r\n    position: relative;\r\n    width: 518px;\r\n    padding: 30px 40px;\r\n    box-sizing: border-box;\r\n    border: 6px solid rgb(241, 241, 241);\r\n    border-radius: 20px;\r\n\r\n    @include xs-down {\r\n        width: 90vw;\r\n        padding: 30px 15px;\r\n    }\r\n\r\n    h1 {\r\n        text-align: center;\r\n        font-weight: bold;\r\n        font-size: 30px;\r\n        text-transform: uppercase;\r\n        color: #212529;\r\n    }\r\n    .common-input,\r\n    .common-btn {\r\n        width: 100%;\r\n        height: 47px;\r\n        margin-top: 32px;\r\n    }\r\n    .create-account-link,\r\n    .authorize-link {\r\n        margin-top: 10px;\r\n        width: 100%;\r\n        display: inline-block;\r\n        text-align: center;\r\n        font-size: 17px;\r\n        font-weight: 500;\r\n        color: rgb(88, 230, 159);\r\n        transition: 0.3s;\r\n    \r\n        &:hover {\r\n            color: rgb(78, 209, 144);\r\n        }\r\n    }\r\n    .error {\r\n        position: absolute;\r\n        bottom: 80px;\r\n        left: calc(50% - 100px);\r\n        width: 200px;\r\n        text-align: center;\r\n        font-size: 13px;\r\n        font-weight: 500;\r\n        color: rgb(235, 93, 93);\r\n    }\r\n}\r\n\r\n@media screen and (max-height: 750px) {\r\n  .auth-component {\r\n      height: auto;\r\n      min-height: 100vh;\r\n      padding: 30px;\r\n      box-sizing: border-box;\r\n      .auth-form {\r\n          margin-top: 50px;\r\n          padding: 10px 30px;\r\n      }\r\n      .common-input,\r\n      .common-btn {\r\n          margin-top: 15px;\r\n      }\r\n      .terms {\r\n          margin-top: 20px;\r\n          font-size: 12px;\r\n      }\r\n  }\r\n}","@import \"src/common/styles/mixins\";\r\n\r\n.what {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  //flex-wrap: wrap;\r\n  position: relative;\r\n  background: #1B1E4A;\r\n  padding: 60px 65px 110px;\r\n  margin-top: 42px;\r\n  margin-left: 17%;\r\n  box-sizing: border-box;\r\n  border-radius: 30px 0 0 30px;\r\n  filter: drop-shadow(-16px 0px 0px #75F880) drop-shadow(-16px 0px 0px #E25AF0);\r\n\r\n  @include lg-down {\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  @include xs-down {\r\n    margin-left: 30px;\r\n    padding: 35px 30px 50px;\r\n    filter: drop-shadow(-5px 0px 0px #75F880) drop-shadow(-5px 0px 0px #E25AF0);\r\n  }\r\n\r\n  &__content {\r\n\r\n    @include lg-down {\r\n      margin-bottom: 60px;\r\n    }\r\n\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 23px;\r\n    line-height: 29px;\r\n    color: #E25AF0;\r\n  }\r\n\r\n  &__subtitle {\r\n    margin-top: 10px;\r\n    font-size: 13px;\r\n    line-height: 21px;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__group {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    padding-top: 40px;\r\n\r\n    @include xs-down {\r\n      padding-top: 50px;\r\n    }\r\n  }\r\n\r\n  &__block {\r\n    max-width: 320px;\r\n    width: 100%;\r\n    margin-top: 40px;\r\n    margin-right: 50px;\r\n\r\n    @include xs-down {\r\n      margin-right: 0;\r\n    }\r\n  }\r\n\r\n  &__block-title {\r\n    font-weight: 600;\r\n    font-size: 16px;\r\n    line-height: 19px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__block-text {\r\n    margin-top: 15px;\r\n    font-size: 16px;\r\n    line-height: 24px;\r\n    color: #BFBEBE;\r\n  }\r\n\r\n  &__buy {\r\n    max-width: 320px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n\r\n  }\r\n\r\n  &__price-wrap {\r\n    display: flex;\r\n  }\r\n\r\n  &__price-finish {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-weight: bold;\r\n    font-size: 35px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #E25AF0;\r\n    margin-right: 15px;\r\n  }\r\n\r\n  &__price-full {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 20px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-right: 15px;\r\n  }\r\n\r\n  &__price-sale {\r\n    width: 100%;\r\n    white-space: nowrap;\r\n    font-size: 20px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    color: #75F880;\r\n  }\r\n\r\n  &__offer {\r\n    margin-top: 30px;\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-weight: bold;\r\n    font-size: 22px;\r\n    line-height: 26px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__btn-group {\r\n    margin-top: 28px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  &__btn {\r\n    max-width: 255px;\r\n    width: 100%;\r\n\r\n    &:not(:last-child) {\r\n      margin-bottom: 14px;\r\n    }\r\n  }\r\n\r\n  &__btn--outline {\r\n  }\r\n\r\n  &__guard {\r\n    margin-top: 28px;\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 13px;\r\n    line-height: 19px;\r\n    text-align: center;\r\n    text-transform: capitalize;\r\n    color: #FFFFFF;\r\n  }\r\n}\r\n\r\n\r\n","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}","@import \"src/common/styles/mixins\";\r\n\r\n.course {\r\n  width: 100%;\r\n  padding: 40px 0 60px;\r\n\r\n\r\n  &__wrap {\r\n    width: 100%;\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 40px;\r\n    line-height: 48px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #E25AF0;\r\n    margin-bottom: 70px;\r\n\r\n    @include sm-down {\r\n      font-size: 30px;\r\n      line-height: 38px;\r\n      margin-bottom: 45px;\r\n    }\r\n  }\r\n\r\n  &__group {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    flex-wrap: wrap;\r\n\r\n    @include sm-down {\r\n      align-items: center;\r\n    }\r\n  }\r\n\r\n  &__block {\r\n    width: 100%;\r\n    max-width: 330px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    background: #1B1E4A;\r\n    border-radius: 24px;\r\n    margin-bottom: 50px;\r\n    padding: 15px 17px 35px;\r\n    box-sizing: border-box;\r\n\r\n    @include sm-down {\r\n      max-width: 100%;\r\n    }\r\n  }\r\n\r\n  &__block-icon {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    width: 76px;\r\n    height: 76px;\r\n    border-radius: 50%;\r\n    background: rgba(117, 248, 128, 0.2);\r\n    margin-bottom: 25px;\r\n    margin-top: -45px;\r\n\r\n    svg {\r\n      display: block;\r\n    }\r\n  }\r\n\r\n  &__block-title {\r\n    font-weight: bold;\r\n    font-size: 18px;\r\n    line-height: 22px;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 20px;\r\n  }\r\n\r\n  &__block-text {\r\n    font-size: 14px;\r\n    line-height: 19px;\r\n    text-align: center;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__desc {\r\n\r\n  }\r\n\r\n  &__desc-title {\r\n    font-weight: bold;\r\n    font-size: 24px;\r\n    line-height: 29px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 50px;\r\n  }\r\n\r\n  &__desc-text {\r\n    font-family: 'Montserrat', sans-serif;\r\n    font-size: 16px;\r\n    line-height: 24px;\r\n    color: #F0EDED;\r\n  }\r\n}"]}]);
 // Exports
 module.exports = exports;
 
@@ -207,12 +2020,14 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".Footer_footer__3cDgJ {\n  padding: 180px 8% 70px 17%;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 1023px) {\n  .Footer_footer__3cDgJ {\n    padding: 70px 0 40px;\n  }\n}\n.Footer_footer__3cDgJ ul {\n  list-style-type: none;\n}\n.Footer_footer__top__lWbDJ {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 100px;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__top__lWbDJ {\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: center;\n  }\n}\n.Footer_footer__news__1AYjw {\n  width: 100%;\n  max-width: 325px;\n  margin-right: 30px;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__news__1AYjw {\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.Footer_footer__title__3aNjI {\n  font-weight: bold;\n  font-size: 20px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 16px;\n}\n.Footer_footer__subtext__MspB- {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n  margin-bottom: 15px;\n}\n.Footer_footer__form__1TL5Q {\n  position: relative;\n  margin-bottom: 25px;\n}\n.Footer_footer__formInput__1CDVB {\n  padding: 8px 15px;\n  box-sizing: border-box;\n  border: 1px solid transparent;\n  border-radius: 10px;\n  font-weight: 500;\n  font-size: 14px;\n  line-height: 24px;\n  letter-spacing: 0.15px;\n  color: #212B36;\n  outline: none;\n}\n.Footer_footer__formInput__1CDVB:hover, .Footer_footer__formInput__1CDVB:focus, .Footer_footer__formInput__1CDVB:active {\n  border: 1px solid #75F880;\n}\n.Footer_footer__formInput__1CDVB::-webkit-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::-moz-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB:-ms-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::-ms-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formBtn__17W4d {\n  display: inline-block;\n  padding: 9px 28px !important;\n  box-sizing: border-box;\n  margin-left: -20px;\n  box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);\n  border-radius: 10px;\n  font-weight: 600;\n  font-size: 14px !important;\n  line-height: 24px !important;\n  text-align: center;\n  color: #212B36;\n}\n.Footer_footer__agree__1-aFT {\n  font-size: 11px;\n  line-height: 17px;\n  color: #FFFFFF;\n}\n.Footer_footer__contact__3gvg7 {\n  margin-right: 30px;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__contact__3gvg7 {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.Footer_footer__contactInfo__7fwSU {\n  margin-bottom: 40px;\n}\n.Footer_footer__infoBlock__KbuvP {\n  margin-bottom: 10px;\n}\n.Footer_footer__contactName__31Gz_ {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n}\n.Footer_footer__contactLink__3VbEE {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n  transition: 0.2s;\n}\n.Footer_footer__contactLink__3VbEE:hover {\n  color: #75F880;\n}\n.Footer_footer__follow__KT1Uw {\n  margin-top: 40px;\n}\n.Footer_footer__followTitle__1uSsH {\n  font-weight: bold;\n  font-size: 19px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.Footer_footer__followGroup__2WiEN {\n  margin-top: 15px;\n  display: flex;\n  align-items: center;\n}\n.Footer_footer__followLink__3HkbR {\n  display: block;\n  margin-right: 10px;\n  transition: 0.2s;\n}\n.Footer_footer__followLink__3HkbR:hover svg path {\n  fill: #75F880;\n}\n.Footer_footer__followIcon__2Mexu svg {\n  display: block;\n  transition: 0.2s;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__menu__3N5OO {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 0;\n    margin-right: 0;\n  }\n}\n.Footer_footer__menuItem__2_czA {\n  margin-bottom: 14px;\n}\n.Footer_footer__menuLink__19f-e {\n  font-size: 14px;\n  line-height: 28px;\n  color: rgba(255, 255, 255, 0.8);\n  transition: 0.2s;\n}\n.Footer_footer__menuLink__19f-e:hover {\n  color: #75F880;\n}\n.Footer_footer__bottomPay__2EhX8 {\n  text-align: center;\n  margin-bottom: 24px;\n}\n.Footer_footer__bottomCopy__1_na5 {\n  text-align: center;\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 14px;\n  color: #FFFFFF;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/components/ui/Footer/Footer.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAEA;EACE,0BAAA;EACA,sBAAA;AADF;ACkBE;EDnBF;IAKI,oBAAA;EAAF;AACF;AAEE;EACE,qBAAA;AAAJ;AAOE;EACE,aAAA;EACA,8BAAA;EACA,oBAAA;AALJ;ACWE;EDTA;IAMI,sBAAA;IACA,2BAAA;IACA,mBAAA;EAJJ;AACF;AAOE;EACE,WAAA;EACA,gBAAA;EACA,kBAAA;AALJ;ACDE;EDGA;IAMI,mBAAA;IACA,eAAA;EAJJ;AACF;AAOE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;AALJ;AAQE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;EACA,mBAAA;AANJ;AASE;EACE,kBAAA;EACA,mBAAA;AAPJ;AAUE;EAEE,iBAAA;EACA,sBAAA;EACA,6BAAA;EACA,mBAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;EACA,sBAAA;EACA,cAAA;EACA,aAAA;AATJ;AAWI;EAGE,yBAAA;AAXN;AAcI;EACE,cAAA;AAZN;AAWI;EACE,cAAA;AAZN;AAWI;EACE,cAAA;AAZN;AAWI;EACE,cAAA;AAZN;AAWI;EACE,cAAA;AAZN;AAgBE;EACE,qBAAA;EACA,4BAAA;EACA,sBAAA;EACA,kBAAA;EACA,kDAAA;EACA,mBAAA;EACA,gBAAA;EACA,0BAAA;EACA,4BAAA;EACA,kBAAA;EACA,cAAA;AAdJ;AAiBE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;AAfJ;AAkBE;EAGE,kBAAA;AAlBJ;AChEE;ED+EA;IAMI,WAAA;IACA,gBAAA;IACA,mBAAA;IACA,eAAA;EAjBJ;AACF;AAoBE;EACE,mBAAA;AAlBJ;AAsBE;EACE,mBAAA;AApBJ;AAuBE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;AArBJ;AAwBE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;EAEA,gBAAA;AAvBJ;AAyBI;EACE,cAAA;AAvBN;AA2BE;EACE,gBAAA;AAzBJ;AA4BE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,yBAAA;EACA,cAAA;AA1BJ;AA6BE;EACE,gBAAA;EACA,aAAA;EACA,mBAAA;AA3BJ;AA8BE;EACE,cAAA;EACA,kBAAA;EACA,gBAAA;AA5BJ;AAgCQ;EACE,aAAA;AA9BV;AAsCI;EACE,cAAA;EACA,gBAAA;AApCN;ACvHE;ED+JA;IAEI,WAAA;IACA,gBAAA;IACA,gBAAA;IACA,eAAA;EAtCJ;AACF;AA6CE;EACE,mBAAA;AA3CJ;AA8CE;EACE,eAAA;EACA,iBAAA;EACA,+BAAA;EACA,gBAAA;AA5CJ;AA8CI;EACE,cAAA;AA5CN;AAoDE;EACE,kBAAA;EACA,mBAAA;AAlDJ;AAqDE;EACE,kBAAA;EACA,oCAAA;EACA,eAAA;EACA,cAAA;AAnDJ","file":"Footer.module.scss","sourcesContent":["@import \"../../../common/styles/mixins.scss\";\r\n\r\n.footer {\r\n  padding: 180px 8% 70px 17%;\r\n  box-sizing: border-box;\r\n\r\n  @include md-down {\r\n    padding: 70px 0 40px;\r\n  }\r\n\r\n  ul {\r\n    list-style-type: none;\r\n  }\r\n\r\n  &__wrap {\r\n\r\n  }\r\n\r\n  &__top {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 100px;\r\n\r\n    @include sm-down {\r\n      flex-direction: column;\r\n      justify-content: flex-start;\r\n      align-items: center;\r\n    }\r\n  }\r\n\r\n  &__news {\r\n    width: 100%;\r\n    max-width: 325px;\r\n    margin-right: 30px;\r\n\r\n    @include sm-down {\r\n      margin-bottom: 60px;\r\n      margin-right: 0;\r\n    }\r\n  }\r\n\r\n  &__title {\r\n    font-weight: bold;\r\n    font-size: 20px;\r\n    line-height: 24px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n    margin-bottom: 16px;\r\n  }\r\n\r\n  &__subtext {\r\n    font-size: 14px;\r\n    line-height: 21px;\r\n    color: #FFFFFF;\r\n    margin-bottom: 15px;\r\n  }\r\n\r\n  &__form {\r\n    position: relative;\r\n    margin-bottom: 25px;\r\n  }\r\n\r\n  &__formInput {\r\n    // width: 100%;\r\n    padding: 8px 15px;\r\n    box-sizing: border-box;\r\n    border: 1px solid transparent;\r\n    border-radius: 10px;\r\n    font-weight: 500;\r\n    font-size: 14px;\r\n    line-height: 24px;\r\n    letter-spacing: 0.15px;\r\n    color: #212B36;\r\n    outline: none;\r\n\r\n    &:hover,\r\n    &:focus,\r\n    &:active {\r\n      border: 1px solid #75F880;\r\n    }\r\n\r\n    &::placeholder {\r\n      color: #7C7E92;\r\n    }\r\n  }\r\n\r\n  &__formBtn {\r\n    display: inline-block;\r\n    padding: 9px 28px !important;\r\n    box-sizing: border-box;\r\n    margin-left: -20px;\r\n    box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);\r\n    border-radius: 10px;\r\n    font-weight: 600;\r\n    font-size: 14px !important;\r\n    line-height: 24px !important;\r\n    text-align: center;\r\n    color: #212B36;\r\n  }\r\n\r\n  &__agree {\r\n    font-size: 11px;\r\n    line-height: 17px;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__contact {\r\n    //width: 100%;\r\n    //max-width: 305px;\r\n    margin-right: 30px;\r\n\r\n    @include sm-down {\r\n      width: 100%;\r\n      max-width: 305px;\r\n      margin-bottom: 60px;\r\n      margin-right: 0;\r\n    }\r\n  }\r\n\r\n  &__contactInfo {\r\n    margin-bottom: 40px;\r\n  }\r\n\r\n\r\n  &__infoBlock {\r\n    margin-bottom: 10px;\r\n  }\r\n\r\n  &__contactName {\r\n    font-size: 14px;\r\n    line-height: 21px;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__contactLink {\r\n    font-size: 14px;\r\n    line-height: 21px;\r\n    color: #FFFFFF;\r\n    // text-decoration: underline;\r\n    transition: 0.2s;\r\n\r\n    &:hover {\r\n      color: #75F880;\r\n    }\r\n  }\r\n\r\n  &__follow {\r\n    margin-top: 40px;\r\n  }\r\n\r\n  &__followTitle {\r\n    font-weight: bold;\r\n    font-size: 19px;\r\n    line-height: 24px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__followGroup {\r\n    margin-top: 15px;\r\n    display: flex;\r\n    align-items: center;\r\n  }\r\n\r\n  &__followLink {\r\n    display: block;\r\n    margin-right: 10px;\r\n    transition: 0.2s;\r\n\r\n    &:hover {\r\n      svg {\r\n        path {\r\n          fill: #75F880;\r\n        }\r\n      }\r\n    }\r\n  }\r\n\r\n  &__followIcon {\r\n\r\n    svg {\r\n      display: block;\r\n      transition: 0.2s;\r\n    }\r\n  }\r\n\r\n  &__menu {\r\n    @include sm-down {\r\n      width: 100%;\r\n      max-width: 305px;\r\n      margin-bottom: 0;\r\n      margin-right: 0;\r\n    }\r\n  }\r\n\r\n  &__menuList {\r\n\r\n  }\r\n\r\n  &__menuItem {\r\n    margin-bottom: 14px;\r\n  }\r\n\r\n  &__menuLink {\r\n    font-size: 14px;\r\n    line-height: 28px;\r\n    color: rgba(255, 255, 255, 0.8);\r\n    transition: 0.2s;\r\n\r\n    &:hover {\r\n      color: #75F880;\r\n    }\r\n  }\r\n\r\n  &__bottom {\r\n    \r\n  }\r\n\r\n  &__bottomPay {\r\n    text-align: center;\r\n    margin-bottom: 24px;\r\n  }\r\n\r\n  &__bottomCopy {\r\n    text-align: center;\r\n    font-family: 'Open Sans', sans-serif;\r\n    font-size: 14px;\r\n    color: #FFFFFF;\r\n  }\r\n}\r\n\r\n","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
+exports.push([module.i, ".Footer_footer__bottom__1efR2 {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Footer_footer__3cDgJ {\n  padding: 180px 8% 70px 17%;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 1023px) {\n  .Footer_footer__3cDgJ {\n    padding: 70px 0 40px;\n  }\n}\n.Footer_footer__3cDgJ ul {\n  list-style-type: none;\n}\n.Footer_footer__top__lWbDJ {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 100px;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__top__lWbDJ {\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: center;\n  }\n}\n.Footer_footer__news__1AYjw {\n  position: relative;\n  width: 100%;\n  max-width: 325px;\n  margin-right: 30px;\n}\n.Footer_footer__news__1AYjw .Footer_response__FzcSx {\n  position: absolute;\n  left: 0;\n  top: 110%;\n  font-size: 14px;\n  line-height: 21px;\n  color: #75F880;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__news__1AYjw {\n    max-width: 300px;\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.Footer_footer__title__3aNjI {\n  font-weight: bold;\n  font-size: 20px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 16px;\n}\n.Footer_footer__subtext__MspB- {\n  font-size: 14px;\n  color: #FFFFFF;\n  margin-bottom: 15px;\n}\n.Footer_footer__form__1TL5Q {\n  position: relative;\n  margin-bottom: 25px;\n}\n.Footer_footer__formInput__1CDVB {\n  padding: 8px 32px 8px 15px;\n  box-sizing: border-box;\n  border: 1px solid transparent;\n  border-radius: 10px;\n  font-weight: 500;\n  font-size: 14px;\n  line-height: 24px;\n  letter-spacing: 0.15px;\n  color: #212B36;\n  outline: none;\n}\n.Footer_footer__formInput__1CDVB:hover, .Footer_footer__formInput__1CDVB:focus, .Footer_footer__formInput__1CDVB:active {\n  border: 1px solid #75F880;\n}\n.Footer_footer__formInput__1CDVB::-webkit-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::-moz-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB:-ms-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::-ms-input-placeholder {\n  color: #7C7E92;\n}\n.Footer_footer__formInput__1CDVB::placeholder {\n  color: #7C7E92;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__formInput__1CDVB {\n    width: 200px;\n  }\n}\n.Footer_footer__formBtn__17W4d {\n  display: inline-block;\n  padding: 9px 20px !important;\n  box-sizing: border-box;\n  margin-left: -29px;\n  box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);\n  border-radius: 10px;\n  font-weight: 600;\n  font-size: 14px !important;\n  line-height: 24px !important;\n  text-align: center;\n  color: #212B36;\n}\n.Footer_footer__agree__1-aFT {\n  font-size: 11px;\n  line-height: 17px;\n  color: #FFFFFF;\n}\n.Footer_footer__contact__3gvg7 {\n  margin-right: 30px;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__contact__3gvg7 {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.Footer_footer__contactInfo__7fwSU {\n  margin-bottom: 40px;\n}\n.Footer_footer__infoBlock__KbuvP {\n  margin-bottom: 10px;\n}\n.Footer_footer__contactName__31Gz_ {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n}\n.Footer_footer__contactLink__3VbEE {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n  transition: 0.2s;\n}\n.Footer_footer__contactLink__3VbEE:hover {\n  color: #75F880;\n}\n.Footer_footer__follow__KT1Uw {\n  margin-top: 40px;\n}\n.Footer_footer__followTitle__1uSsH {\n  font-weight: bold;\n  font-size: 19px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.Footer_footer__followGroup__2WiEN {\n  margin-top: 15px;\n  display: flex;\n  align-items: center;\n}\n.Footer_footer__followLink__3HkbR {\n  display: block;\n  margin-right: 10px;\n  transition: 0.2s;\n}\n.Footer_footer__followLink__3HkbR:hover svg path {\n  fill: #75F880;\n}\n.Footer_footer__followIcon__2Mexu img {\n  display: block;\n  height: 27px;\n  transition: 0.2s;\n}\n@media only screen and (max-width: 767px) {\n  .Footer_footer__menu__3N5OO {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 0;\n    margin-right: 0;\n  }\n}\n.Footer_footer__menuItem__2_czA {\n  margin-bottom: 14px;\n}\n.Footer_footer__menuLink__19f-e {\n  font-size: 14px;\n  line-height: 28px;\n  color: rgba(255, 255, 255, 0.8);\n  transition: 0.2s;\n}\n.Footer_footer__menuLink__19f-e:hover {\n  color: #75F880;\n}\n.Footer_footer__bottom__1efR2 {\n  justify-content: flex-end;\n}\n.Footer_footer__bottom_center__1I56g {\n  margin: 0 150px;\n}\n.Footer_footer__bottom_right__2c6pi p {\n  text-align: right;\n  font-size: 14px;\n  line-height: 28px;\n  color: rgba(255, 255, 255, 0.8);\n}\n@media only screen and (max-width: 576px) {\n  .Footer_footer__bottom__1efR2 {\n    flex-direction: column;\n  }\n  .Footer_footer__bottom_right__2c6pi {\n    order: 1;\n  }\n  .Footer_footer__bottom_right__2c6pi p {\n    text-align: center;\n  }\n  .Footer_footer__bottom_center__1I56g {\n    order: 2;\n    margin-top: 50px;\n  }\n}\n.Footer_footer__bottomPay__2EhX8 {\n  text-align: center;\n  margin-bottom: 24px;\n}\n.Footer_footer__bottomCopy__1_na5 {\n  text-align: center;\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 14px;\n  color: #FFFFFF;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/components/ui/Footer/Footer.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADSA,gBAAA;AAOA,gBAAA;AClBA;EACE,0BAAA;EACA,sBAAA;AAOF;ACSE;EDlBF;IAKI,oBAAA;EAQF;AACF;AANE;EACE,qBAAA;AAQJ;AADE;EACE,aAAA;EACA,8BAAA;EACA,oBAAA;AAGJ;ACEE;EDRA;IAMI,sBAAA;IACA,2BAAA;IACA,mBAAA;EAIJ;AACF;AADE;EACE,kBAAA;EACA,WAAA;EACA,gBAAA;EACA,kBAAA;AAGJ;AADI;EACE,kBAAA;EACA,OAAA;EACA,SAAA;EACA,eAAA;EACA,iBAAA;EACA,cDxBM;AC2BZ;ACnBE;EDIA;IAgBI,gBAAA;IACA,mBAAA;IACA,eAAA;EAGJ;AACF;AAAE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,yBAAA;EACA,cAAA;EACA,mBAAA;AAEJ;AACE;EACE,eAAA;EACA,cAAA;EACA,mBAAA;AACJ;AAEE;EACE,kBAAA;EACA,mBAAA;AAAJ;AAGE;EAEE,0BAAA;EACA,sBAAA;EACA,6BAAA;EACA,mBAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;EACA,sBAAA;EACA,cAAA;EACA,aAAA;AAFJ;AAII;EAGE,yBAAA;AAJN;AAOI;EACE,cAAA;AALN;AAII;EACE,cAAA;AALN;AAII;EACE,cAAA;AALN;AAII;EACE,cAAA;AALN;AAII;EACE,cAAA;AALN;AC7DE;ED8CA;IAwBI,YAAA;EALJ;AACF;AAQE;EACE,qBAAA;EACA,4BAAA;EACA,sBAAA;EACA,kBAAA;EACA,kDAAA;EACA,mBAAA;EACA,gBAAA;EACA,0BAAA;EACA,4BAAA;EACA,kBAAA;EACA,cAAA;AANJ;AASE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;AAPJ;AAUE;EAGE,kBAAA;AAVJ;ACvFE;ED8FA;IAMI,WAAA;IACA,gBAAA;IACA,mBAAA;IACA,eAAA;EATJ;AACF;AAYE;EACE,mBAAA;AAVJ;AAcE;EACE,mBAAA;AAZJ;AAeE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;AAbJ;AAgBE;EACE,eAAA;EACA,iBAAA;EACA,cAAA;EAEA,gBAAA;AAfJ;AAiBI;EACE,cAAA;AAfN;AAmBE;EACE,gBAAA;AAjBJ;AAoBE;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,yBAAA;EACA,cAAA;AAlBJ;AAqBE;EACE,gBAAA;EACA,aAAA;EACA,mBAAA;AAnBJ;AAsBE;EACE,cAAA;EACA,kBAAA;EACA,gBAAA;AApBJ;AAwBQ;EACE,aAAA;AAtBV;AA8BI;EACE,cAAA;EACA,YAAA;EACA,gBAAA;AA5BN;AC/IE;ED+KA;IAEI,WAAA;IACA,gBAAA;IACA,gBAAA;IACA,eAAA;EA9BJ;AACF;AAqCE;EACE,mBAAA;AAnCJ;AAsCE;EACE,eAAA;EACA,iBAAA;EACA,+BAAA;EACA,gBAAA;AApCJ;AAsCI;EACE,cAAA;AApCN;AAwCE;EAEE,yBAAA;AAvCJ;AAyCI;EACE,eAAA;AAvCN;AA2CM;EACE,iBAAA;EACA,eAAA;EACA,iBAAA;EACA,+BAAA;AAzCR;ACzKE;EDqMA;IAkBI,sBAAA;EA1CJ;EA4CI;IACE,QAAA;EA1CN;EA2CM;IACE,kBAAA;EAzCR;EA6CI;IACE,QAAA;IACA,gBAAA;EA3CN;AACF;AA+CE;EACE,kBAAA;EACA,mBAAA;AA7CJ;AAgDE;EACE,kBAAA;EACA,oCAAA;EACA,eAAA;EACA,cAAA;AA9CJ","file":"Footer.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".footer__bottom {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.footer {\n  padding: 180px 8% 70px 17%;\n  box-sizing: border-box;\n}\n@media only screen and (max-width: 1023px) {\n  .footer {\n    padding: 70px 0 40px;\n  }\n}\n.footer ul {\n  list-style-type: none;\n}\n.footer__top {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 100px;\n}\n@media only screen and (max-width: 767px) {\n  .footer__top {\n    flex-direction: column;\n    justify-content: flex-start;\n    align-items: center;\n  }\n}\n.footer__news {\n  position: relative;\n  width: 100%;\n  max-width: 325px;\n  margin-right: 30px;\n}\n.footer__news .response {\n  position: absolute;\n  left: 0;\n  top: 110%;\n  font-size: 14px;\n  line-height: 21px;\n  color: #75F880;\n}\n@media only screen and (max-width: 767px) {\n  .footer__news {\n    max-width: 300px;\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.footer__title {\n  font-weight: bold;\n  font-size: 20px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  margin-bottom: 16px;\n}\n.footer__subtext {\n  font-size: 14px;\n  color: #FFFFFF;\n  margin-bottom: 15px;\n}\n.footer__form {\n  position: relative;\n  margin-bottom: 25px;\n}\n.footer__formInput {\n  padding: 8px 32px 8px 15px;\n  box-sizing: border-box;\n  border: 1px solid transparent;\n  border-radius: 10px;\n  font-weight: 500;\n  font-size: 14px;\n  line-height: 24px;\n  letter-spacing: 0.15px;\n  color: #212B36;\n  outline: none;\n}\n.footer__formInput:hover, .footer__formInput:focus, .footer__formInput:active {\n  border: 1px solid #75F880;\n}\n.footer__formInput::placeholder {\n  color: #7C7E92;\n}\n@media only screen and (max-width: 767px) {\n  .footer__formInput {\n    width: 200px;\n  }\n}\n.footer__formBtn {\n  display: inline-block;\n  padding: 9px 20px !important;\n  box-sizing: border-box;\n  margin-left: -29px;\n  box-shadow: 0px 4px 13px rgba(117, 248, 128, 0.57);\n  border-radius: 10px;\n  font-weight: 600;\n  font-size: 14px !important;\n  line-height: 24px !important;\n  text-align: center;\n  color: #212B36;\n}\n.footer__agree {\n  font-size: 11px;\n  line-height: 17px;\n  color: #FFFFFF;\n}\n.footer__contact {\n  margin-right: 30px;\n}\n@media only screen and (max-width: 767px) {\n  .footer__contact {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 60px;\n    margin-right: 0;\n  }\n}\n.footer__contactInfo {\n  margin-bottom: 40px;\n}\n.footer__infoBlock {\n  margin-bottom: 10px;\n}\n.footer__contactName {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n}\n.footer__contactLink {\n  font-size: 14px;\n  line-height: 21px;\n  color: #FFFFFF;\n  transition: 0.2s;\n}\n.footer__contactLink:hover {\n  color: #75F880;\n}\n.footer__follow {\n  margin-top: 40px;\n}\n.footer__followTitle {\n  font-weight: bold;\n  font-size: 19px;\n  line-height: 24px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.footer__followGroup {\n  margin-top: 15px;\n  display: flex;\n  align-items: center;\n}\n.footer__followLink {\n  display: block;\n  margin-right: 10px;\n  transition: 0.2s;\n}\n.footer__followLink:hover svg path {\n  fill: #75F880;\n}\n.footer__followIcon img {\n  display: block;\n  height: 27px;\n  transition: 0.2s;\n}\n@media only screen and (max-width: 767px) {\n  .footer__menu {\n    width: 100%;\n    max-width: 305px;\n    margin-bottom: 0;\n    margin-right: 0;\n  }\n}\n.footer__menuItem {\n  margin-bottom: 14px;\n}\n.footer__menuLink {\n  font-size: 14px;\n  line-height: 28px;\n  color: rgba(255, 255, 255, 0.8);\n  transition: 0.2s;\n}\n.footer__menuLink:hover {\n  color: #75F880;\n}\n.footer__bottom {\n  justify-content: flex-end;\n}\n.footer__bottom_center {\n  margin: 0 150px;\n}\n.footer__bottom_right p {\n  text-align: right;\n  font-size: 14px;\n  line-height: 28px;\n  color: rgba(255, 255, 255, 0.8);\n}\n@media only screen and (max-width: 576px) {\n  .footer__bottom {\n    flex-direction: column;\n  }\n  .footer__bottom_right {\n    order: 1;\n  }\n  .footer__bottom_right p {\n    text-align: center;\n  }\n  .footer__bottom_center {\n    order: 2;\n    margin-top: 50px;\n  }\n}\n.footer__bottomPay {\n  text-align: center;\n  margin-bottom: 24px;\n}\n.footer__bottomCopy {\n  text-align: center;\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 14px;\n  color: #FFFFFF;\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
 // Exports
 exports.locals = {
+	"footer__bottom": "Footer_footer__bottom__1efR2",
 	"footer": "Footer_footer__3cDgJ",
 	"footer__top": "Footer_footer__top__lWbDJ",
 	"footer__news": "Footer_footer__news__1AYjw",
+	"response": "Footer_response__FzcSx",
 	"footer__title": "Footer_footer__title__3aNjI",
 	"footer__subtext": "Footer_footer__subtext__MspB-",
 	"footer__form": "Footer_footer__form__1TL5Q",
@@ -232,6 +2047,8 @@ exports.locals = {
 	"footer__menu": "Footer_footer__menu__3N5OO",
 	"footer__menuItem": "Footer_footer__menuItem__2_czA",
 	"footer__menuLink": "Footer_footer__menuLink__19f-e",
+	"footer__bottom_center": "Footer_footer__bottom_center__1I56g",
+	"footer__bottom_right": "Footer_footer__bottom_right__2c6pi",
 	"footer__bottomPay": "Footer_footer__bottomPay__2EhX8",
 	"footer__bottomCopy": "Footer_footer__bottomCopy__1_na5"
 };
@@ -251,11 +2068,12 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".Header_header__1LgJ3 {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  padding: 45px 48px 0;\n  box-sizing: border-box;\n  background-color: transparent;\n  z-index: 2;\n}\n.Header_header__1LgJ3 .Header_user-name__3uBZB {\n  font-size: 13px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n}\n.Header_header__wrap__1ZvRB {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.Header_header__logo__3P3yc {\n  z-index: 1001;\n  margin-right: 80px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__logo__3P3yc {\n    margin-right: 20px;\n  }\n}\n.Header_header__logo_link__3043A {\n  display: block;\n  width: 222px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__logo_link__3043A {\n    width: 135px;\n    width: 138px;\n  }\n  .Header_header__logo_link__3043A img {\n    width: 138px;\n  }\n}\n.Header_header__logo_link__3043A svg {\n  display: block;\n  width: 100%;\n  height: auto;\n}\n.Header_header__nav__uyvtS {\n  display: flex;\n  align-items: center;\n}\n.Header_header__nav_list__oJtRB {\n  display: flex;\n  align-items: center;\n}\n.Header_header__nav_item__14rhM {\n  list-style-type: none;\n}\n.Header_header__nav_item__14rhM:not(:last-child) {\n  margin-right: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__nav_item__14rhM:not(:last-child) {\n    margin-right: 20px;\n  }\n}\n.Header_header__nav_link__N0fdo {\n  display: flex;\n  align-items: center;\n  font-size: 13px;\n  line-height: 19px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  cursor: pointer;\n}\n.Header_header__nav_link__N0fdo:hover svg path {\n  transition: 0.2s;\n  fill: #75F880;\n}\n.Header_header__nav_link__N0fdo:hover span {\n  transition: 0.2s;\n  color: #75F880;\n}\n.Header_header__nav_link__N0fdo svg {\n  display: block;\n}\n.Header_header__nav_link__N0fdo span {\n  display: block;\n  margin-left: 10px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__nav_link__N0fdo span {\n    display: none;\n  }\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/components/ui/Header/Header.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAEA;EACE,kBAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,oBAAA;EACA,sBAAA;EACA,6BAAA;EACA,UAAA;AADF;AAGE;EACE,eAAA;EACA,yBAAA;EACA,cAAA;AADJ;AAIE;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;AAFJ;AAKE;EACE,aAAA;EACA,kBAAA;AAHJ;ACUE;EDTA;IAKI,kBAAA;EAFJ;AACF;AAII;EACE,cAAA;EACA,YAAA;AAFN;ACCE;EDDE;IAKI,YAAA;IACA,YAAA;EADN;EAEM;IACE,YAAA;EAAR;AACF;AAGM;EACE,cAAA;EACA,WAAA;EACA,YAAA;AADR;AAOE;EACE,aAAA;EACA,mBAAA;AALJ;AAQI;EACE,aAAA;EACA,mBAAA;AANN;AASI;EACE,qBAAA;AAPN;AASM;EACE,kBAAA;AAPR;AC3BE;EDiCI;IAII,kBAAA;EANR;AACF;AAWI;EACE,aAAA;EACA,mBAAA;EACA,eAAA;EACA,iBAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,eAAA;AATN;AAaU;EACE,gBAAA;EACA,aAAA;AAXZ;AAeQ;EACE,gBAAA;EACA,cAAA;AAbV;AAiBM;EACE,cAAA;AAfR;AAkBM;EACE,cAAA;EACA,iBAAA;AAhBR;ACzDE;EDuEI;IAII,aAAA;EAdR;AACF","file":"Header.module.scss","sourcesContent":["@import \"../../../common/styles/mixins.scss\";\r\n\r\n.header {\r\n  position: absolute;\r\n  left: 0;\r\n  top: 0;\r\n  width: 100%;\r\n  padding: 45px 48px 0;\r\n  box-sizing: border-box;\r\n  background-color: transparent;\r\n  z-index: 2;\r\n\r\n  .user-name {\r\n    font-size: 13px;\r\n    text-transform: uppercase;\r\n    color: #FFFFFF;\r\n  }\r\n\r\n  &__wrap {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n  }\r\n\r\n  &__logo {\r\n    z-index: 1001;\r\n    margin-right: 80px;\r\n\r\n    @include xs-down {\r\n      margin-right: 20px;\r\n    }\r\n\r\n    &_link {\r\n      display: block;\r\n      width: 222px;\r\n\r\n      @include xs-down {\r\n        width: 135px;\r\n        width: 138px;\r\n        img {\r\n          width: 138px;\r\n        }\r\n      }\r\n\r\n      svg {\r\n        display: block;\r\n        width: 100%;\r\n        height: auto;\r\n      }\r\n    }\r\n  }\r\n\r\n\r\n  &__nav {\r\n    display: flex;\r\n    align-items: center;\r\n\r\n\r\n    &_list {\r\n      display: flex;\r\n      align-items: center;\r\n    }\r\n\r\n    &_item {\r\n      list-style-type: none;\r\n\r\n      &:not(:last-child) {\r\n        margin-right: 40px;\r\n\r\n        @include xs-down {\r\n          margin-right: 20px;\r\n        }\r\n      }\r\n\r\n    }\r\n\r\n    &_link {\r\n      display: flex;\r\n      align-items: center;\r\n      font-size: 13px;\r\n      line-height: 19px;\r\n      text-align: center;\r\n      text-transform: uppercase;\r\n      color: #FFFFFF;\r\n      cursor: pointer;\r\n\r\n      &:hover {\r\n        svg {\r\n          path {\r\n            transition: 0.2s;\r\n            fill: #75F880;\r\n          }\r\n        }\r\n\r\n        span {\r\n          transition: 0.2s;\r\n          color: #75F880;\r\n        }\r\n      }\r\n\r\n      svg {\r\n        display: block;\r\n      }\r\n\r\n      span {\r\n        display: block;\r\n        margin-left: 10px;\r\n        @include xs-down {\r\n          display: none;\r\n        }\r\n      }\r\n    }\r\n  }\r\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
+exports.push([module.i, ".Header_header__1LgJ3 .Header_user-name__3uBZB {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.Header_header__1LgJ3 {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  padding: 45px 48px 0;\n  box-sizing: border-box;\n  background-color: transparent;\n  z-index: 2;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__1LgJ3 {\n    padding: 45px 30px;\n  }\n}\n.Header_header__1LgJ3 .Header_user-name__3uBZB {\n  position: relative;\n  justify-content: flex-start;\n  font-size: 15px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  cursor: pointer;\n}\n.Header_header__1LgJ3 .Header_user-name__3uBZB img {\n  margin-right: 6px;\n  width: 32px;\n  height: 32px;\n  border-radius: 50%;\n  border: 1px solid #E25AF0;\n}\n.Header_header__1LgJ3 .Header_profile-menu__CSxRR {\n  position: absolute;\n  top: 115%;\n  left: 0;\n  width: 100%;\n  padding: 10px;\n  box-sizing: border-box;\n  list-style-type: none;\n  background-color: #191f49;\n  border: 2px solid #5c2f61;\n  border-radius: 10px;\n  text-align: right;\n}\n.Header_header__1LgJ3 .Header_profile-menu__CSxRR li {\n  margin-top: 5px;\n  padding: 5px;\n  font-size: 13px;\n  text-transform: uppercase;\n  color: #e0dede;\n}\n.Header_header__1LgJ3 .Header_profile-menu__CSxRR li:first-child {\n  margin-top: 0;\n}\n.Header_header__wrap__1ZvRB {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.Header_header__logo__3P3yc {\n  z-index: 1001;\n  margin-right: 80px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__logo__3P3yc {\n    margin-right: 20px;\n  }\n}\n.Header_header__logo_link__3043A {\n  display: block;\n  width: 222px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__logo_link__3043A {\n    width: 135px;\n    width: 138px;\n  }\n  .Header_header__logo_link__3043A img {\n    width: 138px;\n  }\n}\n.Header_header__logo_link__3043A svg {\n  display: block;\n  width: 100%;\n  height: auto;\n}\n.Header_header__nav__uyvtS {\n  display: flex;\n  align-items: center;\n}\n.Header_header__nav_list__oJtRB {\n  display: flex;\n  align-items: center;\n}\n.Header_header__nav_item__14rhM {\n  list-style-type: none;\n}\n.Header_header__nav_item__14rhM:not(:last-child) {\n  margin-right: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .Header_header__nav_item__14rhM:not(:last-child) {\n    margin-right: 20px;\n  }\n  .Header_header__nav_item__14rhM:not(:last-child):first-child {\n    display: none;\n  }\n}\n.Header_header__nav_link__N0fdo {\n  display: flex;\n  align-items: center;\n  font-size: 13px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  cursor: pointer;\n}\n.Header_header__nav_link__N0fdo:hover {\n  transition: 0.2s;\n  color: #75F880;\n}\n.Header_header__nav_link__N0fdo:hover svg path {\n  transition: 0.2s;\n  fill: #75F880;\n}", "",{"version":3,"sources":["C:/Users/User/Projects/cyberclass/src/common/styles/variables.scss","C:/Users/User/Projects/cyberclass/src/components/ui/Header/Header.module.scss","C:/Users/User/Projects/cyberclass/src/common/styles/mixins.scss"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACCJ;;ADSA,gBAAA;AAOA,gBAAA;AClBA;EACE,kBAAA;EACA,OAAA;EACA,MAAA;EACA,WAAA;EACA,oBAAA;EACA,sBAAA;EACA,6BAAA;EACA,UAAA;AAOF;ACeE;ED9BF;IAWI,kBAAA;EAQF;AACF;AANE;EACE,kBAAA;EAEA,2BAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;EACA,eAAA;AAOJ;AALI;EACE,iBAAA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,yBAAA;AAON;AAQE;EACE,kBAAA;EACA,SAAA;EACA,OAAA;EACA,WAAA;EACA,aAAA;EACA,sBAAA;EACA,qBAAA;EACA,yBAAA;EACA,yBAAA;EACA,mBAAA;EACA,iBAAA;AANJ;AAOI;EACE,eAAA;EACA,YAAA;EACA,eAAA;EACA,yBAAA;EACA,cAAA;AALN;AAMM;EACE,aAAA;AAJR;AASE;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;AAPJ;AAUE;EACE,aAAA;EACA,kBAAA;AARJ;ACrCE;ED2CA;IAKI,kBAAA;EAPJ;AACF;AASI;EACE,cAAA;EACA,YAAA;AAPN;AC9CE;EDmDE;IAKI,YAAA;IACA,YAAA;EANN;EAOM;IACE,YAAA;EALR;AACF;AAQM;EACE,cAAA;EACA,WAAA;EACA,YAAA;AANR;AAYE;EACE,aAAA;EACA,mBAAA;AAVJ;AAaI;EACE,aAAA;EACA,mBAAA;AAXN;AAcI;EACE,qBAAA;AAZN;AAcM;EACE,kBAAA;AAZR;AC1EE;EDqFI;IAII,kBAAA;EAXR;EAYQ;IACE,aAAA;EAVV;AACF;AAgBI;EACE,aAAA;EACA,mBAAA;EACA,eAAA;EACA,kBAAA;EACA,yBAAA;EACA,cAAA;EACA,eAAA;AAdN;AAgBM;EAQE,gBAAA;EACA,cAAA;AArBR;AAcU;EACE,gBAAA;EACA,aAAA;AAZZ","file":"Header.module.scss","sourcesContent":["%display-flex-row {\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n%display-flex-column {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n}\r\n\r\n/* Font colors */\r\n$blackColor: #222222;\r\n$greyColor: #AAAAAA;\r\n$menuLinkColor: #EEEEEE;\r\n$purpleColor: #E25AF0;\r\n$limeColor: #75F880;\r\n\r\n/* Backgrounds */\r\n$greenColor: #81FEC6;\r\n$blueColor: #233E63;\r\n// $landingBg: rgba(5, 4, 4, 0.55);\r\n$bodyBackground: #0F1434;\r\n// $authBackground: linear-gradient(0deg, $blueColor -0.07%, $greenColor 100.07%), rgba(236, 236, 236, 0.0001);\r\n// $menuBackgroundColor: linear-gradient(87.89deg, rgba(85, 85, 85, 0.25) 6.05%, rgba(85, 85, 85, 0.0001) 93.67%), #333333;\r\n$menuBackgroundColor: none;\r\n$sidebarBackgroundColor: none;\r\n$menuActiveLink: rgba(218, 243, 247, 0.4);\r\n\r\n\r\n// Animation speed\r\n$preloader-anim-speed: 2s;\r\n\r\n\r\n// Animations\r\n\r\n// @keyframes spot {\r\n//     0% {transform: translateX(0);}\r\n//     30% {transform: translateX(20px);}\r\n//     60% {transform: translateY(20px);}\r\n//     100% {transform: translateY(0)}\r\n// }\r\n\r\n// styles for CssTransition library\r\n// .show-hide-animation-enter {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n// }\r\n// .show-hide-animation-enter-active {\r\n//     opacity: 1;\r\n//     transform: translateX(0);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n// .show-hide-animation-exit {\r\n//     opacity: 1;\r\n// }\r\n// .show-hide-animation-exit-active {\r\n//     opacity: 0;\r\n//     transform: scale(0.9);\r\n//     transition: opacity 300ms, transform 300ms;\r\n// }\r\n",".header .user-name {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Font colors */\n/* Backgrounds */\n.header {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  padding: 45px 48px 0;\n  box-sizing: border-box;\n  background-color: transparent;\n  z-index: 2;\n}\n@media only screen and (max-width: 576px) {\n  .header {\n    padding: 45px 30px;\n  }\n}\n.header .user-name {\n  position: relative;\n  justify-content: flex-start;\n  font-size: 15px;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  cursor: pointer;\n}\n.header .user-name img {\n  margin-right: 6px;\n  width: 32px;\n  height: 32px;\n  border-radius: 50%;\n  border: 1px solid #E25AF0;\n}\n.header .profile-menu {\n  position: absolute;\n  top: 115%;\n  left: 0;\n  width: 100%;\n  padding: 10px;\n  box-sizing: border-box;\n  list-style-type: none;\n  background-color: #191f49;\n  border: 2px solid #5c2f61;\n  border-radius: 10px;\n  text-align: right;\n}\n.header .profile-menu li {\n  margin-top: 5px;\n  padding: 5px;\n  font-size: 13px;\n  text-transform: uppercase;\n  color: #e0dede;\n}\n.header .profile-menu li:first-child {\n  margin-top: 0;\n}\n.header__wrap {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.header__logo {\n  z-index: 1001;\n  margin-right: 80px;\n}\n@media only screen and (max-width: 576px) {\n  .header__logo {\n    margin-right: 20px;\n  }\n}\n.header__logo_link {\n  display: block;\n  width: 222px;\n}\n@media only screen and (max-width: 576px) {\n  .header__logo_link {\n    width: 135px;\n    width: 138px;\n  }\n  .header__logo_link img {\n    width: 138px;\n  }\n}\n.header__logo_link svg {\n  display: block;\n  width: 100%;\n  height: auto;\n}\n.header__nav {\n  display: flex;\n  align-items: center;\n}\n.header__nav_list {\n  display: flex;\n  align-items: center;\n}\n.header__nav_item {\n  list-style-type: none;\n}\n.header__nav_item:not(:last-child) {\n  margin-right: 40px;\n}\n@media only screen and (max-width: 576px) {\n  .header__nav_item:not(:last-child) {\n    margin-right: 20px;\n  }\n  .header__nav_item:not(:last-child):first-child {\n    display: none;\n  }\n}\n.header__nav_link {\n  display: flex;\n  align-items: center;\n  font-size: 13px;\n  text-align: center;\n  text-transform: uppercase;\n  color: #FFFFFF;\n  cursor: pointer;\n}\n.header__nav_link:hover {\n  transition: 0.2s;\n  color: #75F880;\n}\n.header__nav_link:hover svg path {\n  transition: 0.2s;\n  fill: #75F880;\n}","// Desktop First\r\n$screen-xs-down: 576px;\r\n$screen-sm-down: 767px;\r\n$screen-md-down: 1023px;\r\n$screen-lg-down: 1170px;\r\n$screen-xl-down: 1440px;\r\n\r\n// Desktop First\r\n@mixin xl-down {\r\n  @media only screen and (max-width: $screen-xl-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin lg-down {\r\n  @media only screen and (max-width: $screen-lg-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin md-down {\r\n  @media only screen and (max-width: $screen-md-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin sm-down {\r\n  @media only screen and (max-width: $screen-sm-down) {\r\n    @content;\r\n  }\r\n}\r\n\r\n@mixin xs-down {\r\n  @media only screen and (max-width: $screen-xs-down) {\r\n    @content;\r\n  }\r\n}"]}]);
 // Exports
 exports.locals = {
 	"header": "Header_header__1LgJ3",
 	"user-name": "Header_user-name__3uBZB",
+	"profile-menu": "Header_profile-menu__CSxRR",
 	"header__wrap": "Header_header__wrap__1ZvRB",
 	"header__logo": "Header_header__logo__3P3yc",
 	"header__logo_link": "Header_header__logo_link__3043A",
@@ -3368,6 +5186,201 @@ exports.isSuspense = isSuspense;
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "./node_modules/next/node_modules/react-is/cjs/react-is.development.js");
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/process/browser.js":
+/*!*****************************************!*\
+  !*** ./node_modules/process/browser.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
 
 
 /***/ }),
@@ -8035,6 +10048,108 @@ module.exports = function(originalModule) {
 
 /***/ }),
 
+/***/ "./src/api/auth.ts":
+/*!*************************!*\
+  !*** ./src/api/auth.ts ***!
+  \*************************/
+/*! exports provided: AuthAPI */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthAPI", function() { return AuthAPI; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _environment_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./environment/environment */ "./src/api/environment/environment.ts");
+
+
+var AuthAPI = {
+  auth: function auth(login, password) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint, "/Account/AuthUser"), {
+      login: login,
+      password: password
+    });
+  },
+  register: function register(phone, password, email, nickName) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint, "/Account/RegisterUser"), {
+      phoneNumber: phone,
+      password: password,
+      email: email,
+      nickName: nickName
+    });
+  },
+  sendActivationCode: function sendActivationCode(login) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint, "/Code/SendActivationCode"), {
+      params: {
+        login: login
+      }
+    });
+  },
+  checkCode: function checkCode(login, code) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint, "/Account/CheckCode"), {}, {
+      params: {
+        login: login,
+        code: code
+      }
+    });
+  },
+  subscribeToNews: function subscribeToNews(email) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_environment_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiEndPoint, "/Sub/CreateSub"), {
+      email: email
+    });
+  }
+};
+
+/***/ }),
+
+/***/ "./src/api/environment/environment.ts":
+/*!********************************************!*\
+  !*** ./src/api/environment/environment.ts ***!
+  \********************************************/
+/*! exports provided: environment */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
+var environment = {
+  apiEndPoint: 'http://194.177.23.9:377/api'
+};
+
+/***/ }),
+
+/***/ "./src/common/customHooks/useFormState.ts":
+/*!************************************************!*\
+  !*** ./src/common/customHooks/useFormState.ts ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var useFormState = function useFormState(inititalValue) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(inititalValue),
+      value = _useState[0],
+      setValue = _useState[1];
+
+  var handleChange = function handleChange(e) {
+    setValue(e.target.value);
+  };
+
+  return {
+    value: value,
+    onChange: handleChange
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (useFormState);
+
+/***/ }),
+
 /***/ "./src/common/styles/common.scss":
 /*!***************************************!*\
   !*** ./src/common/styles/common.scss ***!
@@ -8147,8 +10262,8 @@ __webpack_require__.r(__webpack_exports__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\layouts\\AppLayout\\AppLayout.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -8160,14 +10275,14 @@ var AppLayout = function AppLayout(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8,
+      lineNumber: 9,
       columnNumber: 13
     }
   }), children, __jsx(_ui_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10,
+      lineNumber: 11,
       columnNumber: 13
     }
   }));
@@ -8282,342 +10397,219 @@ module.exports = content.locals || {};
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Footer.module.scss */ "./src/components/ui/Footer/Footer.module.scss");
-/* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Footer_module_scss__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Footer.module.scss */ "./src/components/ui/Footer/Footer.module.scss");
+/* harmony import */ var _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Footer_module_scss__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _api_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../api/auth */ "./src/api/auth.ts");
+/* harmony import */ var _common_customHooks_useFormState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../common/customHooks/useFormState */ "./src/common/customHooks/useFormState.ts");
+
+
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Footer\\Footer.tsx";
 
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
+
 
 
 
 var Footer = function Footer() {
+  var email = Object(_common_customHooks_useFormState__WEBPACK_IMPORTED_MODULE_4__["default"])('');
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(''),
+      res = _useState[0],
+      setRes = _useState[1];
+
+  var subscribe = function subscribe(e) {
+    e.preventDefault();
+    _api_auth__WEBPACK_IMPORTED_MODULE_3__["AuthAPI"].subscribeToNews(email.value).then(function (response) {
+      setRes('Вы подписались');
+      setTimeout(function () {
+        return setRes('');
+      }, 3000);
+    })["catch"](function (err) {
+      setRes(err.response.data.en);
+      setTimeout(function () {
+        return setRes('');
+      }, 3000);
+    });
+  };
+
   return __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 6,
-      columnNumber: 9
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__wrap,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 7,
-      columnNumber: 13
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__top,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 8,
-      columnNumber: 17
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__news,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 9,
-      columnNumber: 21
-    }
-  }, __jsx("h3", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__title,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 10,
-      columnNumber: 25
-    }
-  }, "News & updates"), __jsx("p", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__subtext,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11,
-      columnNumber: 25
-    }
-  }, "Sign up to get the latest on sales, new releases and more..."), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__form,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 25
-    }
-  }, __jsx("input", {
-    type: "text",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__formInput,
-    placeholder: "Enter your Email",
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 29
-    }
-  }), __jsx("button", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__formBtn + ' common-btn',
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 29
-    }
-  }, "Sign up")), __jsx("p", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__agree,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 16,
-      columnNumber: 25
-    }
-  }, "By clicking Sign Up, you agree to our")), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contact,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 18,
-      columnNumber: 21
-    }
-  }, __jsx("h3", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__title,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 19,
-      columnNumber: 25
-    }
-  }, "Contact us"), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactInfo,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 20,
-      columnNumber: 25
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__infoBlock,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 21,
-      columnNumber: 29
-    }
-  }, __jsx("h5", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactName,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 22,
-      columnNumber: 33
-    }
-  }, "Business:"), __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactLink,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 23,
-      columnNumber: 33
-    }
-  }, "support@gamerzclass.com")), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__infoBlock,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 25,
-      columnNumber: 29
-    }
-  }, __jsx("h5", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactName,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 26,
-      columnNumber: 33
-    }
-  }, "Support:"), __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__contactLink,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 27,
-      columnNumber: 33
+      columnNumber: 9
     }
-  }, "support@gamerzclass.com"))), __jsx("a", {
-    href: "#",
-    className: 'common-btn--discord',
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__wrap,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28,
+      columnNumber: 13
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__top,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 29,
+      columnNumber: 17
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__news,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 30,
-      columnNumber: 25
+      columnNumber: 21
     }
-  }, __jsx("img", {
-    src: "/static/images/footer/discord.svg",
-    alt: "",
+  }, __jsx("h3", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__title,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 31,
-      columnNumber: 29
+      columnNumber: 25
     }
-  }), __jsx("span", {
+  }, "News & updates"), __jsx("p", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__subtext,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 32,
-      columnNumber: 29
+      columnNumber: 25
     }
-  }, "Join us on discord")), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__follow,
+  }, "Enter your email to  get the latest on sales, new releases and more..."), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__form,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 33,
+      columnNumber: 25
+    }
+  }, __jsx("input", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    type: "email",
+    name: "email",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__formInput
+  }, email, {
+    placeholder: "Email",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 34,
-      columnNumber: 25
+      columnNumber: 29
     }
-  }, __jsx("h4", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followTitle,
+  })), __jsx("button", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__formBtn + ' common-btn',
+    onClick: subscribe,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 35,
       columnNumber: 29
     }
-  }, "Follow us"), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followGroup,
+  }, "Subscribe"), res ? __jsx("span", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.response,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 36,
-      columnNumber: 29
-    }
-  }, __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 37,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 38,
       columnNumber: 37
     }
-  }, __jsx("img", {
-    src: "/static/images/footer/tw.svg",
-    alt: "",
+  }, res) : null)), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__contact,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 39,
-      columnNumber: 41
+      columnNumber: 21
     }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
+  }, __jsx("h3", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__title,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 40,
+      columnNumber: 25
+    }
+  }, "Contact us"), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__contactInfo,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 25
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__infoBlock,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 42,
-      columnNumber: 33
+      columnNumber: 29
     }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
+  }, __jsx("h5", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__contactName,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 43,
-      columnNumber: 37
+      columnNumber: 33
     }
-  }, __jsx("img", {
-    src: "/static/images/footer/yt.svg",
-    alt: "",
+  }, "For business & support:"), __jsx("a", {
+    href: "#",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__contactLink,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 44,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 47,
       columnNumber: 33
     }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
+  }, "info@cyberclass.team"))), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__follow,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 48,
-      columnNumber: 37
+      lineNumber: 55,
+      columnNumber: 25
     }
-  }, __jsx("img", {
-    src: "/static/images/footer/in.svg",
-    alt: "",
+  }, __jsx("h4", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__followTitle,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49,
-      columnNumber: 41
+      lineNumber: 56,
+      columnNumber: 29
     }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 52,
-      columnNumber: 33
-    }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 53,
-      columnNumber: 37
-    }
-  }, __jsx("img", {
-    src: "/static/images/footer/fb.svg",
-    alt: "",
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 54,
-      columnNumber: 41
-    }
-  }))), __jsx("a", {
-    href: "",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
+  }, "Follow us"), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__followGroup,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 57,
-      columnNumber: 33
+      columnNumber: 29
     }
-  }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followIcon,
+  }, __jsx("a", {
+    href: "",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__followLink,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 58,
+      lineNumber: 78,
+      columnNumber: 33
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__followIcon,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 79,
       columnNumber: 37
     }
   }, __jsx("img", {
@@ -8626,99 +10618,107 @@ var Footer = function Footer() {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 59,
+      lineNumber: 80,
       columnNumber: 41
     }
   })))))), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menu,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menu,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65,
+      lineNumber: 86,
       columnNumber: 21
     }
   }, __jsx("h3", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__title,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__title,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 87,
       columnNumber: 25
     }
   }, "Main menu"), __jsx("ul", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuList,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuList,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67,
+      lineNumber: 88,
       columnNumber: 25
     }
   }, __jsx("li", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuItem,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuItem,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68,
+      lineNumber: 89,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
+    href: "/static/docs/CyberClass. Terms.pdf",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuLink,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
+      lineNumber: 90,
       columnNumber: 33
     }
-  }, "Support")), __jsx("li", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuItem,
+  }, "Terms")), __jsx("li", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuItem,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 71,
+      lineNumber: 92,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
+    href: "/static/docs/CyberClass. Privacy.pdf",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuLink,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72,
+      lineNumber: 93,
       columnNumber: 33
     }
-  }, "Privacy Policy")), __jsx("li", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuItem,
+  }, "Privacy")), __jsx("li", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuItem,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 74,
+      lineNumber: 95,
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "#",
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
+    href: "/static/docs/Payments. Security. Refund.pdf",
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__menuLink,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 75,
+      lineNumber: 96,
       columnNumber: 33
     }
-  }, "Terms of Service"))))), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottom,
+  }, "Payments. Security. Refund"))))), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__bottom,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 80,
+      lineNumber: 101,
       columnNumber: 17
     }
   }, __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottomPay,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__bottom_center,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 81,
+      lineNumber: 102,
       columnNumber: 21
+    }
+  }, __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__bottomPay,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 103,
+      columnNumber: 25
     }
   }, __jsx("img", {
     src: "/static/images/footer/pay.png",
@@ -8726,18 +10726,40 @@ var Footer = function Footer() {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82,
-      columnNumber: 25
+      lineNumber: 104,
+      columnNumber: 29
     }
   })), __jsx("div", {
-    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__bottomCopy,
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__bottomCopy,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84,
+      lineNumber: 106,
+      columnNumber: 25
+    }
+  }, "\xA9 2020 \u0421yberClass")), __jsx("div", {
+    className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.footer__bottom_right,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 108,
       columnNumber: 21
     }
-  }, "\xA9 2020 \u0421yberClass"))));
+  }, __jsx("p", {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 109,
+      columnNumber: 25
+    }
+  }, "\u0418\u041F \u0416\u0443\u0440\u0430\u0432\u0435\u043B\u044C \u0410\u043D\u0430\u0441\u0442\u0430\u0441\u0438\u044F \u0410\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440\u043E\u0432\u043D\u0430"), __jsx("p", {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110,
+      columnNumber: 25
+    }
+  }, "\u0418\u041D\u041D 772619676401, \u041E\u0413\u0420\u041D\u0418\u041F 319774600696590")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Footer);
@@ -8858,7 +10880,6 @@ __webpack_require__.r(__webpack_exports__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\components\\ui\\Header\\Header.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -8866,9 +10887,22 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 var Header = function Header(_ref) {
   var store = _ref.store;
-  var userState = store.getState().UserReducer;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      user = _useState[0],
+      setUser = _useState[1];
+
+  var _useState2 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      menuVision = _useState2[0],
+      toggleMenuVision = _useState2[1];
+
+  var logout = function logout() {
+    localStorage.clear();
+    setUser(null);
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log(userState.userID);
+    user === null && localStorage.getItem('user') ? setUser(JSON.parse(localStorage.getItem('user'))) : null;
   });
   return __jsx("header", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header,
@@ -8876,7 +10910,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 20,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -8884,7 +10918,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
+      lineNumber: 21,
       columnNumber: 13
     }
   }, __jsx("div", {
@@ -8892,7 +10926,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18,
+      lineNumber: 23,
       columnNumber: 17
     }
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
@@ -8900,7 +10934,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19,
+      lineNumber: 24,
       columnNumber: 21
     }
   }, __jsx("a", {
@@ -8908,7 +10942,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20,
+      lineNumber: 25,
       columnNumber: 25
     }
   }, __jsx("img", {
@@ -8917,7 +10951,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21,
+      lineNumber: 26,
       columnNumber: 29
     }
   })))), __jsx("nav", {
@@ -8925,7 +10959,7 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26,
+      lineNumber: 31,
       columnNumber: 17
     }
   }, __jsx("ul", {
@@ -8933,91 +10967,109 @@ var Header = function Header(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27,
+      lineNumber: 32,
       columnNumber: 21
     }
-  }, __jsx("li", {
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 28,
-      columnNumber: 25
-    }
-  }, __jsx("a", {
-    href: "#",
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 29,
-      columnNumber: 29
-    }
-  }, __jsx("img", {
-    src: "/static/images/navigation/search.svg",
-    alt: "",
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 30,
-      columnNumber: 33
-    }
-  }), __jsx("span", {
-    __self: _this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 31,
-      columnNumber: 33
-    }
-  }, "Search"))), __jsx("li", {
+  }, !(user === null || user === void 0 ? void 0 : user.userID) && !(user === null || user === void 0 ? void 0 : user.nickName) ? __jsx("li", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 34,
-      columnNumber: 25
+      columnNumber: 29
     }
-  }, userState && !(userState === null || userState === void 0 ? void 0 : userState.userID) ? __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-    href: "/authorization",
+  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/registration",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 35,
       columnNumber: 33
     }
-  }, __jsx("div", {
+  }, __jsx("span", {
     className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 36,
       columnNumber: 37
     }
+  }, "SIGN UP"))) : null, __jsx("li", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_item,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 25
+    }
+  }, !(user === null || user === void 0 ? void 0 : user.userID) && !(user === null || user === void 0 ? void 0 : user.nickName) ? __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/authorization",
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 43,
+      columnNumber: 33
+    }
+  }, __jsx("span", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a.header__nav_link,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 44,
+      columnNumber: 37
+    }
+  }, "LOG IN")) : __jsx("p", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['user-name'],
+    onClick: function onClick() {
+      return toggleMenuVision(!menuVision);
+    },
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 46,
+      columnNumber: 33
+    }
   }, __jsx("img", {
-    src: "/static/images/navigation/login.svg",
+    src: (user === null || user === void 0 ? void 0 : user.avatar) ? 'http://194.177.23.9:577/' + (user === null || user === void 0 ? void 0 : user.avatar) : '/static/images/avatar.svg',
     alt: "",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
-      columnNumber: 41
+      lineNumber: 47,
+      columnNumber: 37
     }
-  }), __jsx("span", {
+  }), (user === null || user === void 0 ? void 0 : user.nickName) || (user === null || user === void 0 ? void 0 : user.person.phoneNumber), menuVision ? __jsx("ul", {
+    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['profile-menu'],
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 50,
       columnNumber: 41
     }
-  }, "Log in"))) : __jsx("span", {
-    className: _Header_module_scss__WEBPACK_IMPORTED_MODULE_2___default.a['user-name'],
+  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/profile",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42,
-      columnNumber: 33
+      lineNumber: 51,
+      columnNumber: 45
     }
-  }, userState.person.name))))));
+  }, __jsx("li", {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 52,
+      columnNumber: 49
+    }
+  }, "Profile")), __jsx("li", {
+    onClick: logout,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 54,
+      columnNumber: 45
+    }
+  }, "Logout")) : null))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -9050,8 +11102,8 @@ __webpack_require__.r(__webpack_exports__);
 var _this = undefined,
     _jsxFileName = "C:\\Users\\User\\Projects\\cyberclass\\src\\pages\\_app.tsx";
 
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
 
 
 
@@ -9096,7 +11148,7 @@ var App = function App(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31,
+      lineNumber: 32,
       columnNumber: 9
     }
   }, router.pathname != '/authorization' && !router.pathname.includes('/registration') ? __jsx(_components_layouts_AppLayout_AppLayout__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -9104,7 +11156,7 @@ var App = function App(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 34,
       columnNumber: 17
     }
   }, __jsx(Component, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
@@ -9114,7 +11166,7 @@ var App = function App(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 35,
       columnNumber: 21
     }
   }))) : __jsx(Component, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
@@ -9124,12 +11176,14 @@ var App = function App(_ref) {
     __self: _this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 17
     }
   })));
 };
-/* harmony default export */ __webpack_exports__["default"] = (Object(next_redux_wrapper__WEBPACK_IMPORTED_MODULE_7__["default"])(makeStore)(App));
+/* harmony default export */ __webpack_exports__["default"] = (Object(next_redux_wrapper__WEBPACK_IMPORTED_MODULE_7__["default"])(function (initialState, options) {
+  return Object(_store_store__WEBPACK_IMPORTED_MODULE_5__["default"])();
+})(App));
 
 /***/ }),
 
@@ -9147,6 +11201,7 @@ var ActionsConstants = {
   SET_LESSONS: 'SET_LESSONS',
   SET_MATERIALS: 'SET_MATERIALS',
   SET_USER: 'SET_USER',
+  SET_AVATAR: 'SET_AVATAR',
   RATE_MATERIAL: 'RATE_MATERIAL'
 };
 
@@ -9237,9 +11292,11 @@ var UserReducer = function UserReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
     userID: NaN,
     person: {
-      name: ''
+      phoneNumber: ''
     },
-    userType: NaN
+    userType: NaN,
+    nickName: '',
+    avatar: ''
   };
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
@@ -9249,6 +11306,15 @@ var UserReducer = function UserReducer() {
         userID: action.userID,
         person: action.person,
         userType: action.userType
+      };
+
+    case _models_actions_constants_model__WEBPACK_IMPORTED_MODULE_0__["ActionsConstants"].SET_AVATAR:
+      return {
+        userID: state.userID,
+        person: state.person,
+        userType: state.userType,
+        nickName: state.nickName,
+        avatar: action.avatar
       };
 
     default:

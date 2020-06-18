@@ -1,3 +1,4 @@
+import React from 'react';
 import '../common/styles/common.scss';
 import AppLayout from '../components/layouts/AppLayout/AppLayout';
 import { useState, useEffect } from 'react';
@@ -40,4 +41,4 @@ export const App = ({Component, pageProps, store}) => {
     )
 }
 
-export default withRedux(makeStore)(App);
+export default withRedux((initialState, options)=>getStore())(App);

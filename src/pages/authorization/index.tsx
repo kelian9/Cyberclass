@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import styles from './Authorization.module.scss';
 import useFormState from "../../common/customHooks/useFormState";
@@ -8,6 +9,9 @@ import { useRouter } from "next/router";
 import { FormEvent } from "react";
 import { setUser } from "../../store/actions/user-actions";
 import InputMask from "react-input-mask";
+import { LessonsAPI } from '../../api/lessons';
+import { MaterialsResponse } from '../../api/models/response/materials.response';
+import { setMaterials } from '../../store/actions/materials-actions';
 
 
 const Authorization = ({store}) => {
@@ -15,18 +19,22 @@ const Authorization = ({store}) => {
     const login = useFormState('');
     const password = useFormState('');
 
+    const [error,setError] = useState('');
+
     const router = useRouter();
 
     const authorize = (e:FormEvent) => {
         e.preventDefault();
         AuthAPI.auth(login.value.replace(/[\s\-\(\)]+/g, ''), password.value)
             .then((response:AxiosResponse<AuthResponse>) => {
-                store.dispatch(setUser(response.data.user))
-                localStorage.setItem('token', JSON.stringify(response.data.token));
-                router.push('/main')
-                console.log('done')
+                router.push('/registration/code/' + login.value.replace(/[\s\-\(\)]+/g, ''));
             })
-            .catch((err:AxiosError) => console.log(err))
+            .catch((err:AxiosError) => {
+                setError(err.response.data.en)
+                setTimeout(() => {
+                    setError('')
+                }, 3000)
+            })
     }
     
     return (
@@ -36,6 +44,7 @@ const Authorization = ({store}) => {
                 <InputMask mask="+7(999)999-99-99" {...login} className="common-input" placeholder="+7(___)___-__-__" />
                 <input type="text" className="common-input" {...password} placeholder="Password" />
                 <button className="common-btn">Log In</button>
+                { error ? <span className="error">{error}</span> : null }
                 <Link href="/registration">
                     <a className='create-account-link'>or create new account</a>
                 </Link>

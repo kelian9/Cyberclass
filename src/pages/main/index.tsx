@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './Main.module.scss';
 import { useEffect, useState } from "react";
 import LessonCard from '../../components/ui/LessonCard/LessonCard';
@@ -12,8 +13,9 @@ import { LessonsResponse } from '../../api/models/response/lessons.response';
 import { setLessons } from '../../store/actions/lessons-actions';
 import Link from 'next/link';
 import Head from 'next/head';
-import {pay} from '../../../static/cloudpayments';
+import pay from '../../../static/cloudpayments.js';
 import { OrderAPI } from '../../api/order';
+import { useRouter } from 'next/router';
 
 let testLessons = [
     {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
@@ -25,10 +27,15 @@ let testLessons = [
 ]
 
 const Main = ({pageWidth, store}) => {
+
+    const router = useRouter();
+
     const materialsState = store.getState().MaterialsReducer;
     const lessonsState = store.getState().LessonsReducer;
 
     const [lessonsURL, setLessonURL] = useState('')
+
+    const [responseModal, setResponseModal] = useState({error: false, response: ''})
 
     const [ballShift, changeBallShift] = useState(0);
     const listener = (e:any) => {
@@ -37,13 +44,14 @@ const Main = ({pageWidth, store}) => {
         }
     }
 
-    const [responseModal, setResponseModal] = useState({error: false, response: ''})
-
     const createOrder = () => {
         OrderAPI.createOrder(materialsState[0].id)
             .then((response:AxiosResponse) => {
                 setResponseModal({error: false, response: 'Заказ получен'})
-                setTimeout(() => setResponseModal({error: false, response: ''}), 3000)
+                setTimeout(() => {
+                    setResponseModal({error: false, response: ''})
+                    router.push(lessonsURL);
+                }, 3000)
             })
             .catch((err:AxiosError) => console.log(err))
     }
@@ -52,8 +60,9 @@ const Main = ({pageWidth, store}) => {
         checkLoggedIn() ?
             pay(materialsState[0]?.price, createOrder) :
             (() => {
-                setResponseModal({error: true, response: 'Войдите для совершения покупки'})
-                setTimeout(() => setResponseModal({error: false, response: ''}), 3000)
+                router.push('/registration')
+                // setResponseModal({error: true, response: 'Войдите для совершения покупки'})
+                // setTimeout(() => setResponseModal({error: false, response: ''}), 3000)
             })()
     }
 
@@ -89,6 +98,7 @@ const Main = ({pageWidth, store}) => {
             document.body.scrollTop > 1 ? document.removeEventListener('scroll', listener) : null
         }
     })
+    
     return (
         <>
             <Head>
@@ -165,7 +175,7 @@ const Main = ({pageWidth, store}) => {
                     </div>
                     <div className="what__offer">SPECIAL OFFER</div>
                     <div className="what__btn-group">
-                        <a className="what__btn common-btn" onClick={buyCourse}>Buy course (${materialsState && materialsState[0]?.price}.00)</a>
+                        <a className="what__btn common-btn" onClick={buyCourse}>Buy course (₽{materialsState && materialsState[0]?.price}.00)</a>
                         <Link href={lessonsURL}>
                             <a className="what__btn transparent-btn">Watch free episodes</a>
                         </Link>
@@ -218,15 +228,17 @@ const Main = ({pageWidth, store}) => {
                 <div className={styles.firstPart}>
                     <h2>ЧТО ВАС ЖДЕТ В ПЕРВОЙ ЧАСТИ?</h2>
                     <div className={styles.cardsContainer}>
-                        { lessonsState?.map((item, index) => <LessonCard lesson={item} key={index} />)}
+                        { lessonsState?.slice(0,3).map((item, index) => <LessonCard lesson={item} key={index} />)}
                     </div>
                     <Link href={lessonsURL}>
                         <a className="common-btn">Show more</a>
                     </Link>
                 </div>
+                {/* <h2 className={styles['section-heading']}>TESTIMONIALS</h2>
                 <Slider itemsCount={9}>
                     { [1,2,3,4,5,6,7,8,9].map(item => <Comment comment={item} key={item} />) }
-                </Slider>
+                </Slider> */}
+                <h2 className={styles['section-heading']}>НОВЫЙ КУРС – КАЖДЫЙ МЕСЯЦ</h2>
                 <Slider itemsCount={testLessons.length}>
                     { testLessons.map((item:LessonsResponse, index) => <LessonCard lesson={item} key={index} />) }
                 </Slider>
@@ -238,7 +250,9 @@ const Main = ({pageWidth, store}) => {
                     <div className={styles.ready__icon}>
                         <img src="/static/images/fifa20.svg" alt=""/>
                     </div>
-                    <a href="#" className={styles.ready__btn + ' common-btn'}>Get started</a>
+                    <Link href="/registration">
+                        <a className={styles.ready__btn + ' common-btn'}>Get started</a>
+                    </Link>
                 </div>
             </div>
         </>

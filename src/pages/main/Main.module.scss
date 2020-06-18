@@ -71,6 +71,16 @@
     }
 }
 
+.section-heading {
+    margin-top: 80px;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 48px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #E25AF0;
+}
+
 .firstPart {
     width: 100%;
     margin-top: 125px;
@@ -85,6 +95,7 @@
         text-transform: uppercase;
         color: #E25AF0;
     }
+
     .cardsContainer {
         width: 100%;
         margin-top: 118px;
@@ -98,17 +109,27 @@
             &:first-child {
                 margin-left: 0;
             }
+
+            @include lg-down {
+                width: 100%;
+                margin-left: 0;
+            }
+        
+            @include sm-down {
+                margin-left: 0;
+            }
         }
 
-        @include xs-down {
+        @include xl-down {
             margin-left: 0;
+            width: 120%;
         }
 
         @include sm-down {
             flex-direction: column;
-            div {
-                margin-top: 20px;
-            }
+            // div {
+            //     margin-top: 20px;
+            // }
         }
 
         @include xl-down {

@@ -1,0 +1,1 @@
+{"ast":null,"code":"var __jsx = React.createElement;\nimport React from 'react';\nimport Head from '../components/head';\nexport default (() => __jsx(\"div\", null, __jsx(Head, {\n  title: \"Cyberclass\"\n})));","map":null,"metadata":{},"sourceType":"module"}
