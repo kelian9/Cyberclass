@@ -16,10 +16,13 @@ export const LessonsAPI = {
         })
     },
 
-    getPaidLessons():Promise<AxiosResponse<LessonsResponse[]>> {
+    getPaidLessons(matId:number):Promise<AxiosResponse<LessonsResponse[]>> {
         return axios.get(`${environment.apiEndPoint}/Lesson/GetPaidLessons`, {
             headers: {
                 'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('token')).token}`
+            },
+            params: {
+                matId: matId
             }
         })
     },

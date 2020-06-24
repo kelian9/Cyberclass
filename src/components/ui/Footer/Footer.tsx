@@ -75,9 +75,9 @@ const Footer = () => {
                                         <img src="/static/images/footer/fb.svg" alt=""/>
                                     </div>
                                 </a> */}
-                                <a href="" className={styles.footer__followLink}>
+                                <a href="https://instagram.com/cyberclass.team?igshid=bk9xmtv5qvw5" target="_blank" className={styles.footer__followLink}>
                                     <div className={styles.footer__followIcon}>
-                                        <img src="/static/images/footer/inst.svg" alt=""/>
+                                        <img src="/static/images/instagram.png" alt=""/>
                                     </div>
                                 </a>
                             </div>
@@ -90,7 +90,7 @@ const Footer = () => {
                                 <a href="/static/docs/CyberClass. Terms.pdf" className={styles.footer__menuLink}>Terms</a>
                             </li>
                             <li className={styles.footer__menuItem}>
-                                <a href="/static/docs/CyberClass. Privacy.pdf" className={styles.footer__menuLink}>Privacy</a>
+                                <a href="/static/docs/CyberClass. Privacy .pdf" className={styles.footer__menuLink}>Privacy</a>
                             </li>
                             <li className={styles.footer__menuItem}>
                                 <a href="/static/docs/Payments. Security. Refund.pdf" className={styles.footer__menuLink}>Payments. Security. Refund</a>

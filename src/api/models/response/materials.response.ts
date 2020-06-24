@@ -9,4 +9,5 @@ export interface MaterialsResponse {
     dislikeCount: number;
     myDislike: boolean;
     myLike: boolean;
+    isPaid: boolean;
 }

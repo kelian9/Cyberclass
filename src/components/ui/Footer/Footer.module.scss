@@ -6,7 +6,7 @@
   box-sizing: border-box;
 
   @include md-down {
-    padding: 70px 0 40px;
+    padding: 70px 20px 40px;
   }
 
   ul {
@@ -194,8 +194,7 @@
   &__followIcon {
 
     img {
-      display: block;
-      height: 27px;
+      width: 23px;
       transition: 0.2s;
     }
   }

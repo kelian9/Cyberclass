@@ -18,12 +18,12 @@ import { OrderAPI } from '../../api/order';
 import { useRouter } from 'next/router';
 
 let testLessons = [
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'},
-    {name: 'Введение', description: 'Мы поделимся лучшими настройками управления, камеры и других игровых параметров'}
+    {name: 'игра в атаке', preview: '/static/images/course/next_course_1.jpg', duration: 15, description: 'Как правильно подобрать игроков нападения. Самые эффективные способы вскрыть оборону соперника'},
+    {name: 'финты', preview: '/static/images/course/next_course_2.jpg', duration: 18, description: 'Самые полезные особые приёмы в FIFA 20. Какие финты и в каких ситуациях можно и нужно использовать'},
+    {name: 'стандарты', preview: '/static/images/course/next_course_3.jpg', duration: 23, description: 'Самые эффективные способы розыгрыша угловых и штрафных.'},
+    {name: 'игра в атаке', preview: '/static/images/course/next_course_1.jpg', duration: 15, description: 'Как правильно подобрать игроков нападения. Самые эффективные способы вскрыть оборону соперника'},
+    {name: 'финты', preview: '/static/images/course/next_course_2.jpg', duration: 18, description: 'Самые полезные особые приёмы в FIFA 20. Какие финты и в каких ситуациях можно и нужно использовать'},
+    {name: 'стандарты', preview: '/static/images/course/next_course_3.jpg', duration: 23, description: 'Самые эффективные способы розыгрыша угловых и штрафных.'}
 ]
 
 const Main = ({pageWidth, store}) => {
@@ -167,23 +167,25 @@ const Main = ({pageWidth, store}) => {
                         </div>
                     </div>
                 </div>
-                <div className="what__buy">
-                    <div className="what__price-wrap">
-                        <span className="what__price-finish">599₽</span>
-                        <span className="what__price-full">999₽</span>
-                        <span className="what__price-sale">Save 40%</span>
-                    </div>
-                    <div className="what__offer">SPECIAL OFFER</div>
-                    <div className="what__btn-group">
-                        <a className="what__btn common-btn" onClick={buyCourse}>Buy course (₽{materialsState && materialsState[0]?.price}.00)</a>
-                        <Link href={lessonsURL}>
-                            <a className="what__btn transparent-btn">Watch free episodes</a>
-                        </Link>
-                    </div>
-                    <span className="what__guard">
-                        Satisfaction guaranteed
-                    </span>
-                </div>
+                { materialsState && !materialsState[0]?.isPaid ?
+                    <div className="what__buy">
+                        <div className="what__price-wrap">
+                            <span className="what__price-finish">599₽</span>
+                            <span className="what__price-full">999₽</span>
+                            <span className="what__price-sale">Save 40%</span>
+                        </div>
+                        <div className="what__offer">SPECIAL OFFER</div>
+                        <div className="what__btn-group">
+                            <a className="what__btn common-btn" onClick={buyCourse}>Buy course (₽{materialsState && materialsState[0]?.price}.00)</a>
+                            <Link href={lessonsURL}>
+                                <a className="what__btn transparent-btn">Watch free episodes</a>
+                            </Link>
+                        </div>
+                        <span className="what__guard">
+                            Satisfaction guaranteed
+                        </span>
+                    </div> : null
+                }
             </div>
             <div className="content-container">
                 <div className="course">
@@ -228,7 +230,7 @@ const Main = ({pageWidth, store}) => {
                 <div className={styles.firstPart}>
                     <h2>ЧТО ВАС ЖДЕТ В ПЕРВОЙ ЧАСТИ?</h2>
                     <div className={styles.cardsContainer}>
-                        { lessonsState?.slice(0,3).map((item, index) => <LessonCard lesson={item} key={index} />)}
+                        { lessonsState?.slice(0,3).map((item, index) => <LessonCard lesson={item} key={index} selectLesson={() => router.push(lessonsURL + '/' + item.id)} />)}
                     </div>
                     <Link href={lessonsURL}>
                         <a className="common-btn">Show more</a>
@@ -238,10 +240,14 @@ const Main = ({pageWidth, store}) => {
                 <Slider itemsCount={9}>
                     { [1,2,3,4,5,6,7,8,9].map(item => <Comment comment={item} key={item} />) }
                 </Slider> */}
-                <h2 className={styles['section-heading']}>НОВЫЙ КУРС – КАЖДЫЙ МЕСЯЦ</h2>
-                <Slider itemsCount={testLessons.length}>
-                    { testLessons.map((item:LessonsResponse, index) => <LessonCard lesson={item} key={index} />) }
-                </Slider>
+                {/* <Slider itemsCount={testLessons.length}> */}
+                <div className={styles.new_course}>
+                    <h2>НОВЫЙ КУРС – КАЖДЫЙ МЕСЯЦ</h2>
+                    <div className={styles.cardsContainer}>
+                        { testLessons.slice(0,3).map((item:any, index) => <LessonCard lesson={item} previewState={true} key={index} />) }
+                    </div>
+                </div>
+                {/* </Slider> */}
             </div>
             <div className={styles.ready}>
                 <div className={styles.ready__wrap}>

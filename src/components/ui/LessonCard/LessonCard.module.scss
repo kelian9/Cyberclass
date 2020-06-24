@@ -17,12 +17,12 @@
         border-radius: 10px;
         background-color: rgb(109, 163, 212);
 
-        @include xl-down {
+        @include xs-down {
             width: 90vw;
         }
     }
     img {
-        width: 100%;
+        width: 340px;
         height: 244px;
         border-radius: 10px;
     }
@@ -45,15 +45,9 @@
             top: 232px;
             left: 10px;
             display: block;
-            width: 320px;
+            width: calc(100% - 20px);
             height: 2px;
             background: #E25AF0;
-        }
-
-        @include xs-down {
-            &-line {
-                width: calc(100% - 20px);
-            }
         }
     }
     h3 {
@@ -64,6 +58,7 @@
         color: #FFFFFF;        
     }
     p {
+        text-align: left;
         margin-top: 16px;
         font-size: 14px;
         color: #7F7F7F;

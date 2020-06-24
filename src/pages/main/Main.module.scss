@@ -81,7 +81,7 @@
     color: #E25AF0;
 }
 
-.firstPart {
+.firstPart, .new_course {
     width: 100%;
     margin-top: 125px;
     @extend %display-flex-column;
@@ -111,31 +111,28 @@
             }
 
             @include lg-down {
-                width: 100%;
-                margin-left: 0;
+                margin-left: 20px;
+                margin-top: 60px;
             }
         
             @include sm-down {
                 margin-left: 0;
+                margin-top: 60px;
             }
         }
 
         @include xl-down {
+            margin-top: 20px;
             margin-left: 0;
             width: 120%;
         }
 
         @include sm-down {
-            flex-direction: column;
+            width: 100%;
+            // flex-direction: column;
             // div {
             //     margin-top: 20px;
             // }
-        }
-
-        @include xl-down {
-            div {
-                margin-top: 20px;
-            }
         }
     }
     a {

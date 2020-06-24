@@ -36,6 +36,7 @@ const Slider = (props) => {
     }
 
     const handleTouchEnd = () => {
+        if(touches.length <= 1) {return}
         const touchDivision = touches[touches.length - 1].clientX - touches[0].clientX;
         if(touchDivision > slideWidth/3) {
             handleBack()

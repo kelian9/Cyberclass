@@ -2469,7 +2469,8 @@ const Footer = () => {
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "",
+    href: "https://instagram.com/cyberclass.team?igshid=bk9xmtv5qvw5",
+    target: "_blank",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__followLink,
     __self: undefined,
     __source: {
@@ -2486,7 +2487,7 @@ const Footer = () => {
       columnNumber: 37
     }
   }, __jsx("img", {
-    src: "/static/images/footer/inst.svg",
+    src: "/static/images/instagram.png",
     alt: "",
     __self: undefined,
     __source: {
@@ -2544,7 +2545,7 @@ const Footer = () => {
       columnNumber: 29
     }
   }, __jsx("a", {
-    href: "/static/docs/CyberClass. Privacy.pdf",
+    href: "/static/docs/CyberClass. Privacy .pdf",
     className: _Footer_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.footer__menuLink,
     __self: undefined,
     __source: {
@@ -3018,7 +3019,7 @@ __webpack_require__.r(__webpack_exports__);
 const LessonsReducer = (state = [], action) => {
   switch (action.type) {
     case _models_actions_constants_model__WEBPACK_IMPORTED_MODULE_0__["ActionsConstants"].SET_LESSONS:
-      return [...action.lessons];
+      return action.lessons;
 
     default:
       return state;

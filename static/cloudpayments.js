@@ -2,7 +2,7 @@ const pay = (amount, successAction) => {
     var widget = new cp.CloudPayments();
     widget.charge({ // options
             publicId: 'pk_d6ade581f1060d5e657f0d18ebd81',  //id из личного кабинета
-            description: 'Пример оплаты (деньги сниматься не будут)', //назначение
+            description: 'CYBERCLASS. FIFA COURSE', //назначение
             amount: amount, //сумма
             currency: 'RUB', //валюта
             accountId: 'user@example.com', //идентификатор плательщика (необязательно)

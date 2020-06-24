@@ -25,9 +25,9 @@ const Authorization = ({store}) => {
 
     const authorize = (e:FormEvent) => {
         e.preventDefault();
-        AuthAPI.auth(login.value.replace(/[\s\-\(\)]+/g, ''), password.value)
+        AuthAPI.auth(login.value.replace(/[\s\-\_\(\)]+/g, ''), password.value)
             .then((response:AxiosResponse<AuthResponse>) => {
-                router.push('/registration/code/' + login.value.replace(/[\s\-\(\)]+/g, ''));
+                router.push('/registration/code/' + login.value.replace(/[\s\-\_\(\)]+/g, ''));
             })
             .catch((err:AxiosError) => {
                 setError(err.response.data.en)
@@ -41,7 +41,7 @@ const Authorization = ({store}) => {
         <div className="auth-component">
             <form className="auth-form" onSubmit={authorize}>
                 <h1>Sign In</h1>
-                <InputMask mask="+7(999)999-99-99" {...login} className="common-input" placeholder="+7(___)___-__-__" />
+                <InputMask mask="+9(999)999-99-9999" {...login} className="common-input" placeholder="+" />
                 <input type="text" className="common-input" {...password} placeholder="Password" />
                 <button className="common-btn">Log In</button>
                 { error ? <span className="error">{error}</span> : null }
